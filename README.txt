@@ -3,4 +3,6 @@ Introduction
 
 
 
-This product may contain traces of nutste.
+1.mudar arquivo
+2.git commit -a
+3.git push sistema.agenda
