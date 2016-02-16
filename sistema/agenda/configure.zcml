@@ -1,0 +1,50 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="sistema.agenda">
+
+  <!-- Include configuration for dependencies listed in setup.py -->
+  <include package="plone.formwidget.contenttree" />
+  <include package="plone.app.relationfield" />
+  <include package="collective.z3cform.datetimewidget" />
+  <include package="plone.app.event" />  
+  <include package="Solgema.fullcalendar" />
+  <includeDependencies package="." />
+
+  <!-- Grok the package to initialize schema interfaces and content classes -->
+  <grok:grok package="." />
+
+  <!-- Register a resource directory from which we can deploy static
+   resource files. -->
+  <browser:resourceDirectory
+    name="sistema.agenda"
+    directory="resources" />
+  <browser:resource name="agenda.css" file="agenda.css" />
+
+  <i18n:registerTranslations directory="locales" />
+
+  <!-- Register an extension profile to make the product installable
+       in Plone -->
+  <genericsetup:registerProfile
+      name="default"
+      title="Agenda de eventos CAC"
+      directory="profiles/default"
+      description="Extension profile for Agenda de eventos CAC"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+	  	  
+  <!-- -*- extra stuff goes here -*- -->
+  <genericsetup:importStep
+      name="criaPastas"
+      title="Cria as pastas iniciais para guardar os conteudos"
+      description="Cria as pastas iniciais para guardar os conteudos"
+      handler="sistema.agenda.scriptDeInstalacao.criaPastas">
+  </genericsetup:importStep>
+  
+
+</configure>

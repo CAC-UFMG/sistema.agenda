@@ -1,0 +1,14 @@
+.type-sistema.agenda.evento{
+ color:white;
+}
+
+.fc-content a:hover {
+    color: #FFF !important;
+}
+.state-published {
+    color: #2F2222 !important;
+}
+
+.state-private {
+    color: #D2913C  !important;
+}
