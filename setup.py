@@ -33,6 +33,7 @@ setup(name='sistema.agenda',
           'plone.formwidget.contenttree',
           'plone.app.event [dexterity]',
           'collective.z3cform.datetimewidget',
+		  'collective.wtf',
       ],
       entry_points="""
       # -*- Entry points: -*-
