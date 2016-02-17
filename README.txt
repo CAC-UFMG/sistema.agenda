@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ﻿Instalação
 ============
+=======
+Introduction
+==============
+>>>>>>> origin/master
 
 1. Instalar o git
 2. cd ... Plone/zinstance/src (ou  ... Plone/zeoserver/src)
