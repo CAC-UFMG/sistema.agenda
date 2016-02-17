@@ -1,33 +1,27 @@
 "[Workflow]"
-"Id:","sistema.kabum.workflow_basico"
-"Title:","Fluxo de criacao de objetos de sistema.kabum"
+"Id:","sistema.agenda.workflow_basico"
+"Title:","Fluxo de criacao de objetos de sistema.agenda"
 "Description:","Fluxo de criacao de objetos baseado em 5 esferas. Privado, Administrativo, Educadores, Escola, Publico."
-"Initial state:","em_educadores"
+"Initial state:","privado"
 
 "[State]"
 "Id:","privado"
 "Title:","Privado"
 "Description:","Somente o proprietario pode ver o conteudo."
-"Transitions","para_adm,para_adm_de_educador,para_educadores,para_escola,para_mundo"
-"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner","Secretarias","Educandos","Educadores"
-"View","N",,,,"X","X",,,,
-"Copy or Move","N",,,,"X","X","X",,,
-"Access contents information","N",,,,"X","X",,,,
-"Add portal content","N",,,,"X","X",,,,
-"Modify portal content","N",,,,"X","X",,,,
-"Delete objects","N",,,,"X","X","X",,,
-"List folder contents","N",,,,"X","X","X",,,
-"sistema.kabum: VisualizacaoDeDadosEducando","N",,,,"X","X",,,,
-"sistema.kabum: VisualizacaoDeDadosEducador","N",,,,"X","X",,,,
-"sistema.kabum: VisualizacaoDeDadosSecretaria","N",,,,"X","X",,,,
-"sistema.kabum: ModificaDadosDeSecretaria","N",,,,"X",,,,,
-"sistema.kabum: ModificaDadosDeEducador","N",,,,"X","X",,,,
-"sistema.kabum: ModificaDadosDeEducando","N",,,,"X","X",,,,
+"Transitions","privar"
+"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
+"View","N",,,,"X","X",,
+"Copy or Move","N",,,,"X","X","X",
+"Access contents information","N",,,,"X","X",,
+"Add portal content","N",,,,"X","X",,
+"Modify portal content","N",,,,"X","X",,
+"Delete objects","N",,,,"X","X","X",
+"List folder contents","N",,,,"X","X","X",
 
 "[Transition]"
 "Id:","privar"
 "Title:","Tornar privado"
 "Description:","Torna esse conteudo visivel somente pelo proprietario"
 "Target state:","privado"
-"Guard permission:","sistema.kabum: ModificaDadosDeSecretaria"
+"Guard permission:","sistema.agenda: ModificaEvento"
 "Guard Role:","Owner
