@@ -8,15 +8,28 @@
   </object>
  </object>
 
-
-<!--
  <object name="object_buttons" meta_type="CMF Action Category">
   <object name="copy" meta_type="CMF Action">   
-   <property name="permissions">
-    <element value="sistema.kabum: ModificaDadosDeSecretaria"/>
-   </property>  
+   <property name="visible">False</property>
   </object>
  </object>
--->
+ 
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="cut" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+ 
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="rename" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+ 
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="paste" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
 
  </object>

@@ -62,7 +62,9 @@ def criaPastas(context):
       workflowTool = getToolByName(raiz, "portal_workflow")
       workflowTool.doActionFor(pastaAgenda, "publish")
       from Products.CMFCore.permissions import setDefaultRoles
-      #pastaAgenda.setDefaultRoles('Add portal content', ('Anonymous',))
+      pastaAgenda.manage_permission('Add portal content',('Anonymous',))	  
+      pastaAgenda.manage_permission('sistema.agenda: ModificaEvento',('Anonymous',))	  
+	  
 	  
       #ISolgemaFullcalendarProperties.get('defaultCalendarView').default = u'month'
       #ISolgemaFullcalendarProperties.get('eventType').default = u'sistema.agenda.evento'

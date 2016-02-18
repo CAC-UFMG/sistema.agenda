@@ -10,7 +10,7 @@
 "Description:","Solicitacao para agendamento criada"
 "Transitions","para_analise"
 "Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
-"View","N",,,"X","X","X",
+"View","N","X",,"X","X","X",
 "Copy or Move","N",,,"X","X","X",
 "Access contents information","N",,,"X","X","X",
 "Add portal content","N",,,"X","X","X",
