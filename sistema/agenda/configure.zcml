@@ -27,7 +27,14 @@
     name="sistema.agenda"
     directory="resources" />
   <browser:resource name="agenda.css" file="agenda.css" />
-
+  
+  <browser:page
+          for="*"
+          name="newev"
+          permission="sistema.agenda.visualizaEvento"
+          class=".newev.newEv"
+          />
+		  
   <i18n:registerTranslations directory="locales" />
 
   <!-- Register an extension profile to make the product installable

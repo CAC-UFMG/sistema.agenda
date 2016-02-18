@@ -26,7 +26,7 @@
 
   <!-- View information -->
   <property name="link_target"></property>
-  <property name="immediate_view">view</property>
+  <property name="immediate_view">newev</property>
   <property name="default_view">view</property>
   <property name="view_methods">
    <element value="view"/>
@@ -39,12 +39,12 @@
   <alias from="(Default)" to="(dynamic view)" />
   <alias from="view" to="(selected layout)" />
   <alias from="edit" to="@@edit" />
-  <alias from="sharing" to="@@sharing" />
+  <alias from="sharing" to="@@sharing" />  
 
   <!-- Actions -->
   <action title="View" action_id="view" category="object" condition_expr=""
     url_expr="string:${object_url}/" visible="True">
-    <permission value="View" />
+    <permission value="sistema.agenda: VisualizaEvento" />
   </action>
   <action title="Edit" action_id="edit" category="object" condition_expr=""
     url_expr="string:${object_url}/edit" visible="True">

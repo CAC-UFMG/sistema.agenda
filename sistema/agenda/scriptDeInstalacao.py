@@ -11,6 +11,7 @@ from Solgema.fullcalendar.browser.dx import InlineFrameAddView
 from Solgema.fullcalendar import interfaces
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_inner, aq_parent
+from Products.CMFCore.permissions import setDefaultRoles
 
 		
 def criaPastas(context):
@@ -27,10 +28,13 @@ def criaPastas(context):
       for item in raiz.listFolderContents(contentFilter={"portal_type":["Folder","Document"]}):
         raiz.manage_delObjects([item.getId()])
       _createObjectByType('Folder',raiz,id='agenda',title="Agenda")
+      pastaAgenda=raiz.get('agenda')      
+      _createObjectByType('Folder',pastaAgenda,id='preagenda',title="Pre Agendamentos")
       _createObjectByType('Folder',raiz,id='equipe',title="Equipe")
       _createObjectByType('Folder',raiz,id='locais',title="Locais")
       
-      pastaAgenda=raiz.get('agenda')      
+      
+      pastaPreAgenda=pastaAgenda.get('preagenda')  
       pastaEquipe=raiz.get('equipe')      
       pastaLocais=raiz.get('locais')      
 	  
@@ -60,10 +64,15 @@ def criaPastas(context):
 	  
 	  
       workflowTool = getToolByName(raiz, "portal_workflow")
-      workflowTool.doActionFor(pastaAgenda, "publish")
-      from Products.CMFCore.permissions import setDefaultRoles
+      workflowTool.doActionFor(pastaAgenda, "publish")      
       pastaAgenda.manage_permission('Add portal content',('Anonymous',))	  
       pastaAgenda.manage_permission('sistema.agenda: ModificaEvento',('Anonymous',))	  
+      pastaAgenda.manage_permission('View management screens',('Anonymous',))	  
+      pastaAgenda.manage_permission('Delete objects',('Anonymous',))	  
+      pastaPreAgenda.manage_permission('Delete objects',('Anonymous',))	  
+      pastaPreAgenda.manage_permission('View management screens',('Anonymous',))	  
+      
+      
 	  
 	  
       #ISolgemaFullcalendarProperties.get('defaultCalendarView').default = u'month'

@@ -7,6 +7,11 @@
         title="sistema.agenda: ModificaEvento"
         />
 
+
+    <permission
+        id="sistema.agenda.visualizaEvento"
+        title="sistema.agenda: VisualizaEvento"
+        />
 		
     <permission
         id="sistema.agenda.modificaRecurso"

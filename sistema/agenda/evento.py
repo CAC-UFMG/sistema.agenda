@@ -24,8 +24,9 @@ from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zc.relation.interfaces import ICatalog
-from Acquisition import aq_inner
+from Acquisition import aq_inner, aq_parent
 from zope.interface import invariant, Invalid
+from Products.CMFCore.interfaces import ISiteRoot
 
 
 class Ievento(form.Schema, IImageScaleTraversable):
@@ -101,8 +102,11 @@ def adicionaEvento(evento, event):
         if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id:
          if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
             raise Invalid("Conflito de equipe com:" + objLocal.title+" entre os eventos: "+objEventoCadastrado.title+" e "+ evento.title)
-
-
+  pai = aq_parent(aq_inner(evento))
+  clipboard = pai.manage_cutObjects([evento.id])
+  dest = pai.get('preagenda')
+  result = dest.manage_pasteObjects(clipboard)
+	
 class evento(Item):
     grok.implements(Ievento)
 
@@ -124,7 +128,7 @@ class SampleView(grok.View):
     """ sample view class """
 
     grok.context(Ievento)
-    grok.require('zope2.View')
+    grok.require('sistema.agenda.visualizaEvento')
 
     # grok.name('view')
 
