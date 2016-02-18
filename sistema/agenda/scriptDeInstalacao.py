@@ -33,6 +33,7 @@ def criaPastas(context):
       pastaAgenda=raiz.get('agenda')      
       pastaEquipe=raiz.get('equipe')      
       pastaLocais=raiz.get('locais')      
+	  
       if pastaEquipe:
         _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='ivanildo',title='Ivanildo',funcao='Tecnico de som',regime='30hs')
         _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Diano',title='Diano',funcao='Tecnico de som',regime='30hs')
@@ -52,10 +53,16 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-ii',title='Auditorio 1 do Cad 2',unidade='CAD2')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-ii',title='Auditorio 2 do Cad 2',unidade='CAD2')
   
-      raiz.setLayout("event_listing")
-      pastaAgenda.setLayout("solgemafullcalendar_view")
+      raiz.setLayout("event_listing")	        
+      pastaAgenda.setLayout("solgemafullcalendar_view")	  
       pastaEquipe.setLayout("folder_summary_view")
       pastaLocais.setLayout("folder_summary_view")
+	  
+	  
+      workflowTool = getToolByName(raiz, "portal_workflow")
+      workflowTool.doActionFor(pastaAgenda, "publish")
+      from Products.CMFCore.permissions import setDefaultRoles
+      #pastaAgenda.setDefaultRoles('Add portal content', ('Anonymous',))
 	  
       #ISolgemaFullcalendarProperties.get('defaultCalendarView').default = u'month'
       #ISolgemaFullcalendarProperties.get('eventType').default = u'sistema.agenda.evento'

@@ -10,7 +10,7 @@
 		
     <permission
         id="sistema.agenda.modificaRecurso"
-        title="sistema.agenda: modificaRecurso"
+        title="sistema.agenda: ModificaRecurso"
         />
 
 

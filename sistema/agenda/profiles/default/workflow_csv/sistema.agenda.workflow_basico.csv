@@ -1,27 +1,114 @@
 "[Workflow]"
 "Id:","sistema.agenda.workflow_basico"
 "Title:","Fluxo de criacao de objetos de sistema.agenda"
-"Description:","Fluxo de criacao de objetos baseado em 5 esferas. Privado, Administrativo, Educadores, Escola, Publico."
-"Initial state:","privado"
+"Description:","Fluxo de agendamento baseado em 4 estagios. Solicitacao, Em analise, Pre-reservado, Agendado, Terminado"
+"Initial state:","solicitacao"
 
 "[State]"
-"Id:","privado"
-"Title:","Privado"
-"Description:","Somente o proprietario pode ver o conteudo."
-"Transitions","privar"
+"Id:","solicitacao"
+"Title:","Solicitacao criada"
+"Description:","Solicitacao para agendamento criada"
+"Transitions","para_analise"
 "Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
-"View","N",,,,"X","X",,
-"Copy or Move","N",,,,"X","X","X",
-"Access contents information","N",,,,"X","X",,
-"Add portal content","N",,,,"X","X",,
-"Modify portal content","N",,,,"X","X",,
-"Delete objects","N",,,,"X","X","X",
-"List folder contents","N",,,,"X","X","X",
+"View","N",,,"X","X","X",
+"Copy or Move","N",,,"X","X","X",
+"Access contents information","N",,,"X","X","X",
+"Add portal content","N",,,"X","X","X",
+"Modify portal content","N",,,"X","X","X",
+"Delete objects","N",,,"X","X","X",
+"List folder contents","N",,,"X","X","X",
+"sistema.agenda: ModificaEvento","N","X",,"X","X","X",
+
+"[State]"
+"Id:","em_analise"
+"Title:","Solicitacao em analise"
+"Description:","Solicitacao de agendamento em analise"
+"Transitions","prereservar","nao_aprovado"
+"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
+"View","N",,,"X","X","X",
+"Copy or Move","N",,,"X","X","X",
+"Access contents information","N",,,"X","X","X",
+"Add portal content","N",,,"X","X","X",
+"Modify portal content","N",,,"X","X","X",
+"Delete objects","N",,,"X","X","X",
+"List folder contents","N",,,"X","X","X",
+"sistema.agenda: ModificaEvento","N",,,"X","X","X",
+
+"[State]"
+"Id:","prereservado"
+"Title:","Pre-agendado"
+"Description:","Evento pre-agendado"
+"Transitions","reservar"
+"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
+"View","N","X",,"X","X","X",
+"Copy or Move","N",,,"X","X","X",
+"Access contents information","N","X",,"X","X","X",
+"Add portal content","N",,,"X","X","X",
+"Modify portal content","N",,,"X","X","X",
+"Delete objects","N",,,"X","X","X",
+"List folder contents","N","X",,"X","X","X",
+"sistema.agenda: ModificaEvento","N",,,"X","X","X",
+
+"[State]"
+"Id:","agendado"
+"Title:","Agendado"
+"Description:","Evento agendado"
+"Transitions","terminar"
+"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
+"View","N","X",,"X","X","X",
+"Copy or Move","N",,,"X","X","X",
+"Access contents information","N","X",,"X","X","X",
+"Add portal content","N",,,"X","X","X",
+"Modify portal content","N",,,"X","X","X",
+"Delete objects","N",,,"X","X","X",
+"List folder contents","N","X",,"X","X","X",
+"sistema.agenda: ModificaEvento","N",,,"X","X","X",
+
+"[State]"
+"Id:","terminado"
+"Title:","Evento realizado"
+"Description:","Evento realizado"
+"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
+"View","N","X",,"X","X","X",
+"Copy or Move","N",,,"X","X","X",
+"Access contents information","N","X",,"X","X","X",
+"Add portal content","N",,,"X","X","X",
+"Modify portal content","N",,,"X","X","X",
+"Delete objects","N",,,"X","X","X",
+"List folder contents","N","X",,"X","X","X",
+"sistema.agenda: ModificaEvento","N",,,"X","X","X",
 
 "[Transition]"
-"Id:","privar"
-"Title:","Tornar privado"
-"Description:","Torna esse conteudo visivel somente pelo proprietario"
-"Target state:","privado"
+"Id:","para_analise"
+"Title:","Enviar para analise"
+"Description:","Enviar a solicitacao para analise"
+"Target state:","em_analise"
 "Guard permission:","sistema.agenda: ModificaEvento"
-"Guard Role:","Owner
+
+"[Transition]"
+"Id:","nao_aprovado"
+"Title:","Enviar para revisao"
+"Description:","Enviar a solicitacao para revisao"
+"Target state:","solicitacao"
+"Guard permission:","sistema.agenda: ModificaEvento"
+
+"[Transition]"
+"Id:","prereservar"
+"Title:","Pre-reservar"
+"Description:","Marcar a solicitacao como pre-reservada"
+"Target state:","prereservado"
+"Guard permission:","sistema.agenda: ModificaEvento"
+
+"[Transition]"
+"Id:","reservar"
+"Title:","Agendar"
+"Description:","Marcar o agendamento definitivo"
+"Target state:","agendado"
+"Guard permission:","sistema.agenda: ModificaEvento"
+
+"[Transition]"
+"Id:","terminar"
+"Title:","Evento realizado"
+"Description:","Marcar como evento realizado"
+"Target state:","terminado"
+"Guard permission:","sistema.agenda: ModificaEvento"
