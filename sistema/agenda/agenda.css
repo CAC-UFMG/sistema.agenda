@@ -9,6 +9,18 @@
     color: #2F2222 !important;
 }
 
+.state-agendado {
+    color: #2F2222 !important;
+}
+
 .state-private {
     color: #D2913C  !important;
+}
+
+.state-terminado {
+    color: red  !important;
+}
+
+.state-em_analise {
+    color: green  !important;
 }
