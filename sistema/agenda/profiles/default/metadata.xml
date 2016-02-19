@@ -7,5 +7,6 @@
         <dependency>profile-plone.formwidget.contenttree:default</dependency>
         <dependency>profile-collective.z3cform.datetimewidget:default</dependency>
 		<dependency>profile-Solgema.fullcalendar:default</dependency>
+		<dependency>profile-plone.formwidget.querystring:default</dependency>
 	</dependencies>
 </metadata>

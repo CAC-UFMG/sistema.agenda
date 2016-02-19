@@ -32,11 +32,13 @@ def criaPastas(context):
       _createObjectByType('Folder',pastaAgenda,id='preagenda',title="Pre Agendamentos")
       _createObjectByType('Folder',raiz,id='equipe',title="Equipe")
       _createObjectByType('Folder',raiz,id='locais',title="Locais")
+      _createObjectByType('Collection',raiz,id='listagem',title="Listagem de eventos")
       
       
       pastaPreAgenda=pastaAgenda.get('preagenda')  
       pastaEquipe=raiz.get('equipe')      
-      pastaLocais=raiz.get('locais')      
+      pastaLocais=raiz.get('locais')    
+      listagem = raiz.get('listagem')	  
 	  
       if pastaEquipe:
         _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='ivanildo',title='Ivanildo',funcao='Tecnico de som',regime='30hs')
@@ -56,8 +58,15 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-i',title='Auditorio 2 do Cad 1',unidade='CAD1')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-ii',title='Auditorio 1 do Cad 2',unidade='CAD2')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-ii',title='Auditorio 2 do Cad 2',unidade='CAD2')
-  
-      raiz.setLayout("event_listing")	        
+		
+
+
+      from plone.formwidget.querystring.converter import QueryStringConverter
+      a={"Type":"sistema.agenda.evento","review_state":"agendado" }
+      #qc = QueryStringConverter()
+      #listagem.query = qc.toWidgetValue(a)
+      raiz.setLayout(listagem.id)
+      listagem.setLayout("event_listing")	        
       pastaAgenda.setLayout("solgemafullcalendar_view")	  
       pastaEquipe.setLayout("folder_summary_view")
       pastaLocais.setLayout("folder_summary_view")
@@ -67,6 +76,7 @@ def criaPastas(context):
       workflowTool.doActionFor(pastaAgenda, "publish")      
       workflowTool.doActionFor(pastaLocais, "publish") 
       workflowTool.doActionFor(pastaEquipe, "publish") 
+      workflowTool.doActionFor(listagem, "publish") 
       pastaAgenda.manage_permission('Add portal content',('Anonymous',))	  
       pastaAgenda.manage_permission('sistema.agenda: ModificaEvento',('Anonymous',))	   
       pastaAgenda.manage_permission('Delete objects',('Anonymous',))	  
