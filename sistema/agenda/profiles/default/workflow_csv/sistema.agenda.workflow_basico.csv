@@ -9,75 +9,59 @@
 "Title:","Solicitacao criada"
 "Description:","Solicitacao para agendamento criada"
 "Transitions","para_analise"
-"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
-"View","N","X",,"X","X","X",
-"Copy or Move","N","X",,"X","X","X",
-"Access contents information","N",,,"X","X","X",
-"Add portal content","N",,,"X","X","X",
-"Modify portal content","N",,,"X","X","X",
-"Delete objects","N",,,"X","X","X",
-"List folder contents","N",,,"X","X","X",
-"sistema.agenda: ModificaEvento","N","X",,"X","X","X",
-"sistema.agenda: VisualizaEvento","N","X",,"X","X","X",
+"Permissions","Acquire","Anonymous","Site Administrator"
+"View","N","X","X"
+"sistema.agenda: ModificaEvento", "N",,"X"
+"sistema.agenda: VisualizaEvento","N","X","X"
+"Delete objects","N","X","X"
+"View management screens","N","X","X"
 
 "[State]"
 "Id:","em_analise"
 "Title:","Solicitacao em analise"
 "Description:","Solicitacao de agendamento em analise"
 "Transitions","prereservar,nao_aprovado"
-"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
-"View","N",,,"X","X","X",
-"Copy or Move","N",,,"X","X","X",
-"Access contents information","N",,,"X","X","X",
-"Add portal content","N",,,"X","X","X",
-"Modify portal content","N",,,"X","X","X",
-"Delete objects","N",,,"X","X","X",
-"List folder contents","N",,,"X","X","X",
-"sistema.agenda: ModificaEvento","N",,,"X","X","X",
+"Permissions","Acquire","Anonymous","Site Administrator"
+"View","N",,"X"
+"sistema.agenda: ModificaEvento", "N",,"X"
+"sistema.agenda: VisualizaEvento","N",,"X"
+"Delete objects","N",,"X"
+"View management screens","N",,"X"
 
 "[State]"
 "Id:","prereservado"
 "Title:","Pre-agendado"
 "Description:","Evento pre-agendado"
 "Transitions","reservar"
-"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
-"View","N","X",,"X","X","X",
-"Copy or Move","N",,,"X","X","X",
-"Access contents information","N","X",,"X","X","X",
-"Add portal content","N",,,"X","X","X",
-"Modify portal content","N",,,"X","X","X",
-"Delete objects","N",,,"X","X","X",
-"List folder contents","N","X",,"X","X","X",
-"sistema.agenda: ModificaEvento","N",,,"X","X","X",
+"Permissions","Acquire","Anonymous","Site Administrator"
+"View","N","X","X"
+"sistema.agenda: ModificaEvento", "N",,"X"
+"sistema.agenda: VisualizaEvento","N","X","X"
+"Delete objects","N",,"X"
+"View management screens","N",,"X"
 
 "[State]"
 "Id:","agendado"
 "Title:","Agendado"
 "Description:","Evento agendado"
 "Transitions","terminar"
-"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
-"View","N","X",,"X","X","X",
-"Copy or Move","N",,,"X","X","X",
-"Access contents information","N","X",,"X","X","X",
-"Add portal content","N",,,"X","X","X",
-"Modify portal content","N",,,"X","X","X",
-"Delete objects","N",,,"X","X","X",
-"List folder contents","N","X",,"X","X","X",
-"sistema.agenda: ModificaEvento","N",,,"X","X","X",
+"Permissions","Acquire","Anonymous","Site Administrator"
+"View","N","X","X"
+"sistema.agenda: ModificaEvento", "N",,"X"
+"sistema.agenda: VisualizaEvento","N","X","X"
+"Delete objects","N",,"X"
+"View management screens","N",,"X"
 
 "[State]"
 "Id:","terminado"
 "Title:","Evento realizado"
 "Description:","Evento realizado"
-"Permissions","Acquire","Anonymous","Authenticated","Member","Manager","Owner"
-"View","N","X",,"X","X","X",
-"Copy or Move","N",,,"X","X","X",
-"Access contents information","N","X",,"X","X","X",
-"Add portal content","N",,,"X","X","X",
-"Modify portal content","N",,,"X","X","X",
-"Delete objects","N",,,"X","X","X",
-"List folder contents","N","X",,"X","X","X",
-"sistema.agenda: ModificaEvento","N",,,"X","X","X",
+"Permissions","Acquire","Anonymous","Site Administrator"
+"View","N","X","X"
+"sistema.agenda: ModificaEvento", "N",,"X"
+"sistema.agenda: VisualizaEvento","N","X","X"
+"Delete objects","N",,"X"
+"View management screens","N",,"X"
 
 "[Transition]"
 "Id:","para_analise"
@@ -106,7 +90,7 @@
 "Description:","Marcar o agendamento definitivo"
 "Target state:","agendado"
 "Guard permission:","sistema.agenda: ModificaEvento"
-"Script after:","sistema.agenda.Extensions.moveItem.copiaParaPastaMae"
+"Script before:","sistema.agenda.Extensions.moveItem.copiaParaPastaMae"
 
 "[Transition]"
 "Id:","terminar"

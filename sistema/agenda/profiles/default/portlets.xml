@@ -4,14 +4,9 @@
 <assignment name="calendar" category="context" key="/"
     manager="plone.rightcolumn" type="portlets.Calendar" visible="True">
   <property name="state">
-   <element>internal</element>
-   <element>visible</element>
-   <element>pending</element>
-   <element>private</element>
-   <element>published</element>
-   <element>internally_published</element>
-   <element>external</element>
+   <element>agendado</element>   
   </property>
   <property name="search_base"></property>
  </assignment>
+ 
 </portlets>

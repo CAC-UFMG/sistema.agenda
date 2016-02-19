@@ -65,18 +65,14 @@ def criaPastas(context):
 	  
       workflowTool = getToolByName(raiz, "portal_workflow")
       workflowTool.doActionFor(pastaAgenda, "publish")      
+      workflowTool.doActionFor(pastaLocais, "publish") 
+      workflowTool.doActionFor(pastaEquipe, "publish") 
       pastaAgenda.manage_permission('Add portal content',('Anonymous',))	  
-      pastaAgenda.manage_permission('sistema.agenda: ModificaEvento',('Anonymous',))	  
-      pastaAgenda.manage_permission('View management screens',('Anonymous',))	  
+      pastaAgenda.manage_permission('sistema.agenda: ModificaEvento',('Anonymous',))	   
       pastaAgenda.manage_permission('Delete objects',('Anonymous',))	  
-      pastaPreAgenda.manage_permission('Delete objects',('Anonymous',))	  
-      pastaPreAgenda.manage_permission('View management screens',('Anonymous',))	  
-      
-      
-	  
-	  
-      #ISolgemaFullcalendarProperties.get('defaultCalendarView').default = u'month'
-      #ISolgemaFullcalendarProperties.get('eventType').default = u'sistema.agenda.evento'
+      pastaPreAgenda.manage_permission('View management screens',('Anonymous',))
+ 
+   
       campo= ISolgemaFullcalendarProperties(aq_inner(pastaAgenda), None)
       setattr(campo,'defaultCalendarView',u'month')
       setattr(campo,'eventType',u'sistema.agenda.evento')
@@ -84,11 +80,12 @@ def criaPastas(context):
 	  
       mt = raiz.portal_membership
       regTool=raiz.portal_registration
-      loginSecretaria='agenda'
-      senhaSecretaria='agenda'
-      emailSecretaria='quilombo@gmail.com'
+      memTool=raiz.portal_membership
+      loginSecretaria='agendador'
+      senhaSecretaria='agendador'
+      emailSecretaria='agendador@gmail.com'
       if mt.getMemberById(loginSecretaria) is None:
-        regTool.addMember(loginSecretaria,senhaSecretaria,roles=('Members','Reviwers'))
+        memTool.addMember(loginSecretaria,senhaSecretaria,['Site Administrator'],[])
 
       manager = getUtility(IPortletManager, name='plone.leftcolumn', context=raiz)
       assignments = getMultiAdapter((raiz, manager), IPortletAssignmentMapping)
