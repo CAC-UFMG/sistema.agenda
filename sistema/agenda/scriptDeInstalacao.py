@@ -65,6 +65,9 @@ def criaPastas(context):
       a={"Type":"sistema.agenda.evento","review_state":"agendado" }
       #qc = QueryStringConverter()
       #listagem.query = qc.toWidgetValue(a)
+      field = listagem.getField('query')
+      field.set(listagem, [{'i': 'portal_type', 'o':'plone.app.querystring.operation.selection.is','v':'sistema.agenda.evento'},
+	  {'i': 'review_state', 'o':'plone.app.querystring.operation.selection.is','v':'agendado'}])
       raiz.setLayout(listagem.id)
       listagem.setLayout("event_listing")	        
       pastaAgenda.setLayout("solgemafullcalendar_view")	  
