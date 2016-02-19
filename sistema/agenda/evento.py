@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from five import grok
 
 from z3c.form import group, field
@@ -28,17 +30,33 @@ from Acquisition import aq_inner, aq_parent
 from zope.interface import invariant, Invalid
 from Products.CMFCore.interfaces import ISiteRoot
 
+listaDeCategorias = SimpleVocabulary.fromValues(['Interno','Externo'])
+sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
+'Palestra',u'Forum',u'Simposio','Mostra','Congresso','Encontro','Ensaio','Montagem',u'Manutencao',
+u'Capacitacao','Workshop','Prova',u'Recepcao','Solenidade','Festividade',u'Reuniao']
+sortTiposEvento.sort()
+tiposEvento = SimpleVocabulary.fromValues(sortTiposEvento)
+listaServicosExtras = SimpleVocabulary.fromValues(['Rede WiFi','Transmissao interna','Transmissao via internet','Traducao simultanea',])
 
 class Ievento(form.Schema, IImageScaleTraversable):
     """
     Evento
     """
-
-    form.fieldset('dadosEvento',label=u"Dados do evento", fields=['local','equipe'] ) 
-
+    categoria=schema.Choice(title=u"Categoria",required=True,vocabulary=listaDeCategorias)
+    tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)
+	
     local=RelationList(title=u"Local",required=True,value_type=RelationChoice(title=u'Local',required=True,source=ObjPathSourceBinder(object_provides=Ilocal.__identifier__)))
     equipe=RelationList(title=u"Equipe",required=True,value_type=RelationChoice(title=u'Equipe',required=True,source=ObjPathSourceBinder(object_provides=ImembroDeEquipe.__identifier__)))
-
+	
+    previsaoDePublico=schema.TextLine(title=u"Previsão de Público",required=True)
+    servicosExtras=schema.Set(title=u"Serviços Extras",value_type=schema.Choice(source=listaServicosExtras))
+	
+    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','instituicao','telefone','email'] ) 
+    responsavel=schema.TextLine(title=u"Responsável",required=True)
+    instituicao=schema.TextLine(title=u"Instituição",required=True,default=u'UFMG')
+    unidade=schema.TextLine(title=u"Unidade",required=True)
+    telefone=schema.TextLine(title=u"Telefone",required=True)
+    email=schema.TextLine(title=u"E-mail",required=True)
 
 @grok.subscribe(Ievento, IObjectModifiedEvent)
 def modificaEvento(evento, event):
