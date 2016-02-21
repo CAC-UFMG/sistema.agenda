@@ -176,10 +176,7 @@ def adicionaEvento(evento, event):
 class evento(Item):
     grok.implements(Ievento)
 
-    # Add your class methods and properties here
-    pass
-
-
+ 
 # View class
 # The view will automatically use a similarly named template in
 # evento_templates.
