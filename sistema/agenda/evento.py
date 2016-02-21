@@ -16,6 +16,7 @@ from plone.namedfile.field import NamedImage, NamedFile
 from plone.namedfile.field import NamedBlobImage, NamedBlobFile
 from plone.namedfile.interfaces import IImageScaleTraversable
 from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget,CheckBoxFieldWidget
 
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from sistema.agenda.membrodeequipe import ImembroDeEquipe
@@ -29,6 +30,8 @@ from zc.relation.interfaces import ICatalog
 from Acquisition import aq_inner, aq_parent
 from zope.interface import invariant, Invalid
 from Products.CMFCore.interfaces import ISiteRoot
+from Products.CMFDefault.utils import checkEmailAddress
+from Products.CMFDefault.exceptions import EmailAddressInvalid
 
 listaDeCategorias = SimpleVocabulary.fromValues(['Interno','Externo'])
 sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
@@ -38,26 +41,71 @@ sortTiposEvento.sort()
 tiposEvento = SimpleVocabulary.fromValues(sortTiposEvento)
 listaServicosExtras = SimpleVocabulary.fromValues(['Rede WiFi','Transmissao interna','Transmissao via internet','Traducao simultanea',])
 
+def telefoneValidation(data):
+	tel = data.replace("(","")
+	tel = tel.replace(")","")
+	tel = tel.replace("-","")
+	tel = tel.replace(" ","")
+	if not tel.isdigit() or len(data)<7 or data[-5]!= "-" or data[0]!="(" or data[3]!=")" or data.count(" ")>0:
+	 	raise Invalid(_(u"O número deve ser no formato (XX)XXXXX-XXXX"))
+	return True
+	
+	
+def validateaddress(data):
+    try:
+        checkEmailAddress(data)
+    except EmailAddressInvalid:
+    	  raise Invalid(u"XXXX@XXX.XXX ")
+    return True	
+	
+def publicoValidation(data):
+    try:
+        int(data) 
+    except ValueError:
+    	  raise Invalid(u'Informe somente números')
+    return True		
+
+def cpfValidation(data):
+	d1=0
+	d2=0
+	i=0
+	if len(data)!=11:
+            raise Invalid(_(u"CPF Inválido"))
+        else:
+            while i<10:
+		d1,d2,i=(d1+(int(data[i])*(11-i-1)))%11 if i<9 else d1,(d2+(int(data[i])*(11-i)))%11,i+1
+	    resultado=(int(data[9])==(11-d1 if d1>1 else 0)) and (int(data[10])==(11-d2 if d2>1 else 0))
+	    if not resultado:
+		raise Invalid(_(u"CPF Inválido"))
+	return True
+	
+permissaoAdm='sistema.agenda.visualizaEvento'
 class Ievento(form.Schema, IImageScaleTraversable):
     """
     Evento
     """
-    categoria=schema.Choice(title=u"Categoria",required=True,vocabulary=listaDeCategorias)
-    tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)
+    form.write_permission(equipe=permissaoAdm)
+    form.write_permission(categoria=permissaoAdm)
 	
-    local=RelationList(title=u"Local",required=True,value_type=RelationChoice(title=u'Local',required=True,source=ObjPathSourceBinder(object_provides=Ilocal.__identifier__)))
-    equipe=RelationList(title=u"Equipe",required=True,value_type=RelationChoice(title=u'Equipe',required=True,source=ObjPathSourceBinder(object_provides=ImembroDeEquipe.__identifier__)))
+    categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
+    tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
+    local=RelationList(title=u"Local",description=u'Escolha os espaços a serem agendados',required=True,value_type=RelationChoice(title=u'Local',required=True,source=ObjPathSourceBinder(object_provides=Ilocal.__identifier__)))
+    equipe=RelationList(title=u"Equipe",description=u'PARA O AGENDADOR: Informe a equipe para este evento',required=False,value_type=RelationChoice(title=u'Equipe',required=True,source=ObjPathSourceBinder(object_provides=ImembroDeEquipe.__identifier__)))	
+    previsaoDePublico=schema.TextLine(title=u"Previsão de Público",description=u'Informe a previsão do número de participantes',required=True,constraint=publicoValidation)
+    servicosExtras=schema.Set(title=u"Serviços Extras",description=u'O evento necessita de algum destes serviços?',required=False, value_type=schema.Choice(source=listaServicosExtras))
+    form.widget('servicosExtras', CheckBoxFieldWidget)
 	
-    previsaoDePublico=schema.TextLine(title=u"Previsão de Público",required=True)
-    servicosExtras=schema.Set(title=u"Serviços Extras",value_type=schema.Choice(source=listaServicosExtras))
-	
-    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','instituicao','telefone','email'] ) 
-    responsavel=schema.TextLine(title=u"Responsável",required=True)
-    instituicao=schema.TextLine(title=u"Instituição",required=True,default=u'UFMG')
-    unidade=schema.TextLine(title=u"Unidade",required=True)
-    telefone=schema.TextLine(title=u"Telefone",required=True)
-    email=schema.TextLine(title=u"E-mail",required=True)
+    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','cpf','instituicao','unidade','telefone','email'] ) 
+    responsavel=schema.TextLine(title=u"Responsável pelo evento",description=u'Quem assumirá a responsabilidade legal pelo evento?',required=True)
+    instituicao=schema.TextLine(title=u"Instituição",description=u'Informe qual a instituição ligada ao evento',required=True,default=u'UFMG')
+    unidade=schema.TextLine(title=u"Unidade",description=u'Informe a unidade ou departamento que está fazendo a solicitação',required=True)
+    telefone=schema.TextLine(title=u"Telefone",description=u'Informe o contato telefônico do responsável pelo evento',required=True,constraint=telefoneValidation)
+    email=schema.TextLine(title=u"E-mail",description=u'Informe o email do responsável pelo evento',required=True,constraint=validateaddress)
+    cpf=schema.TextLine(title=u"CPF",constraint=cpfValidation, description=u'Informe o cpf do responsável pelo evento',required=True)
 
+
+	
+	
 @grok.subscribe(Ievento, IObjectModifiedEvent)
 def modificaEvento(evento, event):
   #se houver outro evento na mesma data com o mesmo espaco.
