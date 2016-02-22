@@ -161,9 +161,6 @@ msgstr ""
 msgid "yearly_repeat_on"
 msgstr ""
 
-msgid "range"
-msgstr ""
-
 msgid "range_no_end"
 msgstr ""
 
@@ -183,25 +180,22 @@ msgid "range_by_end_date_human"
 msgstr ""
 
 msgid "including"
-msgstr ""
+msgstr "Incluindo"
 
 msgid "cancel"
-msgstr ""
+msgstr "Cancelar"
 
 msgid "save"
-msgstr ""
+msgstr "Salvar"
 
 msgid "additional_date"
 msgstr ""
 
 msgid "include"
-msgstr ""
-
-msgid "exclude"
-msgstr ""
+msgstr "Incluir"
 
 msgid "remove"
-msgstr ""
+msgstr "Remover"
 
 msgid "order_indexes_first"
 msgstr ""
@@ -351,37 +345,37 @@ msgid "bysetpos"
 msgstr ""
 
 msgid "no_rule"
-msgstr ""
+msgstr "sem recorrência"
 
 msgid "no_repeat_every"
 msgstr ""
 
 msgid "no_end_date"
-msgstr ""
+msgstr "sem data final"
 
 msgid "no_repeat_on"
-msgstr ""
+msgstr "não repetir em"
 
 msgid "past_end_date"
-msgstr ""
+msgstr "data de término passada"
 
 msgid "no_end_after_n_occurrences"
 msgstr ""
 
 msgid "already_added"
-msgstr ""
+msgstr "Já adicionado"
 
 msgid "template_mondayfriday"
-msgstr ""
+msgstr "De sengunda a sexta"
 
 msgid "template_weekdays"
-msgstr ""
+msgstr "Dias de semana"
 
 msgid "template_weekly"
-msgstr ""
+msgstr "Semanalmente"
 
 msgid "template_monthly"
-msgstr ""
+msgstr "Mensalmente"
 
 msgid "template_yearly"
-msgstr ""
+msgstr "Anualmente"
