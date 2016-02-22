@@ -21,9 +21,51 @@ msgstr ""
 msgid "add_rules"
 msgstr "Adicionar"
 
+msgid "long_date_format"
+msgstr "dddd mmmm dd, yyyy"
+
+msgid "additional_date"
+msgstr "data adicional"
+
+msgid "range_by_end_date_human"
+msgstr "em"
+
+msgid "monthly_weekday_of_month_1_human"
+msgstr "em"
+
+msgid "range_by_occurrences_1_human"
+msgstr "em"
+
+msgid "display_activate"
+msgstr "Repete a cada"
+
+msgid "weekly_weekdays_human"
+msgstr "em" 
+
+msgid "monthly_day_of_month_1_human"
+msgstr "em"
+
+msgid "yearly_day_of_month_1_human"
+msgstr "em"
+
+msgid "yearly_weekday_of_month_1_human"
+msgstr "em"
+
+msgid "multiple_day_of_month"
+msgstr "Este widget não suporta multiplos dias em recorrência mensal ou anual"
+
+msgid "no_repeat_every"
+msgstr "ERRO: o campo deve estar entre 1 e 1000"
+
+msgid "no_end_after_n_occurrences"
+msgstr "ERRO: o campo após n ocorrências deve estar entre 1 e 1000"
+
 #. Default: "Adicionar"
 msgid "add"
 msgstr "Adicionar"
+
+msgid "except"
+msgstr " exceto"
 
 #. Default: "Início da recorrência"
 msgid "recurrence_start"
@@ -184,17 +226,17 @@ msgstr "Última"
 
 
 msgid "no_end_date"
-msgstr "sem data final"
+msgstr "ERRO: sem data final"
 
 msgid "no_repeat_on"
-msgstr "não repetir em"
+msgstr "ERRO: repetir em deve ser selecionado"
 
 msgid "past_end_date"
-msgstr "data de término passada"
+msgstr "ERRO: data de término antes da data de início"
 
 
 msgid "already_added"
-msgstr "Já adicionado"
+msgstr "Essa data já foi adicionada"
 
 msgid "template_mondayfriday"
 msgstr "Segunda e sexta"
