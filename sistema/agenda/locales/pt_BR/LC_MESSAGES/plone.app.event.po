@@ -30,3 +30,13 @@ msgstr "Evento sem horário para terminar"
 #: plone/app/event/dx/behaviors.py:123
 msgid "help_event_open_end"
 msgstr " "
+
+#. Default: "Import Events from icalendar files."
+#: plone/app/event/profiles/default/actions.xml
+msgid "help_ical_import"
+msgstr "Importa eventos de arquivos do Icalendar"
+
+#. Default: "Define the event recurrence rule."
+#: plone/app/event/dx/behaviors.py:169
+msgid "help_event_recurrence"
+msgstr ""

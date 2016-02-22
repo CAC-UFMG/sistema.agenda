@@ -24,3 +24,4 @@ msgstr "Listagem de eventos"
 #. Default: "Event"
 msgid "event_view"
 msgstr "Evento"
+

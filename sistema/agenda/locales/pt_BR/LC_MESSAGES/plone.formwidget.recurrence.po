@@ -1,0 +1,387 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2015-06-25 12:29+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: pt_BR\n"
+"Language-Name: Português do Brasil\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone.formwidget.recurrence\n"
+
+
+# TRANSLATE VIEW NAMES
+# 
+#. Default: "Event Listing"
+msgid "add_rules"
+msgstr "Adicionar"
+
+#. Default: "Adicionar"
+msgid "add"
+msgstr "Adicionar"
+
+#. Default: "Início da recorrência"
+msgid "recurrence_start"
+msgstr "Início da recorrência"
+
+#. Default: "Recorrência"
+msgid "title"
+msgstr "Recorrência"
+
+#. Default: "Nada ainda"
+msgid "display_unactivate"
+msgstr "Nada ainda"
+
+#. Default: "Amostra"
+msgid "preview"
+msgstr "Amostra"
+
+#. Default: "Amostra"
+msgid "refresh"
+msgstr "Atualizar"
+
+#. Default: "Remover"
+msgid "exclude"
+msgstr "Remover"
+
+#. Default: "Adicionar data"
+msgid "add_date"
+msgstr "Adicionar data"
+
+#. Default: "Ocorrências"
+msgid "range"
+msgstr "Ocorrências"
+
+#. Default: "Repete"
+msgid "recurrence_type"
+msgstr "Repete"
+
+#. Default: "Repete"
+msgid "template_daily"
+msgstr "Diariamente"
+
+msgid "edit_rules"
+msgstr "Editar recorrências"
+
+msgid "delete_rules"
+msgstr "Deletar recorrências"
+
+msgid "daily_interval_1"
+msgstr ""
+
+msgid "daily_interval_2"
+msgstr ""
+
+msgid "weekly_interval_1"
+msgstr ""
+
+msgid "weekly_interval_2"
+msgstr ""
+
+msgid "weekly_weekdays"
+msgstr ""
+
+msgid "weekly_weekdays_human"
+msgstr ""
+
+msgid "monthly_interval_1"
+msgstr ""
+
+msgid "monthly_interval_2"
+msgstr ""
+
+msgid "monthly_day_of_month_1"
+msgstr ""
+
+msgid "monthly_day_of_month_1_human"
+msgstr ""
+
+msgid "monthly_day_of_month_2"
+msgstr ""
+
+msgid "monthly_day_of_month_3"
+msgstr ""
+
+msgid "monthly_day_of_month_4"
+msgstr ""
+
+msgid "monthly_weekday_of_month_1"
+msgstr ""
+
+msgid "monthly_weekday_of_month_1_human"
+msgstr ""
+
+msgid "monthly_weekday_of_month_2"
+msgstr ""
+
+msgid "monthly_weekday_of_month_3"
+msgstr ""
+
+msgid "monthly_repeat_on"
+msgstr ""
+
+msgid "yearly_interval_1"
+msgstr ""
+
+msgid "yearly_interval_2"
+msgstr ""
+
+msgid "yearly_day_of_month_1"
+msgstr ""
+
+msgid "yearly_day_of_month_1_human"
+msgstr ""
+
+msgid "yearly_day_of_month_2"
+msgstr ""
+
+msgid "yearly_day_of_month_3"
+msgstr ""
+
+msgid "yearly_weekday_of_month_1"
+msgstr ""
+
+msgid "yearly_weekday_of_month_1_human"
+msgstr ""
+
+msgid "yearly_weekday_of_month_2"
+msgstr ""
+
+msgid "yearly_weekday_of_month_3"
+msgstr ""
+
+msgid "yearly_weekday_of_month_4"
+msgstr ""
+
+msgid "yearly_repeat_on"
+msgstr ""
+
+msgid "range"
+msgstr ""
+
+msgid "range_no_end"
+msgstr ""
+
+msgid "range_by_occurrences_1"
+msgstr ""
+
+msgid "range_by_occurrences_1_human"
+msgstr ""
+
+msgid "range_by_occurrences_2"
+msgstr ""
+
+msgid "range_by_end_date"
+msgstr ""
+
+msgid "range_by_end_date_human"
+msgstr ""
+
+msgid "including"
+msgstr ""
+
+msgid "cancel"
+msgstr ""
+
+msgid "save"
+msgstr ""
+
+msgid "additional_date"
+msgstr ""
+
+msgid "include"
+msgstr ""
+
+msgid "exclude"
+msgstr ""
+
+msgid "remove"
+msgstr ""
+
+msgid "order_indexes_first"
+msgstr ""
+
+msgid "order_indexes_second"
+msgstr ""
+
+msgid "order_indexes_third"
+msgstr ""
+
+msgid "order_indexes_fourth"
+msgstr ""
+
+msgid "order_indexes_last"
+msgstr ""
+
+msgid "month_jan"
+msgstr ""
+
+msgid "month_feb"
+msgstr ""
+
+msgid "month_mar"
+msgstr ""
+
+msgid "month_apr"
+msgstr ""
+
+msgid "month_may"
+msgstr ""
+
+msgid "month_jun"
+msgstr ""
+
+msgid "month_jul"
+msgstr ""
+
+msgid "month_aug"
+msgstr ""
+
+msgid "month_sep"
+msgstr ""
+
+msgid "month_oct"
+msgstr ""
+
+msgid "month_nov"
+msgstr ""
+
+msgid "month_dec"
+msgstr ""
+
+msgid "month_jan_abbr"
+msgstr ""
+
+msgid "month_feb_abbr"
+msgstr ""
+
+msgid "month_mar_abbr"
+msgstr ""
+
+msgid "month_apr_abbr"
+msgstr ""
+
+msgid "month_may_abbr"
+msgstr ""
+
+msgid "month_jun_abbr"
+msgstr ""
+
+msgid "month_jul_abbr"
+msgstr ""
+
+msgid "month_aug_abbr"
+msgstr ""
+
+msgid "month_sep_abbr"
+msgstr ""
+
+msgid "month_oct_abbr"
+msgstr ""
+
+msgid "month_nov_abbr"
+msgstr ""
+
+msgid "month_dec_abbr"
+msgstr ""
+
+msgid "weekday_sun"
+msgstr ""
+
+msgid "weekday_mon"
+msgstr ""
+
+msgid "weekday_tue"
+msgstr ""
+
+msgid "weekday_wed"
+msgstr ""
+
+msgid "weekday_thu"
+msgstr ""
+
+msgid "weekday_fri"
+msgstr ""
+
+msgid "weekday_sat"
+msgstr ""
+
+msgid "weekday_sun_abbr"
+msgstr ""
+
+msgid "weekday_mon_abbr"
+msgstr ""
+
+msgid "weekday_tue_abbr"
+msgstr ""
+
+msgid "weekday_wed_abbr"
+msgstr ""
+
+msgid "weekday_thu_abbr"
+msgstr ""
+
+msgid "weekday_fri_abbr"
+msgstr ""
+
+msgid "weekday_sat_abbr"
+msgstr ""
+
+msgid "long_date_format"
+msgstr ""
+
+msgid "date_format_short_datepicker"
+msgstr ""
+
+msgid "unsupported_features"
+msgstr ""
+
+msgid "no_template_match"
+msgstr ""
+
+msgid "multiple_day_of_month"
+msgstr ""
+
+msgid "bysetpos"
+msgstr ""
+
+msgid "no_rule"
+msgstr ""
+
+msgid "no_repeat_every"
+msgstr ""
+
+msgid "no_end_date"
+msgstr ""
+
+msgid "no_repeat_on"
+msgstr ""
+
+msgid "past_end_date"
+msgstr ""
+
+msgid "no_end_after_n_occurrences"
+msgstr ""
+
+msgid "already_added"
+msgstr ""
+
+msgid "template_mondayfriday"
+msgstr ""
+
+msgid "template_weekdays"
+msgstr ""
+
+msgid "template_weekly"
+msgstr ""
+
+msgid "template_monthly"
+msgstr ""
+
+msgid "template_yearly"
+msgstr ""
