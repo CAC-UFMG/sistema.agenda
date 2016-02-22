@@ -39,7 +39,7 @@ msgstr "Nada ainda"
 
 #. Default: "Amostra"
 msgid "preview"
-msgstr "Amostra"
+msgstr "Datas selecionadas"
 
 #. Default: "Amostra"
 msgid "refresh"
@@ -53,13 +53,13 @@ msgstr "Remover"
 msgid "add_date"
 msgstr "Adicionar data"
 
-#. Default: "Ocorrências"
+#. Default: "Fim da recorrência"
 msgid "range"
-msgstr "Ocorrências"
+msgstr "Fim da recorrência:"
 
 #. Default: "Repete"
 msgid "recurrence_type"
-msgstr "Repete"
+msgstr "Repete:"
 
 #. Default: "Repete"
 msgid "template_daily"
@@ -72,112 +72,85 @@ msgid "delete_rules"
 msgstr "Deletar recorrências"
 
 msgid "daily_interval_1"
-msgstr ""
+msgstr "Repete a cada:"
 
 msgid "daily_interval_2"
-msgstr ""
+msgstr "dia(s)"
 
 msgid "weekly_interval_1"
-msgstr ""
+msgstr "Repete a cada:"
 
 msgid "weekly_interval_2"
-msgstr ""
+msgstr "semana(s)"
 
 msgid "weekly_weekdays"
-msgstr ""
+msgstr "Repetir em:"
 
-msgid "weekly_weekdays_human"
-msgstr ""
 
 msgid "monthly_interval_1"
-msgstr ""
+msgstr "Repete a cada"
 
 msgid "monthly_interval_2"
-msgstr ""
+msgstr "mês(es)"
 
 msgid "monthly_day_of_month_1"
-msgstr ""
-
-msgid "monthly_day_of_month_1_human"
-msgstr ""
+msgstr "Dia"
 
 msgid "monthly_day_of_month_2"
-msgstr ""
-
-msgid "monthly_day_of_month_3"
-msgstr ""
-
-msgid "monthly_day_of_month_4"
-msgstr ""
+msgstr "do mês"
 
 msgid "monthly_weekday_of_month_1"
-msgstr ""
-
-msgid "monthly_weekday_of_month_1_human"
-msgstr ""
+msgstr "A"
 
 msgid "monthly_weekday_of_month_2"
-msgstr ""
+msgstr " "
 
 msgid "monthly_weekday_of_month_3"
-msgstr ""
+msgstr "do mês"
 
 msgid "monthly_repeat_on"
-msgstr ""
+msgstr "Repete a cada:"
 
 msgid "yearly_interval_1"
-msgstr ""
+msgstr "Repete a cada"
 
 msgid "yearly_interval_2"
-msgstr ""
+msgstr "ano(s)"
 
 msgid "yearly_day_of_month_1"
-msgstr ""
+msgstr "Todo"
 
-msgid "yearly_day_of_month_1_human"
-msgstr ""
 
 msgid "yearly_day_of_month_2"
-msgstr ""
+msgstr " "
 
 msgid "yearly_day_of_month_3"
-msgstr ""
+msgstr " "
 
 msgid "yearly_weekday_of_month_1"
-msgstr ""
+msgstr "A"
 
-msgid "yearly_weekday_of_month_1_human"
-msgstr ""
 
 msgid "yearly_weekday_of_month_2"
-msgstr ""
+msgstr " "
 
 msgid "yearly_weekday_of_month_3"
-msgstr ""
+msgstr "de"
 
 msgid "yearly_weekday_of_month_4"
-msgstr ""
+msgstr " "
 
 msgid "yearly_repeat_on"
-msgstr ""
-
-msgid "range_no_end"
-msgstr ""
+msgstr "Repete em:"
 
 msgid "range_by_occurrences_1"
-msgstr ""
-
-msgid "range_by_occurrences_1_human"
-msgstr ""
+msgstr "Terminando após"
 
 msgid "range_by_occurrences_2"
-msgstr ""
+msgstr "ocorrência(s)"
 
 msgid "range_by_end_date"
-msgstr ""
-
-msgid "range_by_end_date_human"
-msgstr ""
+msgstr "Até"
 
 msgid "including"
 msgstr "Incluindo"
@@ -188,9 +161,6 @@ msgstr "Cancelar"
 msgid "save"
 msgstr "Salvar"
 
-msgid "additional_date"
-msgstr ""
-
 msgid "include"
 msgstr "Incluir"
 
@@ -198,157 +168,20 @@ msgid "remove"
 msgstr "Remover"
 
 msgid "order_indexes_first"
-msgstr ""
+msgstr "Primeira"
 
 msgid "order_indexes_second"
-msgstr ""
+msgstr "Segunda"
 
 msgid "order_indexes_third"
-msgstr ""
+msgstr "Terceira"
 
 msgid "order_indexes_fourth"
-msgstr ""
+msgstr "Quarta"
 
 msgid "order_indexes_last"
-msgstr ""
+msgstr "Última"
 
-msgid "month_jan"
-msgstr ""
-
-msgid "month_feb"
-msgstr ""
-
-msgid "month_mar"
-msgstr ""
-
-msgid "month_apr"
-msgstr ""
-
-msgid "month_may"
-msgstr ""
-
-msgid "month_jun"
-msgstr ""
-
-msgid "month_jul"
-msgstr ""
-
-msgid "month_aug"
-msgstr ""
-
-msgid "month_sep"
-msgstr ""
-
-msgid "month_oct"
-msgstr ""
-
-msgid "month_nov"
-msgstr ""
-
-msgid "month_dec"
-msgstr ""
-
-msgid "month_jan_abbr"
-msgstr ""
-
-msgid "month_feb_abbr"
-msgstr ""
-
-msgid "month_mar_abbr"
-msgstr ""
-
-msgid "month_apr_abbr"
-msgstr ""
-
-msgid "month_may_abbr"
-msgstr ""
-
-msgid "month_jun_abbr"
-msgstr ""
-
-msgid "month_jul_abbr"
-msgstr ""
-
-msgid "month_aug_abbr"
-msgstr ""
-
-msgid "month_sep_abbr"
-msgstr ""
-
-msgid "month_oct_abbr"
-msgstr ""
-
-msgid "month_nov_abbr"
-msgstr ""
-
-msgid "month_dec_abbr"
-msgstr ""
-
-msgid "weekday_sun"
-msgstr ""
-
-msgid "weekday_mon"
-msgstr ""
-
-msgid "weekday_tue"
-msgstr ""
-
-msgid "weekday_wed"
-msgstr ""
-
-msgid "weekday_thu"
-msgstr ""
-
-msgid "weekday_fri"
-msgstr ""
-
-msgid "weekday_sat"
-msgstr ""
-
-msgid "weekday_sun_abbr"
-msgstr ""
-
-msgid "weekday_mon_abbr"
-msgstr ""
-
-msgid "weekday_tue_abbr"
-msgstr ""
-
-msgid "weekday_wed_abbr"
-msgstr ""
-
-msgid "weekday_thu_abbr"
-msgstr ""
-
-msgid "weekday_fri_abbr"
-msgstr ""
-
-msgid "weekday_sat_abbr"
-msgstr ""
-
-msgid "long_date_format"
-msgstr ""
-
-msgid "date_format_short_datepicker"
-msgstr ""
-
-msgid "unsupported_features"
-msgstr ""
-
-msgid "no_template_match"
-msgstr ""
-
-msgid "multiple_day_of_month"
-msgstr ""
-
-msgid "bysetpos"
-msgstr ""
-
-msgid "no_rule"
-msgstr "sem recorrência"
-
-msgid "no_repeat_every"
-msgstr ""
 
 msgid "no_end_date"
 msgstr "sem data final"
@@ -359,14 +192,12 @@ msgstr "não repetir em"
 msgid "past_end_date"
 msgstr "data de término passada"
 
-msgid "no_end_after_n_occurrences"
-msgstr ""
 
 msgid "already_added"
 msgstr "Já adicionado"
 
 msgid "template_mondayfriday"
-msgstr "De sengunda a sexta"
+msgstr "Segunda e sexta"
 
 msgid "template_weekdays"
 msgstr "Dias de semana"
