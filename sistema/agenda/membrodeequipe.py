@@ -19,6 +19,7 @@ from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from zope.security import checkPermission
 from zc.relation.interfaces import ICatalog
+from datetime import datetime
 
 from sistema.agenda import MessageFactory as _
 
@@ -71,5 +72,9 @@ class View(dexterity.DisplayForm):
      for rel in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
         obj = intids.queryObject(rel.from_id)
         if obj is not None and checkPermission('zope2.View', obj):
-            result.append(obj)
+            dia=datetime.today()            
+            hoje=datetime(dia.year,dia.month,dia.day)
+            d=datetime(obj.start.year,obj.start.month,obj.start.day)
+            if d>=hoje:
+              result.append(obj)
      return result
