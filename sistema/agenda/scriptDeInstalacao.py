@@ -160,3 +160,5 @@ def criaPastas(context):
       pastaAgenda.setConstrainTypesMode(constraintypes.ENABLED)
       pastaAgenda.setLocallyAllowedTypes(["sistema.agenda.evento"])
       pastaAgenda.setImmediatelyAddableTypes(["sistema.agenda.evento"])
+	  
+      raiz.plone_log("Terminado.") 

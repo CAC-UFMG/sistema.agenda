@@ -58,7 +58,7 @@
 "Description:","Evento realizado"
 "Permissions","Acquire","Anonymous","Site Administrator","Manager"
 "View","N","X","X","X"
-"sistema.agenda: ModificaEvento", "N",,"X","X"
+"sistema.agenda: ModificaEvento", "N","X","X","X"
 "sistema.agenda: VisualizaEvento","N","X","X","X"
 "Delete objects","N",,"X","X"
 "View management screens","N",,"X","X"
@@ -93,8 +93,7 @@
 "Description:","Marcar o agendamento definitivo"
 "Target state:","agendado"
 "Guard permission:","sistema.agenda: ModificaEvento"
-"Script before:","sistema.agenda.Extensions.moveItem.copiaParaPastaMae"
-"Script after:","sistema.agenda.Extensions.moveItem.reindexa"
+"Script after:","sistema.agenda.Extensions.moveItem.copiaParaPastaMae"
 
 "[Transition]"
 "Id:","terminar"

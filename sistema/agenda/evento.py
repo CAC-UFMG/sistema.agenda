@@ -32,6 +32,7 @@ from zope.interface import invariant, Invalid
 from Products.CMFDefault.utils import checkEmailAddress
 from Products.CMFDefault.exceptions import EmailAddressInvalid
 from Products.CMFCore.utils import getToolByName
+from zope.lifecycleevent import modified
 
 listaDeCategorias = SimpleVocabulary.fromValues(['Interno','Externo'])
 sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
@@ -187,10 +188,13 @@ def adicionaEvento(evento, event):
         if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id:
          if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
             raise Invalid("Conflito de equipe com:" + objLocal.title+" entre os eventos: "+objEventoCadastrado.title+" e "+ evento.title)
+  
   pai = aq_parent(aq_inner(evento))
-  clipboard = pai.manage_cutObjects([evento.id])
-  dest = pai.get('preagenda')
-  result = dest.manage_pasteObjects(clipboard)
+  if pai.id == 'agenda':
+    clipboard = pai.manage_cutObjects([evento.id])
+    dest = pai.get('preagenda')
+    result = dest.manage_pasteObjects(clipboard)
+    modified(result)
 	
 class evento(Item):
     grok.implements(Ievento)
