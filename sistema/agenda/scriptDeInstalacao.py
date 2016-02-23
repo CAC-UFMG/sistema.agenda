@@ -49,8 +49,7 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Felipe',title='Felipe',funcao='Tecnico de som',regime='30hs')
   
       if pastaLocais:
-        _createObjectByType('sistema.agenda.local',pastaLocais,id='saguao-reitoria',title='Saguao da Reitoria',unidade='Reitoria')
-        _createObjectByType('sistema.agenda.recurso',pastaLocais.get('saguao-reitoria'),id='mic',title='Microfone sure',tipo='microfone',patrimonio='123456',local=pastaLocais.get('saguao-reitoria').title)		
+        _createObjectByType('sistema.agenda.local',pastaLocais,id='saguao-reitoria',title='Saguao da Reitoria',unidade='Reitoria')        
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-reitoria',title='Auditorio da Reitoria',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='gramado-reitoria',title='Gramado da Reitoria',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='praca-servicos',title='Praca de Servicos',unidade='Reitoria')
@@ -60,7 +59,36 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-ii',title='Auditorio 1 do Cad 2',unidade='CAD2')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-ii',title='Auditorio 2 do Cad 2',unidade='CAD2')
 		
-
+        kitBasicoEquipamentos=[
+		  {'id':'mic-sure',
+		   'title':'Microfone sure', 
+		   'tipo':'microfone', 
+		   'patrimonio':'13574361'
+		  },
+		  {'id':'mic-sure-2',
+		   'title':'Microfone sure 2', 
+		   'tipo':'microfone', 
+		   'patrimonio':'135744361'
+		  },
+		  {'id':'mic-guzik',
+		   'title':'Microfone mesa', 
+		   'tipo':'microfone', 
+		   'patrimonio':'1374361'
+		  },
+		  {'id':'mic-guzik-2',
+		   'title':'Microfone mesa 2', 
+		   'tipo':'microfone', 
+		   'patrimonio':'137436'
+		  },
+		  {'id':'projetor',
+		   'title':'Projetor multimidia', 
+		   'tipo':'projetor', 
+		   'patrimonio':'13745636'
+		  },
+		]        
+        for local in pastaLocais.listFolderContents():
+          for equipamento in kitBasicoEquipamentos:
+            _createObjectByType('sistema.agenda.recurso',local,id=equipamento['id'],title=equipamento['title'],tipo=equipamento['tipo'],patrimonio=equipamento['patrimonio'],local=local.title)
 
             
       field = listagem.getField('query')
