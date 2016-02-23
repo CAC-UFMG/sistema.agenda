@@ -12,7 +12,6 @@ from Solgema.fullcalendar import interfaces
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.permissions import setDefaultRoles
-
 		
 def criaPastas(context):
   raiz = context.getSite()  
@@ -25,7 +24,7 @@ def criaPastas(context):
   if intersecao==adicionais:  
    if not raiz.get('agenda',None):
       workflowTool = getToolByName(raiz, "portal_workflow")
-      raiz.plone_log("Criando pastas iniciais.")
+      raiz.plone_log("Criando pastas iniciais.")      
       for item in raiz.listFolderContents(contentFilter={"portal_type":["Folder","Document"]}):
         raiz.manage_delObjects([item.getId()])
       _createObjectByType('Folder',raiz,id='agenda',title="Agenda")
