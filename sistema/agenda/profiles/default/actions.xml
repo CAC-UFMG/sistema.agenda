@@ -31,5 +31,14 @@
     <property name="visible">False</property>
   </object>
  </object>
+ 
+  <object name="portal_tabs" meta_type="CMF Action Category">
+    <object name="preagendamentos" meta_type="CMF Action">   
+     <property name="url_expr">python: "./agenda/preagenda/folder_contents"</property>
+     <property name="available_expr">python:member and 'Site Administrator' in member.getRoles()</property>
+     <property name="title">Pré-agendamentos</property>
+     <property name="visible">True</property>
+  </object>
+ </object>
 
  </object>

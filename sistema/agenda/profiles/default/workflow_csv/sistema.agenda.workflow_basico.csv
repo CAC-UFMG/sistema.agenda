@@ -11,7 +11,7 @@
 "Transitions","para_analise"
 "Permissions","Acquire","Anonymous","Site Administrator","Manager"
 "View","N","X","X","X"
-"sistema.agenda: ModificaEvento", "N",,"X","X"
+"sistema.agenda: ModificaEvento", "N",,,"X"
 "sistema.agenda: VisualizaEvento","N","X","X","X"
 "Delete objects","N","X","X","X"
 "View management screens","N","X","X","X"
@@ -68,7 +68,7 @@
 "Title:","Enviar para analise"
 "Description:","Enviar a solicitacao para analise"
 "Target state:","em_analise"
-"Guard permission:","sistema.agenda: ModificaEvento"
+"Guard role:","Site Administrator"
 
 "[Transition]"
 "Id:","nao_aprovado"

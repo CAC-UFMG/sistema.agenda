@@ -18,5 +18,12 @@ Atualização no repositório
 3.git commit -a
 4.git push 
 
-usuário: cacufmg
-senha: cacufmg*#1
+
+Instalação do agendamento
+=========================
+1. colocar sistema.agenda no buildout em development e eggs
+2. rodar o buildout
+3. iniciar o servidor
+
+usuário: agendador
+senha: agendador

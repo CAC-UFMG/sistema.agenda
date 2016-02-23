@@ -24,6 +24,7 @@ def criaPastas(context):
   adicionais.sort()
   if intersecao==adicionais:  
    if not raiz.get('agenda',None):
+      workflowTool = getToolByName(raiz, "portal_workflow")
       raiz.plone_log("Criando pastas iniciais.")
       for item in raiz.listFolderContents(contentFilter={"portal_type":["Folder","Document"]}):
         raiz.manage_delObjects([item.getId()])
@@ -87,6 +88,7 @@ def criaPastas(context):
 		  },
 		]        
         for local in pastaLocais.listFolderContents():
+          workflowTool.doActionFor(local, "publish")
           for equipamento in kitBasicoEquipamentos:
             _createObjectByType('sistema.agenda.recurso',local,id=equipamento['id'],title=equipamento['title'],tipo=equipamento['tipo'],patrimonio=equipamento['patrimonio'],local=local.title)
 
@@ -101,14 +103,14 @@ def criaPastas(context):
       listagem.setLayout("event_listing")	        
       pastaAgenda.setLayout("solgemafullcalendar_view")	  
       pastaEquipe.setLayout("folder_summary_view")
-      pastaLocais.setLayout("folder_summary_view")
+      pastaLocais.setLayout("folder_summary_view")	  
 	  
-	  
-      workflowTool = getToolByName(raiz, "portal_workflow")
+      
       workflowTool.doActionFor(pastaAgenda, "publish")      
       workflowTool.doActionFor(pastaLocais, "publish") 
       workflowTool.doActionFor(pastaEquipe, "publish") 
-      workflowTool.doActionFor(listagem, "publish") 
+      workflowTool.doActionFor(listagem, "publish") 	 
+	  
       pastaAgenda.manage_permission('Add portal content',('Anonymous',))	  
       pastaAgenda.manage_permission('sistema.agenda: ModificaEvento',('Anonymous',))	   
       pastaAgenda.manage_permission('Delete objects',('Anonymous',))	  
