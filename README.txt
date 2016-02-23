@@ -27,3 +27,11 @@ Instalação do agendamento
 
 usuário: agendador
 senha: agendador
+
+
+Inserir 
+
+environment-vars =
+        TZ America/Sao_Paulo
+		
+Em buildout.cfg na seção [instance]
