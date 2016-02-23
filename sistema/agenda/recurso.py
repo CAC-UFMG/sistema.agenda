@@ -7,7 +7,7 @@ from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-from plone.dexterity.content import Item,Container
+from plone.dexterity.content import Item
 
 from plone.directives import dexterity, form
 from plone.app.textfield import RichText
@@ -26,22 +26,24 @@ from sistema.agenda import MessageFactory as _
 
 # Interface class; used to define content-type schema.
 
-class Ilocal(form.Schema, IImageScaleTraversable):
+class Irecurso(form.Schema, IImageScaleTraversable):
     """
     Localizacao do evento
     """
 
-    title = schema.TextLine(title=_(u"Nome do local"))
-    unidade = schema.TextLine(title=_(u"Unidade"))	
+    title = schema.TextLine(title=_(u"Nome do recurso"))
+    tipo = schema.TextLine(title=_(u"Tipo"),description=u'Ex: microfone, projetor, computador')
+    local = schema.TextLine(title=_(u"Local"))
+    estado = schema.TextLine(title=_(u"Estado de uso"),default=u"Bom",description=u'Ex: Bom, Danificado, Em manutenção', required=True)
+    patrimonio =schema.TextLine(title=_(u"Patrimônio"),required=True)
 
 
-# Custom content-type class; objects created for this content type will
-# be instances of this class. Use this class to add content-type specific
-# methods and properties. Put methods that are mainly useful for rendering
-# in separate view classes.
+@form.default_value(field=Irecurso['local'])
+def localDefault(data):
+    return data.context.title
 
-class local(Container):
-    grok.implements(Ilocal)
+class recurso(Item):
+    grok.implements(Irecurso)
 
     # Add your class methods and properties here
     pass
@@ -60,26 +62,7 @@ class local(Container):
 class View(dexterity.DisplayForm):
     """ sample view class """
 
-    grok.context(Ilocal)
-    grok.require('zope2.View')
-
-    def eventoNesseLocal(self):
-     catalog = getUtility(ICatalog)
-     intids = getUtility(IIntIds)
-     source_object = self.context
-     result = []
-     for rel in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
-        obj = intids.queryObject(rel.from_id)
-        if obj is not None and checkPermission('zope2.View', obj):
-            result.append(obj)
-     return result
-	 
-    def equipamentosNesseLocal(self):
-     source_object = self.context
-     result = []
-     for rel in source_object.listFolderContents():        
-        if rel is not None and checkPermission('zope2.View', rel):
-            result.append(rel)
-     return result
+    grok.context(Irecurso)
+    grok.require('zope2.View')  
 
 

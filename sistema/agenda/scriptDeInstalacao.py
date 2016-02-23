@@ -50,6 +50,7 @@ def criaPastas(context):
   
       if pastaLocais:
         _createObjectByType('sistema.agenda.local',pastaLocais,id='saguao-reitoria',title='Saguao da Reitoria',unidade='Reitoria')
+        _createObjectByType('sistema.agenda.recurso',pastaLocais.get('saguao-reitoria'),id='mic',title='Microfone sure',tipo='microfone',patrimonio='123456',local=pastaLocais.get('saguao-reitoria').title)		
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-reitoria',title='Auditorio da Reitoria',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='gramado-reitoria',title='Gramado da Reitoria',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='praca-servicos',title='Praca de Servicos',unidade='Reitoria')

@@ -1,24 +1,22 @@
 <?xml version="1.0"?>
-<object name="sistema.agenda.local"
+<object name="sistema.agenda.recurso"
    meta_type="Dexterity FTI"
    i18n:domain="sistema.agenda" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">local</property>
+  <property name="title" i18n:translate="">recurso</property>
   <property name="description"
-    i18n:translate="">Localizacao do evento</property>
-  <property name="icon_expr">string:${portal_url}/folder_icon.png</property>
-  <property name="factory">sistema.agenda.local</property>
+    i18n:translate="">Recursos de um local</property>
+  <property name="icon_expr">string:${portal_url}/document_icon.png</property>
+  <property name="factory">sistema.agenda.recurso</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">True</property>
-  <property name="allowed_content_types">
-    <element value="sistema.agenda.recurso" />
-  </property>
+  <property name="allowed_content_types" />
   <property name="allow_discussion">False</property>
 
   <!-- schema and class used for content items -->
-  <property name="schema">sistema.agenda.local.Ilocal</property>
-  <property name="klass">sistema.agenda.local.local</property>
+  <property name="schema">sistema.agenda.recurso.Irecurso</property>
+  <property name="klass">sistema.agenda.recurso.recurso</property>
 
   <property name="behaviors">
      <element value="plone.app.content.interfaces.INameFromTitle" />
@@ -50,6 +48,6 @@
   </action>
   <action title="Edit" action_id="edit" category="object" condition_expr=""
     url_expr="string:${object_url}/edit" visible="True">
-    <permission value="Modify portal content" />
+    <permission value="sistema.agenda: ModificaRecurso" />
   </action>
 </object>

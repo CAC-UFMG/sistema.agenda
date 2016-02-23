@@ -11,4 +11,5 @@
   <object name="sistema.agenda.evento" meta_type="Dexterity FTI" />
   <object name="sistema.agenda.membrodeequipe" meta_type="Dexterity FTI" />
   <object name="sistema.agenda.local" meta_type="Dexterity FTI" />
+  <object name="sistema.agenda.recurso" meta_type="Dexterity FTI" />
 </object>
