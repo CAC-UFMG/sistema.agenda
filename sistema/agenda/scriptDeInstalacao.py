@@ -12,7 +12,6 @@ from Solgema.fullcalendar import interfaces
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.permissions import setDefaultRoles
-
 		
 def criaPastas(context):
   raiz = context.getSite()  
@@ -24,7 +23,8 @@ def criaPastas(context):
   adicionais.sort()
   if intersecao==adicionais:  
    if not raiz.get('agenda',None):
-      raiz.plone_log("Criando pastas iniciais.")
+      workflowTool = getToolByName(raiz, "portal_workflow")
+      raiz.plone_log("Criando pastas iniciais.")      
       for item in raiz.listFolderContents(contentFilter={"portal_type":["Folder","Document"]}):
         raiz.manage_delObjects([item.getId()])
       _createObjectByType('Folder',raiz,id='agenda',title="Agenda")
@@ -49,7 +49,7 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Felipe',title='Felipe',funcao='Tecnico de som',regime='30hs')
   
       if pastaLocais:
-        _createObjectByType('sistema.agenda.local',pastaLocais,id='saguao-reitoria',title='Saguao da Reitoria',unidade='Reitoria')
+        _createObjectByType('sistema.agenda.local',pastaLocais,id='saguao-reitoria',title='Saguao da Reitoria',unidade='Reitoria')        
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-reitoria',title='Auditorio da Reitoria',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='gramado-reitoria',title='Gramado da Reitoria',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='praca-servicos',title='Praca de Servicos',unidade='Reitoria')
@@ -59,7 +59,37 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-ii',title='Auditorio 1 do Cad 2',unidade='CAD2')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-ii',title='Auditorio 2 do Cad 2',unidade='CAD2')
 		
-
+        kitBasicoEquipamentos=[
+		  {'id':'mic-sure',
+		   'title':'Microfone sure', 
+		   'tipo':'microfone', 
+		   'patrimonio':'13574361'
+		  },
+		  {'id':'mic-sure-2',
+		   'title':'Microfone sure 2', 
+		   'tipo':'microfone', 
+		   'patrimonio':'135744361'
+		  },
+		  {'id':'mic-guzik',
+		   'title':'Microfone mesa', 
+		   'tipo':'microfone', 
+		   'patrimonio':'1374361'
+		  },
+		  {'id':'mic-guzik-2',
+		   'title':'Microfone mesa 2', 
+		   'tipo':'microfone', 
+		   'patrimonio':'137436'
+		  },
+		  {'id':'projetor',
+		   'title':'Projetor multimidia', 
+		   'tipo':'projetor', 
+		   'patrimonio':'13745636'
+		  },
+		]        
+        for local in pastaLocais.listFolderContents():
+          workflowTool.doActionFor(local, "publish")
+          for equipamento in kitBasicoEquipamentos:
+            _createObjectByType('sistema.agenda.recurso',local,id=equipamento['id'],title=equipamento['title'],tipo=equipamento['tipo'],patrimonio=equipamento['patrimonio'],local=local.title)
 
             
       field = listagem.getField('query')
@@ -72,14 +102,14 @@ def criaPastas(context):
       listagem.setLayout("event_listing")	        
       pastaAgenda.setLayout("solgemafullcalendar_view")	  
       pastaEquipe.setLayout("folder_summary_view")
-      pastaLocais.setLayout("folder_summary_view")
+      pastaLocais.setLayout("folder_summary_view")	  
 	  
-	  
-      workflowTool = getToolByName(raiz, "portal_workflow")
+      
       workflowTool.doActionFor(pastaAgenda, "publish")      
       workflowTool.doActionFor(pastaLocais, "publish") 
       workflowTool.doActionFor(pastaEquipe, "publish") 
-      workflowTool.doActionFor(listagem, "publish") 
+      workflowTool.doActionFor(listagem, "publish") 	 
+	  
       pastaAgenda.manage_permission('Add portal content',('Anonymous',))	  
       pastaAgenda.manage_permission('sistema.agenda: ModificaEvento',('Anonymous',))	   
       pastaAgenda.manage_permission('Delete objects',('Anonymous',))	  
@@ -130,3 +160,5 @@ def criaPastas(context):
       pastaAgenda.setConstrainTypesMode(constraintypes.ENABLED)
       pastaAgenda.setLocallyAllowedTypes(["sistema.agenda.evento"])
       pastaAgenda.setImmediatelyAddableTypes(["sistema.agenda.evento"])
+	  
+      raiz.plone_log("Terminado.") 

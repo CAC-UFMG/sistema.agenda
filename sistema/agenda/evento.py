@@ -29,9 +29,10 @@ from zope.component import getUtility
 from zc.relation.interfaces import ICatalog
 from Acquisition import aq_inner, aq_parent
 from zope.interface import invariant, Invalid
-from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFDefault.utils import checkEmailAddress
 from Products.CMFDefault.exceptions import EmailAddressInvalid
+from Products.CMFCore.utils import getToolByName
+from zope.lifecycleevent import modified
 
 listaDeCategorias = SimpleVocabulary.fromValues(['Interno','Externo'])
 sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
@@ -78,7 +79,29 @@ def cpfValidation(data):
 	    if not resultado:
 		raise Invalid(_(u"CPF Inválido"))
 	return True
+
+
+ 
+@grok.provider(IContextSourceBinder)
+def pastaLocais(context):
+    portal_url = getToolByName(context,'portal_url')
+    siteId = portal_url.getPortalObject().id
+    path = '/'+siteId+'/locais'
+    query = { "object_provides" : Ilocal.__identifier__, "path":{'query':path}}
+
+    return ObjPathSourceBinder(navigation_tree_query = query).__call__(context) 
 	
+	
+@grok.provider(IContextSourceBinder)
+def pastaEquipe(context):
+    portal_url = getToolByName(context,'portal_url')
+    siteId = portal_url.getPortalObject().id
+    path = '/'+siteId+'/equipe'
+    query = { "object_provides" : ImembroDeEquipe.__identifier__, "path":{'query':path}}
+
+    return ObjPathSourceBinder(navigation_tree_query = query).__call__(context) 	
+
+
 permissaoAdm='sistema.agenda.visualizaEvento'
 class Ievento(form.Schema, IImageScaleTraversable):
     """
@@ -89,8 +112,8 @@ class Ievento(form.Schema, IImageScaleTraversable):
 	
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
-    local=RelationList(title=u"Local",description=u'Escolha os espaços a serem agendados',required=True,value_type=RelationChoice(title=u'Local',required=True,source=ObjPathSourceBinder(object_provides=Ilocal.__identifier__)))
-    equipe=RelationList(title=u"Equipe",description=u'PARA O AGENDADOR: Informe a equipe para este evento',required=False,value_type=RelationChoice(title=u'Equipe',required=True,source=ObjPathSourceBinder(object_provides=ImembroDeEquipe.__identifier__)))	
+    local=RelationList(title=u"Local",description=u'Escolha os espaços a serem agendados',required=True,value_type=RelationChoice(title=u'Local',required=True,source=pastaLocais))
+    equipe=RelationList(title=u"Equipe",description=u'PARA O AGENDADOR: Informe a equipe para este evento',required=False,value_type=RelationChoice(title=u'Equipe',required=True,source=pastaEquipe))	
     previsaoDePublico=schema.TextLine(title=u"Previsão de Público",description=u'Informe a previsão do número de participantes',required=True,constraint=publicoValidation)
     servicosExtras=schema.Set(title=u"Serviços Extras",description=u'O evento necessita de algum destes serviços?',required=False, value_type=schema.Choice(source=listaServicosExtras))
     form.widget('servicosExtras', CheckBoxFieldWidget)
@@ -102,9 +125,6 @@ class Ievento(form.Schema, IImageScaleTraversable):
     telefone=schema.TextLine(title=u"Telefone",description=u'Informe o contato telefônico do responsável pelo evento',required=True,constraint=telefoneValidation)
     email=schema.TextLine(title=u"E-mail",description=u'Informe o email do responsável pelo evento',required=True,constraint=validateaddress)
     cpf=schema.TextLine(title=u"CPF",constraint=cpfValidation, description=u'Informe o cpf do responsável pelo evento',required=True)
-
-
-	
 	
 @grok.subscribe(Ievento, IObjectModifiedEvent)
 def modificaEvento(evento, event):
@@ -168,10 +188,13 @@ def adicionaEvento(evento, event):
         if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id:
          if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
             raise Invalid("Conflito de equipe com:" + objLocal.title+" entre os eventos: "+objEventoCadastrado.title+" e "+ evento.title)
+  
   pai = aq_parent(aq_inner(evento))
-  clipboard = pai.manage_cutObjects([evento.id])
-  dest = pai.get('preagenda')
-  result = dest.manage_pasteObjects(clipboard)
+  if pai.id == 'agenda':
+    clipboard = pai.manage_cutObjects([evento.id])
+    dest = pai.get('preagenda')
+    result = dest.manage_pasteObjects(clipboard)
+    modified(result)
 	
 class evento(Item):
     grok.implements(Ievento)

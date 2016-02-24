@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from five import grok
 
 from z3c.form import group, field
@@ -19,30 +20,30 @@ from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from zope.security import checkPermission
 from zc.relation.interfaces import ICatalog
-from datetime import datetime
 
 from sistema.agenda import MessageFactory as _
 
 
 # Interface class; used to define content-type schema.
 
-class ImembroDeEquipe(form.Schema, IImageScaleTraversable):
+class Irecurso(form.Schema, IImageScaleTraversable):
     """
-    Membro de equipe tecnica
+    Localizacao do evento
     """
 
-    title = schema.TextLine(title=_(u"Nome do membro"))
-    funcao = schema.TextLine(title=_(u"Funcao"),required=False)
-    regime = schema.TextLine(title=_(u"Regime"),required=False)   
+    title = schema.TextLine(title=_(u"Nome do recurso"))
+    tipo = schema.TextLine(title=_(u"Tipo"),description=u'Ex: microfone, projetor, computador')
+    local = schema.TextLine(title=_(u"Local"))
+    estado = schema.TextLine(title=_(u"Estado de uso"),default=u"Bom",description=u'Ex: Bom, Danificado, Em manutenção', required=True)
+    patrimonio =schema.TextLine(title=_(u"Patrimônio"),required=True)
 
 
-# Custom content-type class; objects created for this content type will
-# be instances of this class. Use this class to add content-type specific
-# methods and properties. Put methods that are mainly useful for rendering
-# in separate view classes.
+@form.default_value(field=Irecurso['local'])
+def localDefault(data):
+    return data.context.title
 
-class membroDeEquipe(Item):
-    grok.implements(ImembroDeEquipe)
+class recurso(Item):
+    grok.implements(Irecurso)
 
     # Add your class methods and properties here
     pass
@@ -50,7 +51,7 @@ class membroDeEquipe(Item):
 
 # View class
 # The view will automatically use a similarly named template in
-# membrodeequipe_templates.
+# local_templates.
 # Template filenames should be all lower case.
 # The view will render when you request a content object with this
 # interface with "/@@sampleview" appended.
@@ -61,20 +62,7 @@ class membroDeEquipe(Item):
 class View(dexterity.DisplayForm):
     """ sample view class """
 
-    grok.context(ImembroDeEquipe)
-    grok.require('zope2.View')
+    grok.context(Irecurso)
+    grok.require('zope2.View')  
 
-    def eventoNesseLocal(self):
-     catalog = getUtility(ICatalog)
-     intids = getUtility(IIntIds)
-     source_object = self.context
-     result = []
-     for rel in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
-        obj = intids.queryObject(rel.from_id)
-        if obj is not None and checkPermission('zope2.View', obj):
-            dia=datetime.today()            
-            hoje=datetime(dia.year,dia.month,dia.day)
-            d=datetime(obj.start.year,obj.start.month,obj.start.day)
-            if d>=hoje:
-              result.append(obj)
-     return result
+

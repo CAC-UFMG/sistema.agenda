@@ -11,7 +11,7 @@
 "Transitions","para_analise"
 "Permissions","Acquire","Anonymous","Site Administrator","Manager"
 "View","N","X","X","X"
-"sistema.agenda: ModificaEvento", "N",,"X","X"
+"sistema.agenda: ModificaEvento", "N",,,"X"
 "sistema.agenda: VisualizaEvento","N","X","X","X"
 "Delete objects","N","X","X","X"
 "View management screens","N","X","X","X"
@@ -58,7 +58,7 @@
 "Description:","Evento realizado"
 "Permissions","Acquire","Anonymous","Site Administrator","Manager"
 "View","N","X","X","X"
-"sistema.agenda: ModificaEvento", "N",,"X","X"
+"sistema.agenda: ModificaEvento", "N","X","X","X"
 "sistema.agenda: VisualizaEvento","N","X","X","X"
 "Delete objects","N",,"X","X"
 "View management screens","N",,"X","X"
@@ -68,7 +68,8 @@
 "Title:","Enviar para analise"
 "Description:","Enviar a solicitacao para analise"
 "Target state:","em_analise"
-"Guard permission:","sistema.agenda: ModificaEvento"
+"Guard role:","Site Administrator"
+"Script after:","sistema.agenda.Extensions.moveItem.reindexa"
 
 "[Transition]"
 "Id:","nao_aprovado"
@@ -76,6 +77,7 @@
 "Description:","Enviar a solicitacao para revisao"
 "Target state:","solicitacao"
 "Guard permission:","sistema.agenda: ModificaEvento"
+"Script after:","sistema.agenda.Extensions.moveItem.reindexa"
 
 "[Transition]"
 "Id:","prereservar"
@@ -83,6 +85,7 @@
 "Description:","Marcar a solicitacao como pre-reservada"
 "Target state:","prereservado"
 "Guard permission:","sistema.agenda: ModificaEvento"
+"Script after:","sistema.agenda.Extensions.moveItem.reindexa"
 
 "[Transition]"
 "Id:","reservar"
@@ -90,8 +93,7 @@
 "Description:","Marcar o agendamento definitivo"
 "Target state:","agendado"
 "Guard permission:","sistema.agenda: ModificaEvento"
-"Script before:","sistema.agenda.Extensions.moveItem.copiaParaPastaMae"
-"Script after:","sistema.agenda.Extensions.moveItem.reindexa"
+"Script after:","sistema.agenda.Extensions.moveItem.copiaParaPastaMae"
 
 "[Transition]"
 "Id:","terminar"
@@ -99,5 +101,6 @@
 "Description:","Marcar como evento realizado"
 "Target state:","terminado"
 "Guard permission:","sistema.agenda: ModificaEvento"
+"Script after:","sistema.agenda.Extensions.moveItem.reindexa"
 
 

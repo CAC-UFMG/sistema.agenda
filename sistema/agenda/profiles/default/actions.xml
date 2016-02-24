@@ -26,9 +26,60 @@
   </object>
  </object>
  
+ <object name="folder_buttons" meta_type="CMF Action Category">
+  <object name="rename" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+ 
+  <object name="folder_buttons" meta_type="CMF Action Category">
+  <object name="copy" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+ 
+  <object name="folder_buttons" meta_type="CMF Action Category">
+  <object name="paste" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+ 
+   <object name="folder_buttons" meta_type="CMF Action Category">
+  <object name="cut" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+ 
  <object name="object_buttons" meta_type="CMF Action Category">
   <object name="paste" meta_type="CMF Action">   
     <property name="visible">False</property>
+  </object>
+ </object>
+ 
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="ical_import_enable" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+ 
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="ical_import_disable" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+ 
+ <object name="object" meta_type="CMF Action Category">
+  <object name="solgemafullcalendar_view" meta_type="CMF Action">   
+    <property name="visible">False</property>
+  </object>
+ </object>
+  
+ <object name="portal_tabs" meta_type="CMF Action Category">
+    <object name="preagendamentos" meta_type="CMF Action">   
+     <property name="url_expr">python: "./agenda/preagenda/folder_contents"</property>
+     <property name="available_expr">python:member and 'Site Administrator' in member.getRoles()</property>
+     <property name="title">Solicitações</property>
+     <property name="visible">True</property>
   </object>
  </object>
 
