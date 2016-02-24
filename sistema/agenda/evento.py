@@ -17,6 +17,7 @@ from plone.namedfile.field import NamedBlobImage, NamedBlobFile
 from plone.namedfile.interfaces import IImageScaleTraversable
 from z3c.relationfield.schema import RelationChoice, RelationList
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget,CheckBoxFieldWidget
+from Products.CMFCore.utils import getToolByName
 
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from sistema.agenda.membrodeequipe import ImembroDeEquipe
