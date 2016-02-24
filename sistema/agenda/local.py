@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from five import grok
 
 from z3c.form import group, field
@@ -6,7 +7,7 @@ from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-from plone.dexterity.content import Item
+from plone.dexterity.content import Item,Container
 
 from plone.directives import dexterity, form
 from plone.app.textfield import RichText
@@ -19,6 +20,7 @@ from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from zope.security import checkPermission
 from zc.relation.interfaces import ICatalog
+from datetime import datetime
 
 from sistema.agenda import MessageFactory as _
 
@@ -32,6 +34,7 @@ class Ilocal(form.Schema, IImageScaleTraversable):
     """
 
     title = schema.TextLine(title=_(u"Nome do local"))
+<<<<<<< HEAD
     bloco = schema.TextLine(title=_(u"Bloco"),required=False)
     andar = schema.TextLine(title=_(u"Andar"),required=False)
     unidade = schema.TextLine(title=_(u"Unidade"))
@@ -59,13 +62,17 @@ class Ilocal(form.Schema, IImageScaleTraversable):
     projetor = schema.TextLine(title=_(u"Projetor"),required=False)
     telaInterativa = schema.TextLine(title=_(u"Tela interativa"),required=False)
     televisor = schema.TextLine(title=_(u"Televisor"),required=False)
+=======
+    unidade = schema.TextLine(title=_(u"Unidade"))	
+
+>>>>>>> origin/master
 
 # Custom content-type class; objects created for this content type will
 # be instances of this class. Use this class to add content-type specific
 # methods and properties. Put methods that are mainly useful for rendering
 # in separate view classes.
 
-class local(Item):
+class local(Container):
     grok.implements(Ilocal)
 
     # Add your class methods and properties here
@@ -89,6 +96,7 @@ class View(dexterity.DisplayForm):
     grok.require('zope2.View')
 
     def eventoNesseLocal(self):
+	
      catalog = getUtility(ICatalog)
      intids = getUtility(IIntIds)
      source_object = self.context
@@ -96,7 +104,19 @@ class View(dexterity.DisplayForm):
      for rel in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
         obj = intids.queryObject(rel.from_id)
         if obj is not None and checkPermission('zope2.View', obj):
-            result.append(obj)
+            dia=datetime.today()            
+            hoje=datetime(dia.year,dia.month,dia.day)
+            d=datetime(obj.start.year,obj.start.month,obj.start.day)
+            if d>=hoje:
+              result.append(obj)
+     return result
+	 
+    def equipamentosNesseLocal(self):
+     source_object = self.context
+     result = []
+     for rel in source_object.listFolderContents():        
+        if rel is not None and checkPermission('zope2.View', rel):
+            result.append(rel)
      return result
 
 
