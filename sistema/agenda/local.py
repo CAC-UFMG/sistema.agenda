@@ -34,7 +34,7 @@ class Ilocal(form.Schema, IImageScaleTraversable):
     """
 
     title = schema.TextLine(title=_(u"Nome do local"))
-<<<<<<< HEAD
+
     bloco = schema.TextLine(title=_(u"Bloco"),required=False)
     andar = schema.TextLine(title=_(u"Andar"),required=False)
     unidade = schema.TextLine(title=_(u"Unidade"))
@@ -45,27 +45,6 @@ class Ilocal(form.Schema, IImageScaleTraversable):
     capacidadeCadeirantes = schema.TextLine(title=_(u"Cadeirantes"),required=False)
     capacidadeObesos = schema.TextLine(title=_(u"Obesos"),required=False)
 
-    form.fieldset('equipamentos',label=u"Equipamentos", fields=['arCondicionado','cabineDeTraducao','caixaDeSomPequena',
-    'caixaDeRetorno','cameraDeVideoAutomatica','desktop','mesaDigitalizadora','microfoneComum','microfoneMesa','microfoneSemFio',
-    'notebook','projetor','telaInterativa','televisor'])
-    arCondicionado = schema.Bool(title=_(u"Ar-condicionado"),required=False)
-    cabineDeTraducao = schema.TextLine(title=_(u"Cabine de traducao"),required=False)
-    caixaDeSomPequena = schema.TextLine(title=_(u"Caixa de som pequena"),required=False)
-    caixaDeRetorno = schema.TextLine(title=_(u"Caixa de retorno"),required=False)
-    cameraDeVideoAutomatica	= schema.TextLine(title=_(u"Camera de video automatica"),required=False)
-    desktop = schema.TextLine(title=_(u"Computador desktop para usuarios"),required=False)
-    mesaDigitalizadora = schema.TextLine(title=_(u"Mesa digitalizadora"),required=False)
-    microfoneComum = schema.TextLine(title=_(u"Microfone comum"),required=False)
-    microfoneMesa = schema.TextLine(title=_(u"Microfone de mesa"),required=False)
-    microfoneSemFio = schema.TextLine(title=_(u"Microfone sem fio"),required=False)
-    notebook = schema.TextLine(title=_(u"Notebook"),required=False)
-    projetor = schema.TextLine(title=_(u"Projetor"),required=False)
-    telaInterativa = schema.TextLine(title=_(u"Tela interativa"),required=False)
-    televisor = schema.TextLine(title=_(u"Televisor"),required=False)
-=======
-    unidade = schema.TextLine(title=_(u"Unidade"))	
-
->>>>>>> origin/master
 
 # Custom content-type class; objects created for this content type will
 # be instances of this class. Use this class to add content-type specific
