@@ -36,6 +36,13 @@
           class=".newev.newEv"
           />
 		  
+  <browser:page
+          for="*"
+          name="relatorio_semanal_eventos"
+          permission="zope2.Public"
+          class=".relatorio_semanal_eventos.relatorio_semanal_eventos"
+          />
+		  
   <i18n:registerTranslations directory="locales" />
 
   <!-- Register an extension profile to make the product installable

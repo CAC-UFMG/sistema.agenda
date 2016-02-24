@@ -1,0 +1,83 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="sistema.agenda">
+<body>
+
+
+<metal:main fill-slot="content-core"> 
+      <TABLE CLASS="listing" TAL:DEFINE="eventos view/obtemEventosDaSemana">
+	  	<THEAD>		
+		 <TR>		
+		  <TH>SEGUNDA</TH>
+		  <TH>TERÇA</TH>
+		  <TH>QUARTA</TH>
+		  <TH>QUINTA</TH>
+		  <TH>SEXTA</TH>
+		  <TH>SÁBADO</TH>
+		  <TH>DOMINGO</TH>
+		 </TR>		
+		</THEAD>
+		<TBODY>
+	    <TR>		  
+		  <TD>
+		  	  <DIV TAL:REPEAT="evento python: eventos['0']">
+	            <B TAL:CONTENT="evento/titulo"></B> -
+		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        <U TAL:CONTENT="evento/horarioStr"></U>
+              <BR/></DIV>			  
+		  </TD>
+		  <TD>
+		  	  <DIV TAL:REPEAT="evento python: eventos['1']">
+	            <B TAL:CONTENT="evento/titulo"></B> -
+		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        <U TAL:CONTENT="evento/horarioStr"></U>
+              <BR/></DIV>			  
+		  </TD>
+		  <TD>
+		  	  <DIV TAL:REPEAT="evento python: eventos['2']">
+	            <B TAL:CONTENT="evento/titulo"></B> -
+		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        <U TAL:CONTENT="evento/horarioStr"></U>
+              <BR/></DIV>			  
+		  </TD>
+		  <TD>
+		  	  <DIV TAL:REPEAT="evento python: eventos['3']">
+	            <B TAL:CONTENT="evento/titulo"></B> -
+		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        <U TAL:CONTENT="evento/horarioStr"></U>
+              <BR/></DIV>			  
+		  </TD>
+		  <TD>
+		  	  <DIV TAL:REPEAT="evento python: eventos['4']">
+	            <B TAL:CONTENT="evento/titulo"></B> -
+		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        <U TAL:CONTENT="evento/horarioStr"></U>
+              <BR/></DIV>			  
+		  </TD>
+		  <TD>
+		  	  <DIV TAL:REPEAT="evento python: eventos['5']">
+	            <B TAL:CONTENT="evento/titulo"></B> -
+		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        <U TAL:CONTENT="evento/horarioStr"></U>
+              <BR/></DIV>			  
+		  </TD>
+		  <TD>
+		  	  <DIV TAL:REPEAT="evento python: eventos['6']">
+	            <B TAL:CONTENT="evento/titulo"></B> -
+		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        <U TAL:CONTENT="evento/horarioStr"></U>
+              <BR/></DIV>			  
+		  </TD>
+		</TR>
+		</TBODY>	  
+	  </TABLE>
+	  
+
+</metal:main>
+
+</body>
+</html>
