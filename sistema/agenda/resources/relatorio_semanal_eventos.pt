@@ -8,7 +8,14 @@
 <body>
 
 
-<metal:main fill-slot="content-core"> 
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="string: Agenda semanal" />
+		
       <TABLE CLASS="listing" TAL:DEFINE="eventos view/obtemEventosDaSemana">
 	  	<THEAD>		
 		 <TR>		
@@ -25,49 +32,49 @@
 	    <TR>		  
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['0']">
-	            <B TAL:CONTENT="evento/titulo"></B> -
+	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
 		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['1']">
-	            <B TAL:CONTENT="evento/titulo"></B> -
+	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
 		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['2']">
-	            <B TAL:CONTENT="evento/titulo"></B> -
+	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
 		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['3']">
-	            <B TAL:CONTENT="evento/titulo"></B> -
+	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
 		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['4']">
-	            <B TAL:CONTENT="evento/titulo"></B> -
+	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
 		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['5']">
-	            <B TAL:CONTENT="evento/titulo"></B> -
+	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
 		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['6']">
-	            <B TAL:CONTENT="evento/titulo"></B> -
+	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
 		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
@@ -76,7 +83,7 @@
 		</TBODY>	  
 	  </TABLE>
 	  
-
+    </tal:main-macro>
 </metal:main>
 
 </body>

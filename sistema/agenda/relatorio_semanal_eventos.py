@@ -48,7 +48,7 @@ class relatorio_semanal_eventos(BrowserView):
               local= 'sem local definido'
             
             if indicadorMesmaSemana:
-			  resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr}
+			  resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url}
 			  semana[str(diaEvento.weekday())].append(resultado)
      for i in semana.keys():
        semana[i]=sorted(semana[i],key=lambda evnt:evnt.values()[2])            
