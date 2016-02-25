@@ -119,6 +119,8 @@ def criaPastas(context):
       campo= ISolgemaFullcalendarProperties(aq_inner(pastaAgenda), None)
       setattr(campo,'defaultCalendarView',u'month')
       setattr(campo,'eventType',u'sistema.agenda.evento')
+      setattr(campo,'disableAJAX',True)
+	   
       
 	  
       mt = raiz.portal_membership
