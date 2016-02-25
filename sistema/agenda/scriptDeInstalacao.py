@@ -107,7 +107,7 @@ def criaPastas(context):
       
       workflowTool.doActionFor(pastaAgenda, "publish")      
       workflowTool.doActionFor(pastaLocais, "publish") 
-      workflowTool.doActionFor(pastaEquipe, "publish") 
+      #workflowTool.doActionFor(pastaEquipe, "publish") 
       workflowTool.doActionFor(listagem, "publish") 	 
 	  
       pastaAgenda.manage_permission('Add portal content',('Anonymous',))	  

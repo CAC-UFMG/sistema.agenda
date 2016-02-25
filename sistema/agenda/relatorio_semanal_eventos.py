@@ -3,9 +3,8 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.security import checkPermission
-from zc.relation.interfaces import ICatalog
 from datetime import datetime
-from zope.intid.interfaces import IIntIds
+
 
 
 class relatorio_semanal_eventos(BrowserView):
@@ -20,8 +19,7 @@ class relatorio_semanal_eventos(BrowserView):
         return self.render()
 		
     def obtemEventosDaSemana(self):	
-     pastaAgenda = self.context
-     intids= getUtility(IIntIds)
+     pastaAgenda = self.context     
      result = []
      semana={}
      semana['0']=[]
@@ -31,7 +29,9 @@ class relatorio_semanal_eventos(BrowserView):
      semana['4']=[]
      semana['5']=[]
      semana['6']=[]
-     hoje=datetime.today()            
+     hoje=datetime.today()   
+     vazio=True	 
+     wf = getToolByName(pastaAgenda,'portal_workflow')     
      for evento in pastaAgenda.listFolderContents():        
         if checkPermission('sistema.agenda.visualizaEvento', evento):            
             diaEvento=datetime(evento.start.year,evento.start.month,evento.start.day)
@@ -41,16 +41,22 @@ class relatorio_semanal_eventos(BrowserView):
             horaEvento=evento.start.time()
             horaEventoStr=str(horaEvento)
             local= ''
+            estado = wf.getInfoFor(evento,'review_state')	 
             if evento.local is not None:
               for rel in evento.local:
                 local = local+' - '+rel.to_object.title 
             else:
               local= 'sem local definido'
             
-            if indicadorMesmaSemana:
-			  resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url}
-			  semana[str(diaEvento.weekday())].append(resultado)
-     for i in semana.keys():
-       semana[i]=sorted(semana[i],key=lambda evnt:evnt.values()[2])            
+            if indicadorMesmaSemana and estado=='agendado':
+              vazio=False
+              resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url}
+              semana[str(diaEvento.weekday())].append(resultado)
+        
+     if not vazio:		   
+       for i in semana.keys():
+           semana[i]=sorted(semana[i],key=lambda evnt:evnt.values()[2])
+     else:		 
+       semana=[]  	 
      return semana
 	 

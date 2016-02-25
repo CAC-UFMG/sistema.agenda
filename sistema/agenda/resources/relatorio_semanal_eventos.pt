@@ -10,13 +10,13 @@
 
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main"
-        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;eventos view/obtemEventosDaSemana">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <h1 class="documentFirstHeading" tal:content="string: Agenda semanal" />
-		
-      <TABLE CLASS="listing" TAL:DEFINE="eventos view/obtemEventosDaSemana">
+        <h1 class="documentFirstHeading" tal:content="string: Agenda semanal" /><br/>
+	  <DIV TAL:CONDITION="python: len(eventos)==0">SEM EVENTOS NESSA SEMANA</DIV>
+      <TABLE CLASS="listing" TAL:CONDITION="python: len(eventos)!=0">
 	  	<THEAD>		
 		 <TR>		
 		  <TH>SEGUNDA</TH>

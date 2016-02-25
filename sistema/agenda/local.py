@@ -85,8 +85,9 @@ class View(dexterity.DisplayForm):
         if obj is not None and checkPermission('zope2.View', obj):
             dia=datetime.today()            
             hoje=datetime(dia.year,dia.month,dia.day)
-            d=datetime(obj.start.year,obj.start.month,obj.start.day)
-            if d>=hoje:
+            di=datetime(obj.start.year,obj.start.month,obj.start.day)
+            df=datetime(obj.end.year,obj.end.month,obj.end.day)
+            if di>=hoje or df<=hoje:
               result.append(obj)
      return result
 	 
