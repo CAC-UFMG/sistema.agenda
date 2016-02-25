@@ -90,6 +90,8 @@ def criaPastas(context):
           workflowTool.doActionFor(local, "publish")
           for equipamento in kitBasicoEquipamentos:
             _createObjectByType('sistema.agenda.recurso',local,id=equipamento['id'],title=equipamento['title'],tipo=equipamento['tipo'],patrimonio=equipamento['patrimonio'],local=local.title)
+            rec=local.get(equipamento['id'])
+            workflowTool.doActionFor(rec, "publish")
 
             
       field = listagem.getField('query')
