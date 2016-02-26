@@ -77,7 +77,7 @@
   <object name="portal_tabs" meta_type="CMF Action Category">
     <object name="enviar_solicitacao" meta_type="CMF Action">   
      <property name="url_expr">python: "/"+context.portal_url.getPortalObject().id+"/agenda/++add++sistema.agenda.evento"</property>     
-     <property name="title">Solicitação de agendamento</property>
+     <property name="title">Nova solicitação</property>
      <property name="visible">True</property>
     </object>  
   </object>  
@@ -86,7 +86,7 @@
     <object name="preagendamentos" meta_type="CMF Action">   
      <property name="url_expr">python: "/"+context.portal_url.getPortalObject().id+"/agenda/preagenda/folder_contents"</property>
      <property name="available_expr">python:member and 'Site Administrator' in member.getRoles()</property>
-     <property name="title">Solicitações</property>
+     <property name="title">Visualizar solicitações</property>
      <property name="visible">True</property>
   </object>
  </object>
