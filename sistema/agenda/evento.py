@@ -120,7 +120,7 @@ class Ievento(form.Schema, IImageScaleTraversable):
     form.widget('servicosExtras', CheckBoxFieldWidget)
 	
     form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','cpf','instituicao','unidade','telefone','email'] ) 
-    responsavel=schema.TextLine(title=u"Responsável pelo evento",description=u'Quem assumirá a responsabilidade legal pelo evento?',required=True)
+    responsavel=schema.TextLine(title=u"Responsável pelo evento",description=u'Indique o nome completo do responsável pelo evento.',required=True)
     instituicao=schema.TextLine(title=u"Instituição",description=u'Informe qual a instituição ligada ao evento',required=True,default=u'UFMG')
     unidade=schema.TextLine(title=u"Unidade",description=u'Informe a unidade ou departamento que está fazendo a solicitação',required=True)
     telefone=schema.TextLine(title=u"Telefone",description=u'Informe o contato telefônico do responsável pelo evento',required=True,constraint=telefoneValidation)
