@@ -7,6 +7,7 @@ from zope import schema
 from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+import random
 
 from plone.dexterity.content import Item
 
@@ -14,10 +15,14 @@ from plone.directives import dexterity, form
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage, NamedFile
 from plone.namedfile.field import NamedBlobImage, NamedBlobFile
+from datetime import datetime,date,time
 from plone.namedfile.interfaces import IImageScaleTraversable
 from z3c.relationfield.schema import RelationChoice, RelationList
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget,CheckBoxFieldWidget
 from Products.CMFCore.utils import getToolByName
+from plone.dexterity.interfaces import IDexterityFTI
+from zope.schema import getFieldsInOrder
+from z3c.relationfield.relation import RelationValue
 
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from sistema.agenda.membrodeequipe import ImembroDeEquipe
@@ -34,6 +39,7 @@ from Products.CMFDefault.utils import checkEmailAddress
 from Products.CMFDefault.exceptions import EmailAddressInvalid
 from Products.CMFCore.utils import getToolByName
 from zope.lifecycleevent import modified
+from plone.uuid.interfaces import IUUID
 
 listaDeCategorias = SimpleVocabulary.fromValues(['Interno','Externo'])
 sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
@@ -109,7 +115,7 @@ class Ievento(form.Schema, IImageScaleTraversable):
     Evento
     """
     form.write_permission(equipe=permissaoAdm)
-    form.write_permission(categoria=permissaoAdm)
+    form.write_permission(categoria=permissaoAdm)    
 	
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
@@ -119,7 +125,8 @@ class Ievento(form.Schema, IImageScaleTraversable):
     servicosExtras=schema.Set(title=u"Serviços Extras",description=u'O evento necessita de algum destes serviços?',required=False, value_type=schema.Choice(source=listaServicosExtras))
     form.widget('servicosExtras', CheckBoxFieldWidget)
 	
-    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','cpf','instituicao','unidade','telefone','email'] ) 
+    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['identificadorSolicitacao','responsavel','cpf','instituicao','unidade','telefone','email'] ) 
+    identificadorSolicitacao=schema.TextLine(title=u"Número identificador desta solicitação.",description=u'NÃO MODIFICAR. Anote este número.')
     responsavel=schema.TextLine(title=u"Responsável pelo evento",description=u'Indique o nome completo do responsável pelo evento.',required=True)
     instituicao=schema.TextLine(title=u"Instituição",description=u'Informe qual a instituição ligada ao evento',required=True,default=u'UFMG')
     unidade=schema.TextLine(title=u"Unidade",description=u'Informe a unidade ou departamento que está fazendo a solicitação',required=True)
@@ -159,7 +166,11 @@ def modificaEvento(evento, event):
 
 
 
-
+@form.default_value(field=Ievento['identificadorSolicitacao'])
+def identificadorSolicitacaoDefault(data):
+    return random.getrandbits(32)
+	
+	
 @grok.subscribe(Ievento, IObjectAddedEvent)
 def adicionaEvento(evento, event):
   #se houver outro evento na mesma data com o mesmo espaco.
@@ -196,7 +207,101 @@ def adicionaEvento(evento, event):
     dest = pai.get('preagenda')
     result = dest.manage_pasteObjects(clipboard)
     modified(result)
+  enviaEmail(evento)
+  
+def enviaEmail(solicitacao):
+	servidor = getToolByName(solicitacao,'MailHost')
+	info = obtemTodasInformacoesDeConteudo(solicitacao)
+	del info[solicitacao.id]['categoria']
+	del info[solicitacao.id]['equipe']	
+	mt = getToolByName(solicitacao,'portal_membership')
+	emailAgendador = mt.getMemberById('agendador').email
+	mensagem = "Solicitação de agendamento.\n\n"
+	mensagem = mensagem + str('responsavel').upper()+" "+ str(info[solicitacao.id]['responsavel'])+"\n"    
+	mensagem = mensagem + str('email').upper()+" "+ str(info[solicitacao.id]['email'])+"\n"    
+	mensagem = mensagem + str('cpf').upper()+" "+ str(info[solicitacao.id]['cpf'])+"\n"    
+	mensagem = mensagem + str('telefone').upper()+" "+ str(info[solicitacao.id]['telefone'])+"\n\n"    
+	mensagem = mensagem + str('local solicitado').upper()+" "+ str(info[solicitacao.id]['local'])+"\n"    
+	mensagem = mensagem + str("Data de começo ").upper()+ str(solicitacao.start.day)+'/'+str(solicitacao.start.month)+' de '+str(solicitacao.start.year)+' às '+str(solicitacao.start.hour)+' e '+str(solicitacao.start.minute)+"\n" 
+	mensagem = mensagem + str("Data de término ").upper()+str(solicitacao.end.day)+'/'+str(solicitacao.end.month)+' de '+str(solicitacao.end.year)+' até '+str(solicitacao.end.hour)+' e '+str(solicitacao.end.minute)+"\n\n" 
+	del info[solicitacao.id]['email']
+	del info[solicitacao.id]['responsavel']
+	del info[solicitacao.id]['local']
+	del info[solicitacao.id]['cpf']
+	del info[solicitacao.id]['telefone']
 	
+	lista=info[solicitacao.id].keys()
+	for dado in lista:		
+		mensagem = mensagem + str(dado).upper()+" "+ str(info[solicitacao.id][dado])+"\n"    
+	mensagem = mensagem + "\n\n ESTES DADOS SERVEM PARA SUA CONFERÊNCIA. ESTA É UMA MENSAGEM AUTOMÁTICA. POR FAVOR NÃO RESPONDA A ESSE EMAIL."  
+	emailsEnvolvidos = solicitacao.email+";"+emailAgendador
+	titulo="Proposta de agendamento de "+solicitacao.responsavel
+	emailConta = 'ti@prograg.ufmg.br'
+	try:
+		servidor.send(mensagem, emailsEnvolvidos,emailConta,titulo)
+	except:
+		pass
+	return
+	
+def obtemTodasInformacoesDeConteudo(conteudo):
+    intids = getUtility(IIntIds)
+    tipo="sistema.agenda."+str(conteudo.Type())
+    tipo=tipo.lower()
+    schema = getUtility(IDexterityFTI, name=tipo).lookupSchema()
+    campos=getFieldsInOrder(schema)    
+    dados={}
+    dados[conteudo.id]={}
+    for campo,val in campos:
+      valor =getattr(conteudo,campo)
+      if valor is None:
+          valor=''
+      else:     
+       #se o campo for relacional      
+       if isinstance(valor,list): 
+        if len(valor) and isinstance(valor[0], RelationValue):
+         lista=valor
+         valor=[]
+         for educandoMatriculado in lista:
+          at=getattr(educandoMatriculado,'to_id',None)
+          if at:
+           obj = intids.queryObject(at)
+           valor.append(obj.title)
+       #se o campo nao for do tipo relacao
+       else:
+        #se o campo for executavel
+        if valor is callable:
+          valor=valor()
+        else:
+            #se o campo for string
+            if isinstance(valor,str):
+              valor=valor
+              #para acentuacao usar valor.decode('iso-8859-1')             
+            # se o campo for data
+            if isinstance(valor,date):
+              valor=str(valor)
+		
+      idCampo = campo      
+      if isinstance(valor,str):          
+        valor=valor.decode('utf-8')
+      if isinstance(valor,list):
+        valor=str(valor)          
+      if isinstance(valor,set):
+        valor=str(valor)          
+      if isinstance(valor,date):
+        valor=str(valor)          
+      if isinstance(valor,time):
+        valor=str(valor)      
+      if valor is callable:
+        valor=valor()                    
+      if isinstance(valor,bool):
+        valor=str(valor)
+      if isinstance(valor,NamedBlobImage) or isinstance(valor,NamedBlobFile):
+        valor='arquivo' 
+      dados[conteudo.id][idCampo]= valor        
+    
+    return dados
+  
+
 class evento(Item):
     grok.implements(Ievento)
 

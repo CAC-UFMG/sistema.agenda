@@ -35,3 +35,8 @@ environment-vars =
         TZ America/Sao_Paulo
 		
 Em buildout.cfg na seção [instance]
+
+informações de email
+smtp.grude.ufmg.br:25
+print-cad1-prograd
+prograd.2012.ag
