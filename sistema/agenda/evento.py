@@ -117,6 +117,7 @@ class Ievento(form.Schema, IImageScaleTraversable):
     form.write_permission(equipe=permissaoAdm)
     form.write_permission(categoria=permissaoAdm)    
 	
+    id=schema.TextLine(title=u"Número identificador desta solicitação.",description=u'NÃO MODIFICAR. Anote este número.')	
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
     local=RelationList(title=u"Local",description=u'Escolha os espaços a serem agendados',required=True,value_type=RelationChoice(title=u'Local',required=True,source=pastaLocais))
@@ -125,8 +126,7 @@ class Ievento(form.Schema, IImageScaleTraversable):
     servicosExtras=schema.Set(title=u"Serviços Extras",description=u'O evento necessita de algum destes serviços?',required=False, value_type=schema.Choice(source=listaServicosExtras))
     form.widget('servicosExtras', CheckBoxFieldWidget)
 	
-    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['identificadorSolicitacao','responsavel','cpf','instituicao','unidade','telefone','email'] ) 
-    identificadorSolicitacao=schema.TextLine(title=u"Número identificador desta solicitação.",description=u'NÃO MODIFICAR. Anote este número.')
+    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','cpf','instituicao','unidade','telefone','email'] ) 
     responsavel=schema.TextLine(title=u"Responsável pelo evento",description=u'Indique o nome completo do responsável pelo evento.',required=True)
     instituicao=schema.TextLine(title=u"Instituição",description=u'Informe qual a instituição ligada ao evento',required=True,default=u'UFMG')
     unidade=schema.TextLine(title=u"Unidade",description=u'Informe a unidade ou departamento que está fazendo a solicitação',required=True)
@@ -166,9 +166,9 @@ def modificaEvento(evento, event):
 
 
 
-@form.default_value(field=Ievento['identificadorSolicitacao'])
-def identificadorSolicitacaoDefault(data):
-    return random.getrandbits(32)
+@form.default_value(field=Ievento['id'])
+def idDefault(data):
+    return random.getrandbits(64)
 	
 	
 @grok.subscribe(Ievento, IObjectAddedEvent)
