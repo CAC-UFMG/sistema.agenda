@@ -237,10 +237,12 @@ def enviaEmail(solicitacao):
 	emailsEnvolvidos = solicitacao.email+";"+emailAgendador
 	titulo="Proposta de agendamento de "+solicitacao.responsavel
 	emailConta = 'ti@prograg.ufmg.br'
-	try:
-		servidor.send(mensagem, emailsEnvolvidos,emailConta,titulo)
-	except:
-		pass
+	#existe um comando que é validateSingleEmailAddress para que serve?
+	if servidor.smtp_host !='':
+		try:
+			servidor.send(mensagem, emailsEnvolvidos,emailConta,titulo)
+		except:
+			pass
 	return
 	
 def obtemTodasInformacoesDeConteudo(conteudo):
