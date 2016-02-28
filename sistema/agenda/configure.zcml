@@ -15,7 +15,7 @@
   <include package="plone.app.event" />  
   <include package="Solgema.fullcalendar" />
   <include package="plone.formwidget.querystring"/>
-  <include package="collective.wtf" />  
+  <include package="collective.wtf" />     
   <include file="permissoes.zcml" />  
   <includeDependencies package="." />
 
@@ -43,6 +43,12 @@
           class=".relatorio_semanal_eventos.relatorio_semanal_eventos"
           />
 		  
+	<browser:page
+          for="*"
+          name="relatorio_geral_eventos"
+          permission="zope2.Public"
+          class=".relatorio_geral_eventos.relatorio_geral_eventos"
+          />
   <i18n:registerTranslations directory="locales" />
 
   <!-- Register an extension profile to make the product installable

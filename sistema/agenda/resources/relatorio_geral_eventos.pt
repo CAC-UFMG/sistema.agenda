@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="sistema.agenda">
+<body>
+
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;
+		eventos view/obtemDadosDeEventos;
+		member python: context.portal_membership.getAuthenticatedMember();
+		estatistica view/obtemEstatisticasDeEventos">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="string: Relatório geral de eventos" /><br/>
+		
+		<TABLE CLASS="listing">
+	  	<THEAD>	
+			<TH TAL:REPEAT="coluna python: estatistica.keys()" TAL:CONTENT="coluna">Estatística</TH>			
+		</THEAD>	
+		<TBODY>
+		 <TR>		  
+		  <TD TAL:REPEAT="coluna python: estatistica.keys()">			
+				<DIV TAL:REPLACE="python: estatistica[coluna]">NOME DA COLUNA</DIV>			
+		  </TD>		  	  		  		  	  
+		 </TR>
+		</TBODY>	  
+	  </TABLE>
+		
+	  <DIV>Listagem de eventos</DIV>
+	  <DIV TAL:CONDITION="python: len(eventos)==0">SEM EVENTOS POR ENQUANTO</DIV>
+	  <DIV class="row-fluid" TAL:CONDITION="python: len(eventos)!=0">
+      <TABLE CLASS="listing">
+	  	<THEAD>		
+		 <TR>		
+		  <TH TAL:REPEAT="coluna python: eventos[0].keys()" TAL:CONTENT="coluna">NOME DA COLUNA</TH>		 
+		 </TR>		
+		</THEAD>
+		<TBODY>
+	    <TR TAL:REPEAT="evento eventos">
+		  <TD TAL:REPEAT="coluna python: evento.keys()" >
+			<DIV TAL:CONDITION="python: coluna in ['cpf','telefone','email','equipe']">
+				<DIV TAL:CONDITION="python: 'Site Administrator' in member.getRoles()" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
+			</DIV>
+			<DIV TAL:CONDITION="python: coluna not in ['cpf','telefone','email','equipe']" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
+		  </TD>		  	  		  		  	  
+		</TR>
+		</TBODY>	  
+	  </TABLE>
+	  </DIV>
+	  
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>
