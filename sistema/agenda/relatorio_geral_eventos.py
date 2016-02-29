@@ -158,7 +158,9 @@ class relatorio_geral_eventos(BrowserView):
 		dados['TotalCad1']=TotalCad1
 		dados['TotalCad2']=TotalCad2
 		DuracaoMediaHoras = float(DuracaoMedia.seconds)/3600
-		DuracaoMedia=round(DuracaoMediaHoras/TotalDeEventos,2)
+		if TotalDeEventos:
+			DuracaoMedia=round(DuracaoMediaHoras/TotalDeEventos,2)
+		
 		dados['DuracaoMedia']=DuracaoMedia
 		
 		return dados
