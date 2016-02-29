@@ -5,9 +5,12 @@ from five import grok
 from z3c.form import group, field
 from zope import schema
 from zope.interface import invariant, Invalid
+from z3c.form.interfaces import ActionExecutionError, WidgetActionExecutionError
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import random
+from plone.app.event.dx.behaviors import IEventBasic,IEventRecurrence
+
 
 from plone.dexterity.content import Item
 
@@ -87,8 +90,8 @@ def cpfValidation(data):
 		raise Invalid(_(u"CPF Inválido"))
 	return True
 
-
- 
+	
+	
 @grok.provider(IContextSourceBinder)
 def pastaLocais(context):
     portal_url = getToolByName(context,'portal_url')
@@ -110,12 +113,12 @@ def pastaEquipe(context):
 
 
 permissaoAdm='sistema.agenda.visualizaEvento'
-class Ievento(form.Schema, IImageScaleTraversable):
+class Ievento(form.Schema, IImageScaleTraversable,IEventBasic):
     """
     Evento
     """
     form.write_permission(equipe=permissaoAdm)
-    form.write_permission(categoria=permissaoAdm)    
+    form.write_permission(categoria=permissaoAdm)         
 	
     id=schema.TextLine(title=u"Número identificador desta solicitação.",description=u'NÃO MODIFICAR. Anote este número.')	
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
@@ -134,73 +137,50 @@ class Ievento(form.Schema, IImageScaleTraversable):
     email=schema.TextLine(title=u"E-mail",description=u'Informe o email do responsável pelo evento',required=True,constraint=validateaddress)
     cpf=schema.TextLine(title=u"CPF",constraint=cpfValidation, description=u'Informe o cpf do responsável pelo evento',required=True)
 	
-@grok.subscribe(Ievento, IObjectModifiedEvent)
-def modificaEvento(evento, event):
-  #se houver outro evento na mesma data com o mesmo espaco.
-  catalog = getUtility(ICatalog)
-  intids = getUtility(IIntIds)
-  if evento.local:
-   for it in evento.local:
-    local = getattr(it,'to_id',None)
-    if local:
-     objLocal = intids.queryObject(local)   
-     source_object = objLocal
-     result = []
-     for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
-        objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
-        if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id:
-         if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
-            raise Invalid("Conflito de horario com:" + objLocal.title+" entre os eventos: "+objEventoCadastrado.title+" e "+ evento.title)
-  if evento.equipe:
-   for it in evento.equipe:
-    local = getattr(it,'to_id',None)
-    if local:
-     objLocal = intids.queryObject(local)   
-     source_object = objLocal
-     result = []
-     for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
-        objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
-        if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id:
-         if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
-            raise Invalid("Conflito de equipe com:" + objLocal.title+" entre os eventos: "+objEventoCadastrado.title+" e "+ evento.title)
+    @invariant
+    def localValidation(data):  
+      catalog = getUtility(ICatalog)
+      intids = getUtility(IIntIds)  
+	  
+      if len(data.local):   
+        for local in data.local:    
+          if local:            
+            source_object = local
+            titulo = local.title_or_id()
+            result = []
+            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
+              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
+              if objEventoCadastrado is not None and objEventoCadastrado.id != data.id:
+                if (data.start >= objEventoCadastrado.start and data.start <= objEventoCadastrado.end) or (data.end <= objEventoCadastrado.end and data.end >= objEventoCadastrado.start) or (data.end >= objEventoCadastrado.end and data.start <= objEventoCadastrado.start):
+                  msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
+                  raise WidgetActionExecutionError('local', Invalid(msg))	
 
-
-
+    @invariant
+    def equipeValidation(data):  
+      catalog = getUtility(ICatalog)
+      intids = getUtility(IIntIds)  
+	  
+      if len(data.equipe):   
+        for local in data.equipe:    
+          if local:            
+            source_object = local
+            titulo = local.title_or_id()
+            result = []
+            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
+              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
+              if objEventoCadastrado is not None and objEventoCadastrado.id != data.id:
+                if (data.start >= objEventoCadastrado.start and data.start <= objEventoCadastrado.end) or (data.end <= objEventoCadastrado.end and data.end >= objEventoCadastrado.start) or (data.end >= objEventoCadastrado.end and data.start <= objEventoCadastrado.start):
+                  msg="EQUIPE NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma alocacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
+                  raise WidgetActionExecutionError('equipe', Invalid(msg))				  
+  
+	
 @form.default_value(field=Ievento['id'])
 def idDefault(data):
     return random.getrandbits(64)
 	
 	
 @grok.subscribe(Ievento, IObjectAddedEvent)
-def adicionaEvento(evento, event):
-  #se houver outro evento na mesma data com o mesmo espaco.
-  catalog = getUtility(ICatalog)
-  intids = getUtility(IIntIds)
-  if evento.local:
-   for it in evento.local:
-    local = getattr(it,'to_id',None)
-    if local:
-     objLocal = intids.queryObject(local)   
-     source_object = objLocal
-     result = []
-     for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
-        objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
-        if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id:
-         if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
-            raise Invalid("Conflito de horario com:" + objLocal.title+" entre os eventos: "+objEventoCadastrado.title+" e "+ evento.title)
-  if evento.equipe:
-   for it in evento.equipe:
-    local = getattr(it,'to_id',None)
-    if local:
-     objLocal = intids.queryObject(local)   
-     source_object = objLocal
-     result = []
-     for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
-        objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
-        if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id:
-         if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
-            raise Invalid("Conflito de equipe com:" + objLocal.title+" entre os eventos: "+objEventoCadastrado.title+" e "+ evento.title)
-  
+def adicionaEvento(evento, event):  
   pai = aq_parent(aq_inner(evento))
   if pai.id == 'agenda':
     clipboard = pai.manage_cutObjects([evento.id])

@@ -157,10 +157,12 @@ class relatorio_geral_eventos(BrowserView):
 		
 		dados['TotalCad1']=TotalCad1
 		dados['TotalCad2']=TotalCad2
-		DuracaoMediaHoras = float(DuracaoMedia.seconds)/3600
-		if TotalDeEventos:
-			DuracaoMedia=round(DuracaoMediaHoras/TotalDeEventos,2)
 		
+		if TotalDeEventos:
+			DuracaoMediaHoras = float(DuracaoMedia.seconds)/3600
+			DuracaoMedia=round(DuracaoMediaHoras/TotalDeEventos,2)
+		else:
+			DuracaoMedia=0
 		dados['DuracaoMedia']=DuracaoMedia
 		
 		return dados
@@ -172,8 +174,8 @@ class relatorio_geral_eventos(BrowserView):
 		schema = getUtility(IDexterityFTI, name=tipo).lookupSchema()
 		campos=getFieldsInOrder(schema)    
 		dados={}
-		dados['dataDeComeco']= str(conteudo.start.day)+'/'+str(conteudo.start.month)+' de '+str(conteudo.start.year)+' às '+str(conteudo.start.hour)+' e '+str(conteudo.start.minute)
-		dados['dataDeTermino']=str(conteudo.end.day)+'/'+str(conteudo.end.month)+' de '+str(conteudo.end.year)+' às '+str(conteudo.end.hour)+' e '+str(conteudo.end.minute)
+		#dados['dataDeComeco']= str(conteudo.start.day)+'/'+str(conteudo.start.month)+' de '+str(conteudo.start.year)+' às '+str(conteudo.start.hour)+' e '+str(conteudo.start.minute)
+		#dados['dataDeTermino']=str(conteudo.end.day)+'/'+str(conteudo.end.month)+' de '+str(conteudo.end.year)+' às '+str(conteudo.end.hour)+' e '+str(conteudo.end.minute)
 		for campo,val in campos:
 			valor =getattr(conteudo,campo)
 			idCampo = campo      
