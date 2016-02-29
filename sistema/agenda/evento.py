@@ -140,8 +140,7 @@ class Ievento(form.Schema, IImageScaleTraversable,IEventBasic):
     @invariant
     def localValidation(data):  
       catalog = getUtility(ICatalog)
-      intids = getUtility(IIntIds)  
-	  
+      intids = getUtility(IIntIds)        
       if len(data.local):   
         for local in data.local:    
           if local:            
@@ -178,10 +177,13 @@ class Ievento(form.Schema, IImageScaleTraversable,IEventBasic):
 def idDefault(data):
     return random.getrandbits(64)
 	
+@form.default_value(field=Ievento['timezone'])
+def timezoneDefault(data):
+    return 'America/Sao_Paulo'
 	
 @grok.subscribe(Ievento, IObjectAddedEvent)
 def adicionaEvento(evento, event):  
-  pai = aq_parent(aq_inner(evento))
+  pai = aq_parent(aq_inner(evento))  
   if pai.id == 'agenda':
     clipboard = pai.manage_cutObjects([evento.id])
     dest = pai.get('preagenda')
