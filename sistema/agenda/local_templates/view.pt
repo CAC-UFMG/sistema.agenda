@@ -24,18 +24,20 @@
 		  <tr>
 		    <td><br/>
 		      <strong>Equipamentos</strong>
-		        <div tal:repeat="relacionado python: view.equipamentosNesseLocal()">
-                  <a tal:content="relacionado/title_or_id" tal:attributes="href relacionado/absolute_url"> </a>
-                </div>
+		        
             </td>
+			<td><div tal:repeat="relacionado python: view.equipamentosNesseLocal()">
+                  <a tal:content="relacionado/title_or_id" tal:attributes="href relacionado/absolute_url"> </a>
+                </div></td>
 		   </tr>
           <tr>
 		    <td><br/>
 		      <strong>Eventos agendados</strong>
-		        <div tal:repeat="relacionado python: view.eventoNesseLocal()">
-                  <a tal:content="relacionado/title_or_id" tal:attributes="href relacionado/absolute_url"> </a>
-                </div>
+		        
             </td>
+			<td><div tal:repeat="relacionado python: view.eventoNesseLocal()">
+                  <a tal:content="relacionado/title_or_id" tal:attributes="href relacionado/absolute_url"> </a>
+                </div></td>
 		   </tr>
 	    </table>   
 	</div>

@@ -85,12 +85,25 @@
  <object name="portal_tabs" meta_type="CMF Action Category">
     <object name="preagendamentos" meta_type="CMF Action">   
      <property name="url_expr">python: "/"+context.portal_url.getPortalObject().id+"/agenda/preagenda/folder_contents"</property>
+<<<<<<< HEAD
      <property name="available_expr">python:member and 'Site Administrator' in member.getRoles()</property>
      <property name="title">Visualizar solicitações</property>
+=======
+     <property name="available_expr">python:member and ('Site Administrator' in member.getRoles() or 'Manager' in member.getRoles())</property>
+     <property name="title">Ver solicitações</property>
+>>>>>>> origin/master
      <property name="visible">True</property>
   </object>
  </object>
  
+ <object name="portal_tabs" meta_type="CMF Action Category">
+    <object name="relatoriogeral" meta_type="CMF Action">   
+     <property name="url_expr">python: "/"+context.portal_url.getPortalObject().id+"/agenda/relatorio_geral_eventos"</property>     	 
+     <property name="title">Relatório Geral</property>
+     <property name="visible">True</property>
+    </object>  
+  </object>
+
  <object name="portal_tabs" meta_type="CMF Action Category">
     <object name="relatoriosemanal" meta_type="CMF Action">   
      <property name="url_expr">python: "/"+context.portal_url.getPortalObject().id+"/agenda/relatorio_semanal_eventos"</property>     
@@ -99,6 +112,4 @@
     </object>  
   </object>
   
-
-
  </object>

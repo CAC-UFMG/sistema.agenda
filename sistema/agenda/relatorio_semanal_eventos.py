@@ -33,7 +33,7 @@ class relatorio_semanal_eventos(BrowserView):
      vazio=True	 
      wf = getToolByName(pastaAgenda,'portal_workflow')     
      for evento in pastaAgenda.listFolderContents():        
-        if checkPermission('sistema.agenda.visualizaEvento', evento):            
+        if checkPermission('sistema.agenda.visualizaEvento', evento) and evento.portal_type=='sistema.agenda.evento':            
             diaEvento=datetime(evento.start.year,evento.start.month,evento.start.day)
             semanaEvento = diaEvento.isocalendar()[1]
             semanaHoje = hoje.isocalendar()[1]

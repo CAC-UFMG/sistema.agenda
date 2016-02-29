@@ -9,7 +9,9 @@
 
 
 <metal:main fill-slot="content-core"> 
-      Solicitação enviada!  
+      <p>Solicitação enviada!  <br/>
+	  No email infomado, você receberá uma mensagem de confirmação desta solicitação. <br/>
+	  <b>Guarde estes dados pois entraremos em contato com informações sobre os próximos passos do agendamento.</b></p>
 </metal:main>
 
 </body>
