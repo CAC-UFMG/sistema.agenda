@@ -23,6 +23,8 @@ from plone.namedfile.interfaces import IImageScaleTraversable
 from z3c.relationfield.schema import RelationChoice, RelationList
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget,CheckBoxFieldWidget
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.WorkflowCore import WorkflowException
 from plone.dexterity.interfaces import IDexterityFTI
 from zope.schema import getFieldsInOrder
 from z3c.relationfield.relation import RelationValue
@@ -140,7 +142,7 @@ class Ievento(form.Schema, IImageScaleTraversable,IEventBasic):
     @invariant
     def localValidation(data):  
       catalog = getUtility(ICatalog)
-      intids = getUtility(IIntIds)        
+      intids = getUtility(IIntIds)      	  
       if len(data.local):   
         for local in data.local:    
           if local:            
@@ -149,7 +151,9 @@ class Ievento(form.Schema, IImageScaleTraversable,IEventBasic):
             result = []
             for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
-              if objEventoCadastrado is not None and objEventoCadastrado.id != data.id:
+              wf = getToolByName(objEventoCadastrado,'portal_workflow')
+              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
+              if objEventoCadastrado is not None and objEventoCadastrado.id != data.id and (estado=='agendado' or estado=='prereservado'):
                 if (data.start >= objEventoCadastrado.start and data.start <= objEventoCadastrado.end) or (data.end <= objEventoCadastrado.end and data.end >= objEventoCadastrado.start) or (data.end >= objEventoCadastrado.end and data.start <= objEventoCadastrado.start):
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
                   raise WidgetActionExecutionError('local', Invalid(msg))	
@@ -167,7 +171,9 @@ class Ievento(form.Schema, IImageScaleTraversable,IEventBasic):
             result = []
             for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
-              if objEventoCadastrado is not None and objEventoCadastrado.id != data.id:
+              wf = getToolByName(objEventoCadastrado,'portal_workflow')
+              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 			  
+              if objEventoCadastrado is not None and objEventoCadastrado.id != data.id and (estado=='agendado' or estado=='prereservado'):
                 if (data.start >= objEventoCadastrado.start and data.start <= objEventoCadastrado.end) or (data.end <= objEventoCadastrado.end and data.end >= objEventoCadastrado.start) or (data.end >= objEventoCadastrado.end and data.start <= objEventoCadastrado.start):
                   msg="EQUIPE NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma alocacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
                   raise WidgetActionExecutionError('equipe', Invalid(msg))				  
@@ -191,6 +197,30 @@ def adicionaEvento(evento, event):
     modified(result)
   enviaEmail(evento)
   
+@grok.subscribe(Ievento, IActionSucceededEvent)
+def trasitaEvento(evento,event):  
+      catalog = getUtility(ICatalog)
+      intids = getUtility(IIntIds)        
+      wf = getToolByName(evento,'portal_workflow')	  
+      estadoLocal = wf.getInfoFor(evento,'review_state')	 
+      if len(evento.local) and estadoLocal=='prereservado':   
+        for loc in evento.local: 
+          i = getattr(loc,'to_id',None)		
+          if i:            
+            source_object = intids.queryObject(i)
+            titulo =  source_object.title            
+            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
+              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)              
+              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
+              if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
+                if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
+                  msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
+                  evento.plone_utils.addPortalMessage(msg, 'error')
+                  raise WorkflowException(Invalid(msg))				  
+                  #evento.REQUEST.response.redirect(evento.absolute_url()+'/@@edit')
+                  
+    
+
 def enviaEmail(solicitacao):
 	servidor = getToolByName(solicitacao,'MailHost')
 	info = obtemTodasInformacoesDeConteudo(solicitacao)

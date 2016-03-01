@@ -17,4 +17,3 @@ def copiaParaPastaMae(self, state_change):
 def reindexa(self, state_change):      
    obj = state_change.object
    modified(obj)   
-   

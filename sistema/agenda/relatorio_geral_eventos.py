@@ -52,13 +52,13 @@ class relatorio_geral_eventos(BrowserView):
 		dados['TotalEmAnalise']=0
 		dados['TotalDeEventos']=0
 		
-		dados['TotalDeCongressos']=0
-		dados['TotalDeColacoes']=0
-		dados['TotalDeAulas']=0
-		dados['TotalOutros']=0
+		dados['Congressos']=0
+		dados['Colacoes']=0
+		dados['Aulas']=0
+		dados['Outros']=0
 		
-		dados['TotalCad1']=0
-		dados['TotalCad2']=0
+		dados['Cad1']=0
+		dados['Cad2']=0
 		
 		dados['DuracaoMedia']=datetime.now()-datetime.now()
 		
@@ -75,9 +75,9 @@ class relatorio_geral_eventos(BrowserView):
 			if evento.portal_type =='sistema.agenda.evento':
 				TotalDeEventos = TotalDeEventos+1
 				estado = wf.getInfoFor(evento,'review_state')
-				if estado=='solicitado':
+				if estado=='solicitacao':
 					TotalEmSolicitacoes=TotalEmSolicitacoes+1
-				if estado=='reservado':
+				if estado=='agendado':
 					TotalAgendados=TotalAgendados+1
 				if estado=='em_analise':
 					TotalEmAnalise=TotalEmAnalise+1
@@ -112,9 +112,9 @@ class relatorio_geral_eventos(BrowserView):
 			if evento.portal_type =='sistema.agenda.evento':
 				TotalDeEventos = TotalDeEventos+1
 				estado = wf.getInfoFor(evento,'review_state')
-				if estado=='solicitado':
+				if estado=='solicitacao':
 					TotalEmSolicitacoes=TotalEmSolicitacoes+1
-				if estado=='reservado':
+				if estado=='agendado':
 					TotalAgendados=TotalAgendados+1
 				if estado=='em_analise':
 					TotalEmAnalise=TotalEmAnalise+1
@@ -150,13 +150,13 @@ class relatorio_geral_eventos(BrowserView):
 		dados['TotalEmAnalise']=TotalEmAnalise
 		dados['TotalDeEventos']=TotalDeEventos
 		
-		dados['TotalDeCongressos']=TotalDeCongressos
-		dados['TotalDeColacoes']=TotalDeColacoes
-		dados['TotalDeAulas']=TotalDeAulas
-		dados['TotalOutros']=TotalOutros
+		dados['Congressos']=TotalDeCongressos
+		dados['Colacoes']=TotalDeColacoes
+		dados['Aulas']=TotalDeAulas
+		dados['Outros']=TotalOutros
 		
-		dados['TotalCad1']=TotalCad1
-		dados['TotalCad2']=TotalCad2
+		dados['Cad1']=TotalCad1
+		dados['Cad2']=TotalCad2
 		
 		if TotalDeEventos:
 			DuracaoMediaHoras = float(DuracaoMedia.seconds)/3600
@@ -174,8 +174,10 @@ class relatorio_geral_eventos(BrowserView):
 		schema = getUtility(IDexterityFTI, name=tipo).lookupSchema()
 		campos=getFieldsInOrder(schema)    
 		dados={}
-		#dados['dataDeComeco']= str(conteudo.start.day)+'/'+str(conteudo.start.month)+' de '+str(conteudo.start.year)+' às '+str(conteudo.start.hour)+' e '+str(conteudo.start.minute)
-		#dados['dataDeTermino']=str(conteudo.end.day)+'/'+str(conteudo.end.month)+' de '+str(conteudo.end.year)+' às '+str(conteudo.end.hour)+' e '+str(conteudo.end.minute)
+		dados['dataInicial']= str(conteudo.start.day)+'/'+str(conteudo.start.month)+' de '+str(conteudo.start.year)
+		dados['dataFinal']=str(conteudo.end.day)+'/'+str(conteudo.end.month)+' de '+str(conteudo.end.year)
+		dados['horaInicial']=str(conteudo.start.hour)+':'+str(conteudo.start.minute)
+		dados['horaFinal']=str(conteudo.end.hour)+':'+str(conteudo.end.minute)
 		for campo,val in campos:
 			valor =getattr(conteudo,campo)
 			idCampo = campo      
@@ -211,7 +213,18 @@ class relatorio_geral_eventos(BrowserView):
 				if isinstance(valor,NamedBlobImage) or isinstance(valor,NamedBlobFile):
 					valor='arquivo anexado' 
 			dados[idCampo]= valor        
-    
+		del dados['sync_uid']
+		del dados['whole_day']
+		del dados['timezone']
+		del dados['open_end']
+		del dados['equipe']
+		del dados['servicosExtras']
+		del dados['cpf']
+		del dados['start']
+		del dados['end']
+		del dados['categoria']
+		dados['Publico']=dados['previsaoDePublico']
+		del dados['previsaoDePublico']
 		return dados
 	
 	def obtemDadosDeEventos(self):	
