@@ -28,6 +28,7 @@ from Products.CMFCore.WorkflowCore import WorkflowException
 from plone.dexterity.interfaces import IDexterityFTI
 from zope.schema import getFieldsInOrder
 from z3c.relationfield.relation import RelationValue
+from plone.event.interfaces import IEventAccessor
 
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from sistema.agenda.membrodeequipe import ImembroDeEquipe
@@ -45,6 +46,9 @@ from Products.CMFDefault.exceptions import EmailAddressInvalid
 from Products.CMFCore.utils import getToolByName
 from zope.lifecycleevent import modified
 from plone.uuid.interfaces import IUUID
+from plone.app.event.dx.behaviors import first_weekday_sun0
+from plone.autoform.interfaces import IFormFieldProvider
+from zope.interface import alsoProvides
 
 listaDeCategorias = SimpleVocabulary.fromValues(['Interno','Externo'])
 sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
@@ -115,14 +119,15 @@ def pastaEquipe(context):
 
 
 permissaoAdm='sistema.agenda.visualizaEvento'
-class Ievento(form.Schema, IImageScaleTraversable,IEventBasic):
+class Ievento(form.Schema, IImageScaleTraversable):
     """
     Evento
     """
     form.write_permission(equipe=permissaoAdm)
     form.write_permission(categoria=permissaoAdm)         
+    #form.mode(id='display')      
 	
-    id=schema.TextLine(title=u"Número identificador desta solicitação.",description=u'NÃO MODIFICAR. Anote este número.')	
+    id=schema.TextLine(title=u"Número identificador desta solicitação.")	
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
     local=RelationList(title=u"Local",description=u'Escolha os espaços a serem agendados',required=True,value_type=RelationChoice(title=u'Local',required=True,source=pastaLocais))
@@ -138,54 +143,16 @@ class Ievento(form.Schema, IImageScaleTraversable,IEventBasic):
     telefone=schema.TextLine(title=u"Telefone",description=u'Informe o contato telefônico do responsável pelo evento',required=True,constraint=telefoneValidation)
     email=schema.TextLine(title=u"E-mail",description=u'Informe o email do responsável pelo evento',required=True,constraint=validateaddress)
     cpf=schema.TextLine(title=u"CPF",constraint=cpfValidation, description=u'Informe o cpf do responsável pelo evento',required=True)
-	
-    @invariant
-    def localValidation(data):  
-      catalog = getUtility(ICatalog)
-      intids = getUtility(IIntIds)      	  
-      if len(data.local):   
-        for local in data.local:    
-          if local:            
-            source_object = local
-            titulo = local.title_or_id()
-            result = []
-            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
-              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
-              wf = getToolByName(objEventoCadastrado,'portal_workflow')
-              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
-              if objEventoCadastrado is not None and objEventoCadastrado.id != data.id and (estado=='agendado' or estado=='prereservado'):
-                if (data.start >= objEventoCadastrado.start and data.start <= objEventoCadastrado.end) or (data.end <= objEventoCadastrado.end and data.end >= objEventoCadastrado.start) or (data.end >= objEventoCadastrado.end and data.start <= objEventoCadastrado.start):
-                  msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
-                  raise WidgetActionExecutionError('local', Invalid(msg))	
-
-    @invariant
-    def equipeValidation(data):  
-      catalog = getUtility(ICatalog)
-      intids = getUtility(IIntIds)  
-	  
-      if len(data.equipe):   
-        for local in data.equipe:    
-          if local:            
-            source_object = local
-            titulo = local.title_or_id()
-            result = []
-            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
-              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
-              wf = getToolByName(objEventoCadastrado,'portal_workflow')
-              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 			  
-              if objEventoCadastrado is not None and objEventoCadastrado.id != data.id and (estado=='agendado' or estado=='prereservado'):
-                if (data.start >= objEventoCadastrado.start and data.start <= objEventoCadastrado.end) or (data.end <= objEventoCadastrado.end and data.end >= objEventoCadastrado.start) or (data.end >= objEventoCadastrado.end and data.start <= objEventoCadastrado.start):
-                  msg="EQUIPE NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma alocacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
-                  raise WidgetActionExecutionError('equipe', Invalid(msg))				  
+			  
   
-	
+
 @form.default_value(field=Ievento['id'])
 def idDefault(data):
     return random.getrandbits(64)
 	
-@form.default_value(field=Ievento['timezone'])
-def timezoneDefault(data):
-    return 'America/Sao_Paulo'
+#@form.default_value(field=Ievento['timezone'])
+#def timezoneDefault(data):
+#    return 'America/Sao_Paulo'
 	
 @grok.subscribe(Ievento, IObjectAddedEvent)
 def adicionaEvento(evento, event):  
@@ -197,16 +164,88 @@ def adicionaEvento(evento, event):
     modified(result)
   enviaEmail(evento)
   
+  catalog = getUtility(ICatalog)
+  intids = getUtility(IIntIds) 
+  inicio=getattr(evento,'start')
+  fim=getattr(evento,'end')
+  if len(evento.local):   
+        for local in evento.local:   
+           i = getattr(local,'to_id',None)		
+           if i:            
+            source_object = intids.queryObject(i)
+            titulo =  source_object.title 		
+            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
+              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
+              wf = getToolByName(objEventoCadastrado,'portal_workflow')
+              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
+              if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
+                if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
+                  msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
+                  raise WidgetActionExecutionError('local', Invalid(msg))                  
+  if len(evento.equipe):   
+        for local in evento.equipe:    
+          i = getattr(local,'to_id',None)		
+          if i:            
+            source_object = intids.queryObject(i)
+            titulo =  source_object.title 	
+            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
+              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
+              wf = getToolByName(objEventoCadastrado,'portal_workflow')
+              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 			  
+              if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
+                if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
+                  msg="EQUIPE NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma alocacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
+                  raise WidgetActionExecutionError('equipe', Invalid(msg))
+  
+@grok.subscribe(Ievento, IObjectModifiedEvent)
+def modificaEvento(evento, event):  
+  pai = aq_parent(aq_inner(evento))  
+  # a criacao do objeto ainda esta acontecendo!!!!
+  catalog = getUtility(ICatalog)
+  intids = getUtility(IIntIds) 
+  inicio=getattr(evento,'start')
+  fim=getattr(evento,'end')
+  if len(evento.local):   
+        for local in evento.local:   
+           i = getattr(local,'to_id',None)		
+           if i:            
+            source_object = intids.queryObject(i)
+            titulo =  source_object.title 		
+            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
+              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
+              wf = getToolByName(objEventoCadastrado,'portal_workflow')
+              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
+              if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
+                if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
+                  msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
+                  raise WidgetActionExecutionError('local', Invalid(msg))                  
+  if len(evento.equipe):   
+        for local in evento.equipe:    
+          i = getattr(local,'to_id',None)		
+          if i:            
+            source_object = intids.queryObject(i)
+            titulo =  source_object.title 	
+            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
+              objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
+              wf = getToolByName(objEventoCadastrado,'portal_workflow')
+              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 			  
+              if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
+                if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
+                  msg="EQUIPE NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma alocacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
+                  raise WidgetActionExecutionError('equipe', Invalid(msg))
+				  
+  
 @grok.subscribe(Ievento, IActionSucceededEvent)
 def trasitaEvento(evento,event):  
       catalog = getUtility(ICatalog)
       intids = getUtility(IIntIds)        
       wf = getToolByName(evento,'portal_workflow')	  
-      estadoLocal = wf.getInfoFor(evento,'review_state')	 
-      if len(evento.local) and estadoLocal=='prereservado':   
-        for loc in evento.local: 
-          i = getattr(loc,'to_id',None)		
-          if i:            
+      estadoLocal = wf.getInfoFor(evento,'review_state')
+      if evento.local:
+       if len(evento.local) and estadoLocal=='prereservado':   
+         for loc in evento.local: 
+           i = getattr(loc,'to_id',None)		
+           if i:            
             source_object = intids.queryObject(i)
             titulo =  source_object.title            
             for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
@@ -241,6 +280,10 @@ def enviaEmail(solicitacao):
 	del info[solicitacao.id]['local']
 	del info[solicitacao.id]['cpf']
 	del info[solicitacao.id]['telefone']
+	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone']
+	for i in listaExclusao:
+		if i in info[solicitacao.id].keys():
+			del info[solicitacao.id][i]
 	
 	lista=info[solicitacao.id].keys()
 	for dado in lista:		

@@ -214,16 +214,11 @@ class relatorio_geral_eventos(BrowserView):
 				if isinstance(valor,NamedBlobImage) or isinstance(valor,NamedBlobFile):
 					valor='arquivo anexado' 
 			dados[idCampo]= valor        
-		del dados['sync_uid']
-		del dados['whole_day']
-		del dados['timezone']
-		del dados['open_end']
-		del dados['equipe']
-		del dados['servicosExtras']
-		del dados['cpf']
-		del dados['start']
-		del dados['end']
-		del dados['categoria']
+		listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','equipe','servicosExtras','cpf','categoria']
+		for i in listaExclusao:
+			if i in dados.keys():
+				del dados[i]
+		
 		dados['Publico']=dados['previsaoDePublico']
 		del dados['previsaoDePublico']
 		return dados
