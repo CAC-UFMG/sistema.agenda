@@ -120,7 +120,8 @@ class relatorio_geral_eventos(BrowserView):
 					TotalEmAnalise=TotalEmAnalise+1
 				if estado=='terminado':
 					TotalTerminado=TotalTerminado+1
-				if len(evento.local) and isinstance(evento.local[0], RelationValue):
+				if evento.local:
+				  if len(evento.local) and isinstance(evento.local[0], RelationValue):
 					lista=evento.local					
 					for local in lista:
 						at=getattr(local,'to_id',None)
