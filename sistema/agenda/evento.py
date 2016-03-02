@@ -124,10 +124,9 @@ class Ievento(form.Schema, IImageScaleTraversable):
     Evento
     """
     form.write_permission(equipe=permissaoAdm)
-    form.write_permission(categoria=permissaoAdm)         
-    #form.mode(id='display')      
+    form.write_permission(categoria=permissaoAdm)             
 	
-    id=schema.TextLine(title=u"Número identificador desta solicitação.")	
+    id=schema.TextLine(title=u"Número identificador desta solicitação.")	    
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
     local=RelationList(title=u"Local",description=u'Escolha os espaços a serem agendados',required=True,value_type=RelationChoice(title=u'Local',required=True,source=pastaLocais))
@@ -144,31 +143,26 @@ class Ievento(form.Schema, IImageScaleTraversable):
     email=schema.TextLine(title=u"E-mail",description=u'Informe o email do responsável pelo evento',required=True,constraint=validateaddress)
     cpf=schema.TextLine(title=u"CPF",constraint=cpfValidation, description=u'Informe o cpf do responsável pelo evento',required=True)
 			  
-  
+    @invariant
+    def validaDados(data):
+      modificaEvento(data)
+	  
+	  
 
 @form.default_value(field=Ievento['id'])
-def idDefault(data):
-    return random.getrandbits(64)
-	
-#@form.default_value(field=Ievento['timezone'])
-#def timezoneDefault(data):
-#    return 'America/Sao_Paulo'
+def idDefault(data):      
+    return  random.getrandbits(64)
 	
 @grok.subscribe(Ievento, IObjectAddedEvent)
 def adicionaEvento(evento, event):  
-  pai = aq_parent(aq_inner(evento))  
-  if pai.id == 'agenda':
-    clipboard = pai.manage_cutObjects([evento.id])
-    dest = pai.get('preagenda')
-    result = dest.manage_pasteObjects(clipboard)
-    modified(result)
-  enviaEmail(evento)
-  
   catalog = getUtility(ICatalog)
   intids = getUtility(IIntIds) 
   inicio=getattr(evento,'start')
   fim=getattr(evento,'end')
-  if len(evento.local):   
+  haLocal=getattr(evento,'local')
+  haEquipe=getattr(evento,'equipe')
+  if haLocal:
+    if len(evento.local):   
         for local in evento.local:   
            i = getattr(local,'to_id',None)		
            if i:            
@@ -181,8 +175,10 @@ def adicionaEvento(evento, event):
               if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
                 if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
-                  raise WidgetActionExecutionError('local', Invalid(msg))                  
-  if len(evento.equipe):   
+                  evento.plone_utils.addPortalMessage(msg, 'error')				  				  
+                  raise Invalid(msg)                   
+  if haEquipe:
+    if len(evento.equipe):   
         for local in evento.equipe:    
           i = getattr(local,'to_id',None)		
           if i:            
@@ -195,21 +191,30 @@ def adicionaEvento(evento, event):
               if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
                 if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
                   msg="EQUIPE NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma alocacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
-                  raise WidgetActionExecutionError('equipe', Invalid(msg))
-  
-@grok.subscribe(Ievento, IObjectModifiedEvent)
-def modificaEvento(evento, event):  
+                  evento.plone_utils.addPortalMessage(msg, 'error')
+                  raise Invalid(msg)
+
   pai = aq_parent(aq_inner(evento))  
-  # a criacao do objeto ainda esta acontecendo!!!!
+  if pai.id == 'agenda':
+    clipboard = pai.manage_cutObjects([evento.id])
+    dest = pai.get('preagenda')
+    result = dest.manage_pasteObjects(clipboard)
+    modified(result)
+  enviaEmail(evento)
+  
+  
+
+def modificaEvento(evento):    
   catalog = getUtility(ICatalog)
   intids = getUtility(IIntIds) 
-  inicio=getattr(evento,'start')
-  fim=getattr(evento,'end')
-  if len(evento.local):   
-        for local in evento.local:   
-           i = getattr(local,'to_id',None)		
-           if i:            
-            source_object = intids.queryObject(i)
+  inicio=getattr(evento,'start',getattr(evento.__context__,'start',None))
+  fim=getattr(evento,'end',getattr(evento.__context__,'end',None))
+  haLocal=getattr(evento,'local')
+  haEquipe=getattr(evento,'equipe')
+  if haLocal and inicio and fim:
+    if len(evento.local):   
+        for local in evento.local:                          
+            source_object = local
             titulo =  source_object.title 		
             for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
@@ -217,13 +222,12 @@ def modificaEvento(evento, event):
               estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
               if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
                 if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
-                  msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
+                  msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id                  
                   raise WidgetActionExecutionError('local', Invalid(msg))                  
-  if len(evento.equipe):   
-        for local in evento.equipe:    
-          i = getattr(local,'to_id',None)		
-          if i:            
-            source_object = intids.queryObject(i)
+  if haEquipe and inicio and fim:
+    if len(evento.equipe):   
+        for local in evento.equipe:              
+            source_object = local
             titulo =  source_object.title 	
             for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='equipe')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
