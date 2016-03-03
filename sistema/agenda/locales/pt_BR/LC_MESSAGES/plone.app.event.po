@@ -20,6 +20,9 @@ msgstr ""
 msgid "label_event_whole_day"
 msgstr "Evento de dia inteiro"
 
+msgid "help_event_whole_day"
+msgstr " "
+
 #. Default: "Open End"
 #: plone/app/event/dx/behaviors.py:119
 msgid "label_event_open_end"
