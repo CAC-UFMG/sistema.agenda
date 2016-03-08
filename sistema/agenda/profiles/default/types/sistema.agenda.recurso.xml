@@ -48,6 +48,6 @@
   </action>
   <action title="Edit" action_id="edit" category="object" condition_expr=""
     url_expr="string:${object_url}/edit" visible="True">
-    <permission value="sistema.agenda: ModificaRecurso" />
+    <permission value="Modify portal content" />
   </action>
 </object>
