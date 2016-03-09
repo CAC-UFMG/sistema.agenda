@@ -4,6 +4,7 @@ from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.security import checkPermission
 from datetime import datetime
+from pytz import timezone
 
 
 
@@ -38,8 +39,8 @@ class relatorio_semanal_eventos(BrowserView):
             semanaEvento = diaEvento.isocalendar()[1]
             semanaHoje = hoje.isocalendar()[1]
             indicadorMesmaSemana = semanaEvento==semanaHoje
-            horaEvento=evento.start.time()
-            horaEventoStr=str(horaEvento)
+            horaEvento=evento.start.time()			
+            horaEventoStr=str(evento.start.astimezone(timezone(evento.timezone)).time())
             local= ''
             estado = wf.getInfoFor(evento,'review_state')	 
             if evento.local is not None:

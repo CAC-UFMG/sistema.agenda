@@ -4,7 +4,7 @@
 
 
 .fc-event{	
-	background-color:#5a6971 !important;
+	background-color:#3c3948 !important;
 }
 .fc-content a:hover {
     color: #FFF !important;
@@ -15,7 +15,7 @@
 }
 
 .state-agendado {
-    color: #2F2222 !important;
+    color: #DEBF9D !important;
 }
 
 .state-private {
@@ -23,7 +23,7 @@
 }
 
 .state-terminado {
-    color: #753636 !important;
+    color: #776B59  !important;
 }
 
 .state-em_analise {
