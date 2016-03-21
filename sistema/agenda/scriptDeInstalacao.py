@@ -130,7 +130,7 @@ def criaPastas(context):
       memTool=raiz.portal_membership
       loginSecretaria='agendador'
       senhaSecretaria='agendador'
-      emailSecretaria='ocupacaocads@gmail.com'
+      emailSecretaria='nav@cac.ufmg.br'
       if mt.getMemberById(loginSecretaria) is None:
         memTool.addMember(loginSecretaria,senhaSecretaria,['Site Administrator'],[])
 

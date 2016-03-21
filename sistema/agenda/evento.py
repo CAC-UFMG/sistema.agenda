@@ -295,7 +295,7 @@ def enviaEmail(solicitacao):
 	mensagem = mensagem + "\n\n ESTES DADOS SERVEM PARA SUA CONFERÊNCIA. ESTA É UMA MENSAGEM AUTOMÁTICA. POR FAVOR NÃO RESPONDA A ESSE EMAIL."  
 	emailsEnvolvidos = solicitacao.email+";"+emailAgendador
 	titulo="Proposta de agendamento de "+solicitacao.responsavel
-	emailConta = 'ti@prograg.ufmg.br'
+	emailConta = 'nav@cac.ufmg.br'
 	#existe um comando que é validateSingleEmailAddress para que serve?
 	if servidor.smtp_host !='':
 		try:
