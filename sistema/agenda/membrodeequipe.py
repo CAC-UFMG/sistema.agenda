@@ -79,3 +79,45 @@ class View(dexterity.DisplayForm):
             if di>=hoje or df<=hoje:
               result.append(obj)
      return result
+
+	 
+    def sinteseJustificativas(self):     
+     membro = self.context
+     result = {}
+     datasFuturas=0
+     datasAteHoje=0
+     justificativas=membro.listFolderContents()
+     numeroTotal=len(justificativas)
+     motivos={}
+     numMotivos=0
+     for justificativa in justificativas: 
+       dia=datetime.today()            
+       hoje=datetime(dia.year,dia.month,dia.day)
+       dataJustificada=datetime(justificativa.data.year,justificativa.data.month,justificativa.data.day)            
+       if dataJustificada>dia:
+        datasFuturas+=1
+       if dataJustificada<=dia:
+        datasAteHoje+=1 
+       for mot in justificativa.motivos:
+         if not motivos.has_key(mot):
+   	       motivos[mot]=1
+         else:
+           motivos[mot]+=1
+         numMotivos+=1
+		 
+     for i in motivos.keys():
+       if numMotivos:
+         motivos[i]=str(round(float(motivos[i])/numMotivos,2)*100)+"%"
+		
+     result['datasAteHoje']=datasAteHoje
+     result['datasFuturas']=datasFuturas
+     result['motivos']=motivos
+     return result
+	 
+    def listaJustificativas(self):     
+     membro = self.context
+     result = []
+     for justificativa in membro.listFolderContents():
+        if justificativa is not None and checkPermission('zope2.View', justificativa):            
+            result.append(justificativa)
+     return result

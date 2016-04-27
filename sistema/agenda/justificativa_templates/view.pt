@@ -21,8 +21,6 @@
 		  <span tal:content="structure widget/render" /> 
 		</td>
 	      </tr>
-
-
 	    </table>   
 	</div>
   </metal:content-core>

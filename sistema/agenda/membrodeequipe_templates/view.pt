@@ -33,7 +33,40 @@
                   </div>			   
 		</td>
 		</tr>
+			<tr tal:define="global estatistica python: view.sinteseJustificativas()">
+			 <td><strong>Justificativas até hoje:</strong></td>
+			 <td><div tal:content="python: estatistica['datasAteHoje']"/></td>
+		    </tr>	 
+			
+			<tr >
+			 <td><strong>Justificativas futuras:</strong></td>
+			 <td><div tal:content="python: estatistica['datasFuturas']"/></td>
+		    </tr>	 
+			
+			<tr tal:repeat="motivo python: estatistica['motivos'].items()">
+			 <td><strong tal:content="python:motivo[0]">Motivos</strong></td>
+			   <td>
+			     <div tal:content="python:motivo[1]" />
+			   </td>
+		    </tr>	 
+			
+		<tr>
+			<td>
+				<strong>Lista de justificativas de trabalho</strong>                 
+            </td>
+			<td>
+			    <div tal:repeat="justificativa python: view.listaJustificativas()">
+                    <a tal:content="justificativa/title_or_id" tal:attributes="href justificativa/absolute_url">
+                   </a>
+                </div>			   
+			</td>
+			</tr>	
+		
 	    </table>   
+		
+		
+
+		
 	</div>
   </metal:content-core>
 </metal:main>
