@@ -47,6 +47,7 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Hector',title='Hector',funcao='Tecnico de som',regime='30hs')
         _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Alcindo',title='Alcindo',funcao='Tecnico de som',regime='30hs')
         _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Felipe',title='Felipe',funcao='Tecnico de som',regime='30hs')
+		
   
       if pastaLocais:
         _createObjectByType('sistema.agenda.local',pastaLocais,id='saguao-reitoria',title='Saguao da Reitoria',unidade='Reitoria')        

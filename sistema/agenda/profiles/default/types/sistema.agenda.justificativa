@@ -4,7 +4,7 @@
    i18n:domain="sistema.agenda" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">Membro De Equipe</property>
+  <property name="title" i18n:translate="">membroDeEquipe</property>
   <property name="description"
     i18n:translate="">Membro de equipe tecnica</property>
   <property name="icon_expr">string:${portal_url}/folder_icon.png</property>

@@ -1,24 +1,22 @@
 <?xml version="1.0"?>
-<object name="sistema.agenda.membrodeequipe"
+<object name="sistema.agenda.justificativa"
    meta_type="Dexterity FTI"
    i18n:domain="sistema.agenda" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">Membro De Equipe</property>
+  <property name="title" i18n:translate="">Justificativa</property>
   <property name="description"
-    i18n:translate="">Membro de equipe tecnica</property>
+    i18n:translate="">Justificativa de trabalhado</property>
   <property name="icon_expr">string:${portal_url}/folder_icon.png</property>
-  <property name="factory">sistema.agenda.membrodeequipe</property>
+  <property name="factory">sistema.agenda.justificativa</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">True</property>
-  <property name="allowed_content_types">
-	<element value="sistema.agenda.justificativa" />
-  </property>
+  <property name="allowed_content_types"/>
   <property name="allow_discussion">False</property>
 
   <!-- schema and class used for content items -->
-  <property name="schema">sistema.agenda.membrodeequipe.ImembroDeEquipe</property>
-  <property name="klass">sistema.agenda.membrodeequipe.membroDeEquipe</property>
+  <property name="schema">sistema.agenda.justificativa.Ijustificativa</property>
+  <property name="klass">sistema.agenda.justificativa.justificativa</property>
 
   <property name="behaviors">
      <element value="plone.app.content.interfaces.INameFromTitle" />

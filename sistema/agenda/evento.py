@@ -118,7 +118,7 @@ def pastaEquipe(context):
     return ObjPathSourceBinder(navigation_tree_query = query).__call__(context) 	
 
 
-permissaoAdm='sistema.agenda.visualizaEvento'
+permissaoAdm='sistema.agenda.modificaRecurso'
 class Ievento(form.Schema, IImageScaleTraversable):
     """
     Evento

@@ -4,7 +4,7 @@
    i18n:domain="sistema.agenda" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">local</property>
+  <property name="title" i18n:translate="">Local de evento</property>
   <property name="description"
     i18n:translate="">Localizacao do evento</property>
   <property name="icon_expr">string:${portal_url}/folder_icon.png</property>
