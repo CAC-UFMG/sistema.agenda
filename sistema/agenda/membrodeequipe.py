@@ -13,6 +13,10 @@ from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage, NamedFile
 from plone.namedfile.field import NamedBlobImage, NamedBlobFile
 from plone.namedfile.interfaces import IImageScaleTraversable
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from Products.CMFCore.utils import getToolByName
 
 from Acquisition import aq_inner
 from zope.component import getUtility
@@ -21,25 +25,106 @@ from zope.security import checkPermission
 from zc.relation.interfaces import ICatalog
 from datetime import datetime
 
+from Products.CMFDefault.utils import checkEmailAddress
+from Products.CMFDefault.exceptions import EmailAddressInvalid
+
 from sistema.agenda import MessageFactory as _
 
+def loginValidation(data):
+	
+	if len(data)<=4:
+		raise Invalid(u'Login invalido')
+	return True
+	
+def senhaValidation(data):
 
+    if len(data)<=8:
+      raise Invalid(u'Senha invalida')
+    return True
+	
+def validateaddress(data):
+    try:
+        checkEmailAddress(data)
+    except EmailAddressInvalid:
+    	  raise Invalid(u"XXXX@XXX.XXX")
+    return True
+	
 # Interface class; used to define content-type schema.
 permissaoAdm='sistema.agenda.modificaRecurso'
 class ImembroDeEquipe(form.Schema, IImageScaleTraversable):
     """
     Membro de equipe tecnica
     """
-	
+    form.fieldset('dpessoais',label=u"Dados Pessoais", fields=['title','email','funcao','regime'])
     title = schema.TextLine(title=_(u"Nome do membro"))
+    login = schema.TextLine(title=_(u'Login'), required=True,constraint=loginValidation)
+    senha = schema.Password(title=_(u'Senha'), required=True,constraint=senhaValidation)
+    loginAntigo = schema.TextLine(title=_(u'Login Anterior'), readonly=True)
+    email = schema.TextLine(title=_(u'Email'), constraint=validateaddress,required=True)
     funcao = schema.TextLine(title=_(u"Funcao"),required=False)
     regime = schema.TextLine(title=_(u"Regime"),required=False)   
 
 
-# Custom content-type class; objects created for this content type will
-# be instances of this class. Use this class to add content-type specific
-# methods and properties. Put methods that are mainly useful for rendering
-# in separate view classes.
+@grok.subscribe(ImembroDeEquipe, IObjectAddedEvent)
+def adicionaUsr(membro, event):
+  membro.title=membro.title.title() 
+  membro.login=membro.login.lower()
+
+  regTool = getToolByName(membro, 'portal_registration')
+  portal_url = getToolByName(membro, 'portal_url')
+  portal = portal_url.getPortalObject()
+  mt = getToolByName(portal, 'portal_membership')
+  senha = str(membro.senha)
+  if mt.getMemberById(membro.login) is None:
+    login= str(membro.login).lower()
+  else:
+    raise  schema.ValidationError('Login existente!')
+    return
+  
+  prop = {
+        'username': login ,
+        'fullname': membro.title,
+        'email': membro.email or ''
+        }
+
+  member =  regTool.addMember(login,senha,properties=prop,roles=('Member',))
+  membro.loginAntigo=login
+  membro.manage_setLocalRoles(login, ["Owner",])
+  membro.reindexObjectSecurity()
+ 
+@grok.subscribe(ImembroDeEquipe, IObjectRemovedEvent)
+def removeUsr(membro, event):
+  regTool = getToolByName(membro, 'portal_membership')
+  portal_url = getToolByName(membro, 'portal_url')
+  portal = portal_url.getPortalObject()
+  mt = getToolByName(portal, 'portal_membership')
+  login= str(membro.login).lower()
+  if mt.getMemberById(login) is not None:
+    regTool.deleteMembers([login])
+
+
+@grok.subscribe(ImembroDeEquipe, IObjectModifiedEvent)
+def atualizaCampos(membro, event):
+  portal_url = getToolByName(membro, 'portal_url')
+  portal = portal_url.getPortalObject()
+  mt = getToolByName(portal, 'portal_membership')
+  regTool = getToolByName(membro, 'portal_registration')
+  login= str(membro.login).lower()
+  loginAntigo= str(membro.loginAntigo)
+  senha = str(membro.senha)
+  if mt.getMemberById(login) is not None and login!=loginAntigo:
+    # se ja houver um membro com o login,lanca erro
+    raise  schema.ValidationError('Login existente!')
+    return
+  else:
+       if login!=loginAntigo:
+           mt.deleteMembers([loginAntigo])
+           membro.loginAntigo=login
+           prop = {'username': login,'fullname': membro.title,'email': membro.email or ''} 
+           regTool.addMember(login,senha,properties=prop,roles=('Member',))
+           membro.manage_setLocalRoles(login, ["Owner",])
+           membro.reindexObjectSecurity()
+           #groups_tool = getToolByName(portal, 'portal_groups')
 
 class membroDeEquipe(Container):
     grok.implements(ImembroDeEquipe)
@@ -47,16 +132,6 @@ class membroDeEquipe(Container):
     # Add your class methods and properties here
     pass
 
-
-# View class
-# The view will automatically use a similarly named template in
-# membrodeequipe_templates.
-# Template filenames should be all lower case.
-# The view will render when you request a content object with this
-# interface with "/@@sampleview" appended.
-# You may make this the default view for content objects
-# of this type by uncommenting the grok.name line below or by
-# changing the view class name and template filename to View / view.pt.
 
 class View(dexterity.DisplayForm):
     """ sample view class """

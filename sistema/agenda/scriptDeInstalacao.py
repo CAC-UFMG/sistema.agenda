@@ -41,12 +41,13 @@ def criaPastas(context):
       listagem = raiz.get('listagem')	  
 	  
       if pastaEquipe:
-        _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='ivanildo',title='Ivanildo',funcao='Tecnico de som',regime='30hs')
-        _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Diano',title='Diano',funcao='Tecnico de som',regime='30hs')
-        _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Alef',title='Alef',funcao='Tecnico de som',regime='30hs')
-        _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Hector',title='Hector',funcao='Tecnico de som',regime='30hs')
-        _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Alcindo',title='Alcindo',funcao='Tecnico de som',regime='30hs')
-        _createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Felipe',title='Felipe',funcao='Tecnico de som',regime='30hs')
+	    pass
+        #_createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='ivanildo',title='Ivanildo',funcao='Tecnico de som',regime='30hs')
+        #_createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Diano',title='Diano',funcao='Tecnico de som',regime='30hs')
+        #_createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Alef',title='Alef',funcao='Tecnico de som',regime='30hs')
+        #_createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Hector',title='Hector',funcao='Tecnico de som',regime='30hs')
+        #_createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Alcindo',title='Alcindo',funcao='Tecnico de som',regime='30hs')
+        #_createObjectByType('sistema.agenda.membrodeequipe',pastaEquipe,id='Felipe',title='Felipe',funcao='Tecnico de som',regime='30hs')
 		
   
       if pastaLocais:

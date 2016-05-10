@@ -106,5 +106,27 @@
      <property name="visible">True</property>
     </object>  
   </object>
+
+ 
+ <object name="user" meta_type="CMF Action Category">
+	<object name="dadosPessoais" meta_type="CMF Action">   
+     <property name="url_expr">python:  [i.getObject().absolute_url() for i in context.portal_catalog.searchResults({'Type':['Membro De Equipe',]}) if i.getObject().login==str(member)][0]</property>
+     <property name="available_expr">python:len([i for i in context.portal_catalog.searchResults({'Type':['Membro De Equipe',]}) if i.getObject().login==str(member)])!=0</property>
+     <property name="title">Meus dados</property>
+     <property name="visible">True</property>
+	</object>
+ </object>
+ 
+  <object name="user" meta_type="CMF Action Category">
+	<object name="dashboard" meta_type="CMF Action">   
+     <property name="visible">False</property>
+	</object>
+ </object>
+   <object name="user" meta_type="CMF Action Category">
+	<object name="preferences" meta_type="CMF Action">   
+     <property name="visible">False</property>
+	</object>
+ </object>
+ 
   
  </object>
