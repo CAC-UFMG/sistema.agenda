@@ -40,7 +40,7 @@
 		    </tr>	 
 			
 			<tr >
-			 <td><strong>Justificativas futuras:</strong></td>
+			 <td><strong>Justificativas após hoje:</strong></td>
 			 <td><div tal:content="python: estatistica['datasFuturas']"/></td>
 		    </tr>	 
 			

@@ -24,7 +24,7 @@ from datetime import datetime
 import random
 from sistema.agenda import MessageFactory as _
 
-listaMotivos = SimpleVocabulary.fromValues(['Saude','Familiar','Trabalho fora da UFMG','Adiantamento de ferias','Compensacao de folga'])
+listaMotivos = SimpleVocabulary.fromValues(['Hora extra na UFMG','Saude','Familiar','Trabalho fora da UFMG','Adiantamento de ferias','Compensacao de horas'])
 # Interface class; used to define content-type schema.
 permissaoAdm='sistema.agenda.modificaRecurso'
 class Ijustificativa(form.Schema, IImageScaleTraversable):
@@ -37,8 +37,9 @@ class Ijustificativa(form.Schema, IImageScaleTraversable):
     title = schema.TextLine(title=_(u"Titulo da justificativa"))
     id=schema.TextLine(title=u"Numero identificador")	
     data = schema.Date(title=u'Data do dia justificado')   
-    texto=schema.Text(title=u"Justificativa")	
-    motivos=schema.Set(title=u"Tipo do motivo da justificativa", value_type=schema.Choice(source=listaMotivos))
+    horas = schema.TextLine(title=u'Horas envolvidas nesta justificativa',description=u"Informe o numero de horas")   
+    texto=schema.Text(title=u"Justificativa",description=u"Justifique as horas envolvidas com esta ocorrencia.")	
+    motivos=schema.Set(title=u"Tipo da justificativa", value_type=schema.Choice(source=listaMotivos))
     anexoA= namedfile.NamedBlobFile(title=_(u"Documento anexo A"), required=False)
     anexoB= namedfile.NamedBlobFile(title=_(u"Documento anexo B"), required=False)
 
