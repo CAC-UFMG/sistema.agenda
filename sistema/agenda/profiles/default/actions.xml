@@ -106,7 +106,15 @@
      <property name="visible">True</property>
     </object>  
   </object>
-
+  
+ <object name="portal_tabs" meta_type="CMF Action Category">
+    <object name="salas" meta_type="CMF Action">   
+     <property name="url_expr">string:${globals_view/navigationRootUrl}/@@agendamentoDeSalas</property>
+     <property name="available_expr">python:member and ('Site Administrator' in member.getRoles() or 'Manager' in member.getRoles())</property>
+     <property name="title">Aulas</property>
+     <property name="visible">True</property>
+	</object>
+ </object>
  
  <object name="user" meta_type="CMF Action Category">
 	<object name="dadosPessoais" meta_type="CMF Action">   
