@@ -318,6 +318,27 @@ class Solicitacao(Sala):
 		print "        Comecando em "+str(self.diaI.day)+"/"+str(self.diaI.month)+"/"+str(self.diaI.year)+" e terminando em "+str(self.diaF.day)+"/"+str(self.diaF.month)+"/"+str(self.diaF.year)
 		print "==================================================================\n"
 
+	#Exibe uma matriz com os dias marcados para a solicitacao
+	def output(self):
+		out=""
+		out2=""
+		saida=""
+		saida+= "----------------Dias de semana da "+str(self.__class__.__name__)+"---------------------"				
+		for dia in diasSemana:
+			numChar=len(dia)
+			dif=10-numChar			
+			out+=' '*(dif/2)+dia+' '*(dif/2)
+			if dia in self.diaSemana:
+				out2+="    X    "				
+			else:
+				out2+="         "
+		saida+= out
+		saida+= out2
+		saida+= "------------------------------------------------------------------"
+		saida+= "        Comecando em "+str(self.diaI.day)+"/"+str(self.diaI.month)+"/"+str(self.diaI.year)+" e terminando em "+str(self.diaF.day)+"/"+str(self.diaF.month)+"/"+str(self.diaF.year)
+		saida+= "==================================================================\n"
+		return saida
+
 
 #Agendamento de uma solucao
 class Agendamento(object):
@@ -339,6 +360,13 @@ class Solucao(object):
 		print "Percentual de distribuicao"	
 		self.atualizaContagemDistribuicao(solicitacoes)
 		print self.distribuicao
+		
+	def outputDistribuicao(self,solicitacoes):		
+		saida=""
+		saida+= "Percentual de distribuicao"	
+		self.atualizaContagemDistribuicao(solicitacoes)
+		saida+= str(self.distribuicao)
+		return saida
 		
 	def exibe(self,agendamentos,salas):
 		print "-------------------Solucao de agendamentos---------------\n"
@@ -391,6 +419,68 @@ class Solucao(object):
 		print "-------------Indice:"+str(self.avaliacaoFinal)+"------------\n"
 	
 	
+	def output(self,agendamentos,salas):
+		out=""
+		out+= "-------------------Solucao de agendamentos---------------\n"
+		out+= "---------------Indice:"+str(self.avaliacaoFinal)+"------------\n"
+		for sala in salas:
+			out+= ":::::::::::::::::: Sala:"+ str(sala.id)+" ::::::::::::::::::::::\n"
+			dias = [dia for dia in sala.quadroDisponibilidade.keys()]
+			dias.sort()
+			exibidos={}
+			diaExibido=''
+			for dia in dias:	
+				diaStr = dia.split('-')				
+				out+= "::::::::::::::::::::::: Dia:"+diaStr[2]+"/"+diaStr[1]+"/"+diaStr[0]+" :::::::::::::::::::::::::::\n"
+				horarios = [horario for horario in sala.quadroDisponibilidade[dia].keys() if sala.quadroDisponibilidade[dia][horario]!='']
+				horarios.sort()					
+				idSolicitacao=''
+				if not len(horarios):
+					out+= "                       -->DIA LIVRE<--\n"
+				for horario in horarios:
+					idSolicitacao=str(sala.quadroDisponibilidade[dia][horario])
+					objS=agendamentos[0].solicitacao.obtemSolicitacaoPorId(idSolicitacao)				
+				
+					if not exibidos.has_key(idSolicitacao):
+						exibidos[idSolicitacao]={}
+						exibidos[idSolicitacao]['diasExibidos']=len(objS.diasDaSolicitacao)
+						exibidos[idSolicitacao]['horarioExibido']=False
+					
+					#se nao foi exibido por horario
+					if not exibidos[idSolicitacao]['horarioExibido']:
+						out+= "=================================================================="
+						out+= "                Id da solicitacao:"+idSolicitacao
+						out+= "  	                        Unidade:"+objS.unidade
+						out+= "Horario Inicial:"+str(objS.horarioI)+"                    Horario Final:"+str(objS.horarioF)+"\n"
+						out+=objS.output()							
+						exibidos[idSolicitacao]['diasExibidos']-=1
+						exibidos[idSolicitacao]['horarioExibido']=True
+						diaExibido=dia
+					#se ja foi exibido por horario
+					else:
+						if diaExibido!=dia:										
+							out+= "=================================================================="
+							out+= "                Id da solicitacao:"+idSolicitacao
+							out+= "  	                        Unidade:"+objS.unidade
+							out+= "Horario Inicial:"+str(objS.horarioI)+"                    Horario Final:"+str(objS.horarioF)+"\n"
+							out+=objS.output()								
+							exibidos[idSolicitacao]['diasExibidos']-=1		
+							diaExibido=dia												
+						
+		out+= "---------------------------------------------------------\n"
+		out+= "-------------Indice:"+str(self.avaliacaoFinal)+"------------\n"
+		return out
+	
+	def outputCSV(self,agendamentos,salas):
+		out=""
+		out+="disciplina;unidade;alunos;sala.id;diaSemana;curso;cod;turma;professor;diaI;diaF;contatoProfessor"+"\n"
+		for agendamento in agendamentos:
+			solicitacao=agendamento.solicitacao
+			sala = agendamento.sala												
+			if solicitacao.atendida:			
+				out+=str(solicitacao.disciplina)+";"+str(solicitacao.unidade)+";"+str(solicitacao.capacidade)+";"+str(sala.id)+";"+str(solicitacao.diaSemana)+";"+str(solicitacao.curso)+";"+str(solicitacao.cod)+";"+str(solicitacao.turma)+";"+str(solicitacao.professor)+";"+str(solicitacao.diaI)+";"+str(solicitacao.diaF)+";"+str(solicitacao.contatoProfessor)+"\n"
+		return out
+		
 	def otimizaOcupacaoHorario(self,solicitacao,sala,solucaoAtual):
 		#Uma ocupacao de maior duracao é melhor que varias ocupacoes pequenas que nao tomam todo o tempo		
 		d=datetime(2016,1,1,solicitacao.horarioF.hour,solicitacao.horarioF.minute)
@@ -789,12 +879,23 @@ class Iagendamento_de_salas(form.Schema):
 	
 	csv_solicitacoes = NamedFile(title=u"Arquivo CSV das SOLICITACOES")
 	csv_salas = NamedFile(title=u"Arquivo CSV das SALAS")
-	form.widget("distribuir",  SingleCheckBoxFieldWidget)
+	form.widget("distribuir", SingleCheckBoxFieldWidget)
 	distribuir=schema.Bool(title=u"Distribuir entre unidades?",required=True,default=True)
-	indiceSolucao=schema.TextLine(title=u"Indice alvo para a solucao", required=True,default=u"64")
-	restricoes=schema.Text(title=u"Restricoes por unidade", required=True,default=u"EBA:0.99\nECI:0.98\nENG:1\nICB:0.96\nICEX:1\nEEFFTO:1\nFACE:1\nFAE:0.95\nFAFICH:0.95\nFALE:0.98\nICB-POS:1\nIGC:1\nMUSICA:1\nODONTO:1\nVET:1")
+	indiceSolucao=schema.TextLine(title=u"Indice alvo para a solucao",description=u"Insira um número entre 0 e 100", required=True,default=u"64")
+	dataI = schema.Date(title=u'Data inicial de atendimento')   
+	dataF = schema.Date(title=u'Data final de atendimento')   
+	restricoes=schema.Text(title=u"Percentual de atendimento por unidade", description=u"Preencha no formato abaixo com números entre 0.0 e 1.0",required=True,default=u"EBA:0.99\nECI:0.98\nENG:1\nICB:0.96\nICEX:1\nEEFFTO:1\nFACE:1\nFAE:0.95\nFAFICH:0.95\nFALE:0.98\nICB-POS:1\nIGC:1\nMUSICA:1\nODONTO:1\nVET:1")
 							
+@form.default_value(field=Iagendamento_de_salas['dataI'])
+def dataIDefaultValue(data):
+	anoAtual= datetime.today().year
+	return datetime(anoAtual,2,1)
 
+@form.default_value(field=Iagendamento_de_salas['dataF'])
+def dataFDefaultValue(data):
+	anoAtual= datetime.today().year	
+	return datetime(anoAtual,12,23)
+	 
 class agendamento_de_salas(form.SchemaForm):
     """ Define Form handling
     """
@@ -844,7 +945,7 @@ class agendamento_de_salas(form.SchemaForm):
 				salas.append(salaAtual)      
 		return salas
 		
-    @button.buttonAndHandler(u'Ok')
+    @button.buttonAndHandler(u'Enviar')
     def handleApply(self, action):
 		data, errors = self.extractData()        
 
@@ -854,11 +955,11 @@ class agendamento_de_salas(form.SchemaForm):
 
 		#Configuracoes basicas de horario
 		horarioInicioAtendimento = time(7,0)
-		horarioFimAtendimento = time(22,40)
+		horarioFimAtendimento = time(23,00)
 
 		#Configuracoes basicas de dia
-		diaInicioAtendimento = date(2016,2,3)
-		diaFimAtendimento = date(2016,12,1)
+		diaInicioAtendimento = date(data["dataI"].year,data["dataI"].month,data["dataI"].day)
+		diaFimAtendimento = date(data["dataF"].year,data["dataF"].month,data["dataF"].day)
 		
 		#Configuracoes basicas do total de salas e solicitacoes
 		
@@ -869,11 +970,7 @@ class agendamento_de_salas(form.SchemaForm):
 		raiz =self.context
 				
 		solicitacoes=self.leSolicitacoes(data["csv_solicitacoes"].data)  
-		salas=self.leSalas(data["csv_salas"].data,horarioInicioAtendimento,horarioFimAtendimento,diaInicioAtendimento,diaFimAtendimento)  
-		totalSalas=len(salas)
-		
-		totalSolicitacoes=len(solicitacoes)		
-		totalSolicitacoes=totalSolicitacoes+1
+		salas=self.leSalas(data["csv_salas"].data,horarioInicioAtendimento,horarioFimAtendimento,diaInicioAtendimento,diaFimAtendimento)  				
 		
 		solucao = Solucao()
 
@@ -884,14 +981,15 @@ class agendamento_de_salas(form.SchemaForm):
 		
 		OTIMIZAR_ENTRE_UNIDADES=data["distribuir"]
 		strDistro=data["restricoes"]
+		
 		strDistro=strDistro.splitlines()
 		niveisDistribuicao={}
 		for k in strDistro:
 			chave=str(k.split(':')[0])
 			valor=float(k.split(':')[1])
 			niveisDistribuicao[chave]=valor
-		
-		print 'Horario de inicio : '+str(datetime.now().hour)+':'+str(datetime.now().minute)
+		info=""
+		info+= 'Horario de inicio : '+str(datetime.now().hour)+':'+str(datetime.now().minute)+"\n"
 		ini=time2.time()
 		agendamentosFinais=solucao.resolve(None,solicitacoes,salas,nivelAceitavel,niveisDistribuicao,OTIMIZAR_ENTRE_UNIDADES)
 		fim=time2.time()
@@ -901,18 +999,29 @@ class agendamento_de_salas(form.SchemaForm):
 
 		#exibe a matriz de agendamento por sala por dia
 		#solucao.exibe(agendamentosFinais,salas)
-		print "---------------------------------------------\n"
-		print "Numero total de solicitacoes: "+ str(len(solicitacoes))+"\n"
-		print "Solicitacoes agendadas: "+ str(len(solAgendadas))+"\n"
-		print "Solicitacoes nao agendadas: " +str(len(naoAgendadas))+"\n"
-		print "Percentual de atendimento: " +str(float(len(solAgendadas)*100)/len(solicitacoes))+" %\n"
-		print "Indice de avaliacao da solucao:"+ str(solucao.avaliacaoFinal)+"\n"
-		print "Tempo gasto:"+ str((fim-ini)/60)+" minutos\n"
-		print "---------------------------------------------\n"
-		solucao.exibeDistribuicao(solicitacoes)		
+		
+		info+= "---------------------------------------------\n"
+		info+= "Numero total de solicitacoes: "+ str(len(solicitacoes))+"\n"
+		info+= "Solicitacoes agendadas: "+ str(len(solAgendadas))+"\n"
+		info+= "Solicitacoes nao agendadas: " +str(len(naoAgendadas))+"\n"
+		info+= "Percentual de atendimento: " +str(float(len(solAgendadas)*100)/len(solicitacoes))+" %\n"
+		info+= "Indice de avaliacao da solucao:"+ str(solucao.avaliacaoFinal)+"\n"
+		info+= "Tempo gasto:"+ str((fim-ini)/60)+" minutos\n"
+		info+= "---------------------------------------------\n"
+		info+= solucao.outputDistribuicao(solicitacoes)		
+		saida = solucao.outputCSV(agendamentosFinais,salas)
+		sdm = self.context.session_data_manager
+		session = sdm.getSessionData(create=True)
+		session.set("info", info)
+		session.set("saida", saida)
+		
+		IStatusMessage(self.request).addStatusMessage(u"Solucao encontrada para o melhor agendamento das solicitacoes!","info")
+
+		contextURL = raiz.absolute_url()
+		self.request.response.redirect(contextURL+"/@@download_agendamento_salas")
+		
     
-    @button.buttonAndHandler(u"Cancel")
+    @button.buttonAndHandler(u"Cancelar")
     def handleCancel(self, action):
-        """User cancelled. Redirect back to the front page.
-        """
-	 
+		contextURL = self.context.absolute_url()
+		self.request.response.redirect(contextURL)
