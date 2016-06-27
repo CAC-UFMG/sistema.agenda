@@ -1,7 +1,16 @@
+#form-widgets-saida textarea {
+	white-space: pre !important;
+	word-wrap: normal !important;
+	overflow-x: scroll !important;
+}
+
 #content textarea {
     font: 150% Monaco, "Courier New", Courier, monospace;
     width: 100%;
 	height: 278px;
+	white-space: pre !important;
+	word-wrap: normal !important;
+	overflow-x: scroll !important;
 }
 
 .type-sistema.agenda.evento{

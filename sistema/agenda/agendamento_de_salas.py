@@ -358,14 +358,15 @@ class Solucao(object):
 		
 	def exibeDistribuicao(self,solicitacoes):		
 		print "Percentual de distribuicao"	
-		self.atualizaContagemDistribuicao(solicitacoes)
+		self.atualizaContagemDistribuicao(solicitacoes)	
 		print self.distribuicao
 		
 	def outputDistribuicao(self,solicitacoes):		
 		saida=""
-		saida+= "Percentual de distribuicao"	
+		saida+= "Percentual de distribuicao\n"	
 		self.atualizaContagemDistribuicao(solicitacoes)
-		saida+= str(self.distribuicao)
+		for unidade in self.distribuicao.keys():
+			saida+=str(unidade)+" "+str(self.distribuicao[unidade])+"%\n"		
 		return saida
 		
 	def exibe(self,agendamentos,salas):
@@ -774,7 +775,7 @@ class Solucao(object):
 			return None
 	
 	#Método central que dá a solucao do problema
-	def resolve(self,solucaoAtual,solicitacoes,salas,nivelAceitavel, nivelDistribuicao,OTIMIZAR_ENTRE_UNIDADES):		
+	def resolve(self,solucaoAtual,solicitacoes,salas,nivelAceitavel, nivelDistribuicao,pOTIMIZAR_ENTRE_UNIDADES):		
 		
 		if not solucaoAtual:
 			solucaoAtual = self.solucaoInicial(solicitacoes,salas)			
@@ -783,9 +784,8 @@ class Solucao(object):
 		resultado=avaliacao.avalia()
 		if resultado >= nivelAceitavel[0] and resultado <= nivelAceitavel[1]:
 			self.avaliacaoFinal=resultado	
-			if OTIMIZAR_ENTRE_UNIDADES:
-				self.otimizaOcupacaoDistribuicaoUnidades(solicitacoes, solucaoAtual,nivelDistribuicao,salas,avaliacao)						
-			a=self.obtemSolicitacoesDaUnidade(solicitacoes,'ICB')		
+			if pOTIMIZAR_ENTRE_UNIDADES:
+				self.otimizaOcupacaoDistribuicaoUnidades(solicitacoes, solucaoAtual,nivelDistribuicao,salas,avaliacao)									
 			return solucaoAtual			
 		else:					
 			solucaoAlternativa = self.buscaSolucaoAlternativa(solucaoAtual,salas,solicitacoes,nivelDistribuicao,avaliacao)
@@ -987,7 +987,8 @@ class agendamento_de_salas(form.SchemaForm):
 		for k in strDistro:
 			chave=str(k.split(':')[0])
 			valor=float(k.split(':')[1])
-			niveisDistribuicao[chave]=valor
+			niveisDistribuicao[chave]=float(valor)
+		
 		info=""
 		info+= 'Horario de inicio : '+str(datetime.now().hour)+':'+str(datetime.now().minute)+"\n"
 		ini=time2.time()
