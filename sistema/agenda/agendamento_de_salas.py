@@ -366,7 +366,7 @@ class Solucao(object):
 		saida+= "Percentual de distribuicao\n"	
 		self.atualizaContagemDistribuicao(solicitacoes)
 		for unidade in self.distribuicao.keys():
-			saida+=str(unidade)+" "+str(self.distribuicao[unidade])+"%\n"		
+			saida+=str(unidade)+" "+str(float(self.distribuicao[unidade])*100)+"%\n"		
 		return saida
 		
 	def exibe(self,agendamentos,salas):
@@ -881,10 +881,11 @@ class Iagendamento_de_salas(form.Schema):
 	csv_salas = NamedFile(title=u"Arquivo CSV das SALAS")
 	form.widget("distribuir", SingleCheckBoxFieldWidget)
 	distribuir=schema.Bool(title=u"Distribuir entre unidades?",required=True,default=True)
+	intervaloEntreAulas = schema.TextLine(title=u"Intervalo entre cada agendamento",description=u"Insira um número entre 0 e 30 minutos", required=True,default=u"20")
 	indiceSolucao=schema.TextLine(title=u"Indice alvo para a solucao",description=u"Insira um número entre 0 e 100", required=True,default=u"64")
 	dataI = schema.Date(title=u'Data inicial de atendimento')   
 	dataF = schema.Date(title=u'Data final de atendimento')   
-	restricoes=schema.Text(title=u"Percentual de atendimento por unidade", description=u"Preencha no formato abaixo com números entre 0.0 e 1.0",required=True,default=u"EBA:0.99\nECI:0.98\nENG:1\nICB:0.96\nICEX:1\nEEFFTO:1\nFACE:1\nFAE:0.95\nFAFICH:0.95\nFALE:0.98\nICB-POS:1\nIGC:1\nMUSICA:1\nODONTO:1\nVET:1")
+	restricoes=schema.Text(title=u"Percentual de atendimento por unidade", description=u"Preencha no formato abaixo com números entre 00 e 100",required=True,default=u"EBA:99\nECI:98\nENG:100\nICB:96\nICEX:100\nEEFFTO:100\nFACE:100\nFAE:95\nFAFICH:95\nFALE:98\nICB-POS:100\nIGC:100\nMUSICA:100\nODONTO:100\nVET:100")
 							
 @form.default_value(field=Iagendamento_de_salas['dataI'])
 def dataIDefaultValue(data):
@@ -981,12 +982,20 @@ class agendamento_de_salas(form.SchemaForm):
 		
 		OTIMIZAR_ENTRE_UNIDADES=data["distribuir"]
 		strDistro=data["restricoes"]
+		intervalo =int(data["intervaloEntreAulas"])
+		
+		#Acrescenta o intervalo ao final de cada solicitacao
+		intervaloTime = timedelta(minutes=intervalo)
+		for solicitacao in solicitacoes:
+			hfim=datetime(2016,1,1,solicitacao.horarioF.hour,solicitacao.horarioF.minute)
+			hfim+=intervaloTime
+			solicitacao.horarioF = hfim.time()
 		
 		strDistro=strDistro.splitlines()
 		niveisDistribuicao={}
 		for k in strDistro:
 			chave=str(k.split(':')[0])
-			valor=float(k.split(':')[1])
+			valor=float(k.split(':')[1])/100
 			niveisDistribuicao[chave]=float(valor)
 		
 		info=""
