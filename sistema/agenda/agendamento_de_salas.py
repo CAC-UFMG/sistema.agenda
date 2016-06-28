@@ -792,7 +792,7 @@ class Solucao(object):
 			if solucaoAlternativa:			
 				nivelRestrito=[int(resultado),nivelAceitavel[1]]
 				print "Reduzindo um nivel para:"+str(nivelRestrito)+". Nivel anterior: "+str(resultado)+"\n"
-				return self.resolve(solucaoAlternativa,solicitacoes,salas,nivelRestrito,nivelDistribuicao,False)
+				return self.resolve(solucaoAlternativa,solicitacoes,salas,nivelRestrito,nivelDistribuicao,pOTIMIZAR_ENTRE_UNIDADES)
 			else:
 				return None
 				
