@@ -13,4 +13,5 @@
   <object name="sistema.agenda.local" meta_type="Dexterity FTI" />
   <object name="sistema.agenda.recurso" meta_type="Dexterity FTI" />
   <object name="sistema.agenda.justificativa" meta_type="Dexterity FTI" />
+  <object name="sistema.agenda.agendamento" meta_type="Dexterity FTI" />
 </object>

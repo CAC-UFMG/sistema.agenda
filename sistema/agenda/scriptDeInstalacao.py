@@ -30,12 +30,15 @@ def criaPastas(context):
       _createObjectByType('Folder',raiz,id='agenda',title="Agenda")
       pastaAgenda=raiz.get('agenda')      
       _createObjectByType('Folder',pastaAgenda,id='preagenda',title="Pre Agendamentos")
+	  #Cria pasta de agendamentos de salas
+      _createObjectByType('Folder',pastaAgenda,id='agendamentosDeSalas',title="Agendamentos de salas")
       _createObjectByType('Folder',raiz,id='equipe',title="Equipe")
       _createObjectByType('Folder',raiz,id='locais',title="Locais")
       _createObjectByType('Collection',raiz,id='listagem',title="Listagem de eventos")
       
       
       pastaPreAgenda=pastaAgenda.get('preagenda')  
+      pastaAgendamentosDeSalas=pastaAgenda.get('agendamentosDeSalas') 
       pastaEquipe=raiz.get('equipe')      
       pastaLocais=raiz.get('locais')    
       listagem = raiz.get('listagem')	  
@@ -166,5 +169,9 @@ def criaPastas(context):
       pastaAgenda.setConstrainTypesMode(constraintypes.ENABLED)
       pastaAgenda.setLocallyAllowedTypes(["sistema.agenda.evento"])
       pastaAgenda.setImmediatelyAddableTypes(["sistema.agenda.evento"])
+	  
+      pastaAgendamentosDeSalas.setConstrainTypesMode(constraintypes.ENABLED)
+      pastaAgendamentosDeSalas.setLocallyAllowedTypes(["sistema.agenda.agendamento"])
+      pastaAgendamentosDeSalas.setImmediatelyAddableTypes(["sistema.agenda.agendamento"])
 	  
       raiz.plone_log("Terminado.") 

@@ -474,12 +474,16 @@ class Solucao(object):
 	
 	def outputCSV(self,agendamentos,salas):
 		out=""
-		out+="disciplina;unidade;alunos;sala.id;diaSemana;curso;cod;turma;professor;diaI;diaF;contatoProfessor"+"\n"
+		out+="disciplina;unidade;alunos;sala;diaSemana;curso;cod;turma;professor;diaInicial;diaFinal;contatoProfessor;horarioInicial;horarioFinal"+"\n"
 		for agendamento in agendamentos:
 			solicitacao=agendamento.solicitacao
 			sala = agendamento.sala												
-			if solicitacao.atendida:			
-				out+=str(solicitacao.disciplina)+";"+str(solicitacao.unidade)+";"+str(solicitacao.capacidade)+";"+str(sala.id)+";"+str(solicitacao.diaSemana)+";"+str(solicitacao.curso)+";"+str(solicitacao.cod)+";"+str(solicitacao.turma)+";"+str(solicitacao.professor)+";"+str(solicitacao.diaI)+";"+str(solicitacao.diaF)+";"+str(solicitacao.contatoProfessor)+"\n"
+			if solicitacao.atendida:
+				strDias=""
+				for i in solicitacao.diaSemana:
+					strDias+=i+"-"
+				strDias=strDias[:-1]
+				out+=str(solicitacao.disciplina)+";"+str(solicitacao.unidade)+";"+str(solicitacao.capacidade)+";"+str(sala.id)+";"+strDias+";"+str(solicitacao.curso)+";"+str(solicitacao.cod)+";"+str(solicitacao.turma)+";"+str(solicitacao.professor)+";"+str(solicitacao.diaI)+";"+str(solicitacao.diaF)+";"+str(solicitacao.contatoProfessor)+";"+str(solicitacao.horarioI)+";"+str(solicitacao.horarioF)+"\n"
 		return out
 		
 	def otimizaOcupacaoHorario(self,solicitacao,sala,solucaoAtual):
@@ -1020,15 +1024,26 @@ class agendamento_de_salas(form.SchemaForm):
 		info+= "---------------------------------------------\n"
 		info+= solucao.outputDistribuicao(solicitacoes)		
 		saida = solucao.outputCSV(agendamentosFinais,salas)
-		sdm = self.context.session_data_manager
-		session = sdm.getSessionData(create=True)
-		session.set("info", info)
-		session.set("saida", saida)
 		
-		IStatusMessage(self.request).addStatusMessage(u"Solucao encontrada para o melhor agendamento das solicitacoes!","info")
+		#cria o tipo na pasta de agendamento de salas
+		pastaAgenda=raiz.get('agenda')
+		pastaAgendamentosDeSalas=pastaAgenda.get('agendamentosDeSalas')      
+		idObj = str(random.getrandbits(64))
+		nome="Agendamentos realizados em "+str(datetime.now().day)+"/"+str(datetime.now().month)+"/"+str(datetime.now().year)+" - "+str(datetime.now().hour)+":"+str(datetime.now().minute)+":"+str(datetime.now().second)
+		_createObjectByType('sistema.agenda.agendamento',pastaAgendamentosDeSalas,title=nome,info=info,saida=saida,id=idObj)
+		obj=pastaAgendamentosDeSalas.get(idObj)
+		contextURL = obj.absolute_url()+"?inicial=1;final=10"
+		self.request.response.redirect(contextURL)
+		
+		# sdm = self.context.session_data_manager
+		# session = sdm.getSessionData(create=True)
+		# session.set("info", info)
+		# session.set("saida", saida)
+		
+		# IStatusMessage(self.request).addStatusMessage(u"Solucao encontrada para o melhor agendamento das solicitacoes!","info")
 
-		contextURL = raiz.absolute_url()
-		self.request.response.redirect(contextURL+"/@@download_agendamento_salas")
+		# contextURL = raiz.absolute_url()
+		# self.request.response.redirect(contextURL+"/@@download_agendamento_salas")
 		
     
     @button.buttonAndHandler(u"Cancelar")
