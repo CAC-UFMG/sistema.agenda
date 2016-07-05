@@ -486,6 +486,17 @@ class Solucao(object):
 				out+=str(solicitacao.disciplina)+";"+str(solicitacao.unidade)+";"+str(solicitacao.capacidade)+";"+str(sala.id)+";"+strDias+";"+str(solicitacao.curso)+";"+str(solicitacao.cod)+";"+str(solicitacao.turma)+";"+str(solicitacao.professor)+";"+str(solicitacao.diaI)+";"+str(solicitacao.diaF)+";"+str(solicitacao.contatoProfessor)+";"+str(solicitacao.horarioI)+";"+str(solicitacao.horarioF)+"\n"
 		return out
 		
+	def outputCSVNaoAtendidas(self,solicitacoes):
+		out=""
+		out+="disciplina;unidade;alunos;sala;diaSemana;curso;cod;turma;professor;diaInicial;diaFinal;contatoProfessor;horarioInicial;horarioFinal"+"\n"
+		for solicitacao in solicitacoes:						
+				strDias=""
+				for i in solicitacao.diaSemana:
+					strDias+=i+"-"
+				strDias=strDias[:-1]
+				out+=str(solicitacao.disciplina)+";"+str(solicitacao.unidade)+";"+str(solicitacao.capacidade)+";;"+strDias+";"+str(solicitacao.curso)+";"+str(solicitacao.cod)+";"+str(solicitacao.turma)+";"+str(solicitacao.professor)+";"+str(solicitacao.diaI)+";"+str(solicitacao.diaF)+";"+str(solicitacao.contatoProfessor)+";"+str(solicitacao.horarioI)+";"+str(solicitacao.horarioF)+"\n"
+		return out
+		
 	def otimizaOcupacaoHorario(self,solicitacao,sala,solucaoAtual):
 		#Uma ocupacao de maior duracao é melhor que varias ocupacoes pequenas que nao tomam todo o tempo		
 		d=datetime(2016,1,1,solicitacao.horarioF.hour,solicitacao.horarioF.minute)
@@ -1024,28 +1035,50 @@ class agendamento_de_salas(form.SchemaForm):
 		info+= "---------------------------------------------\n"
 		info+= solucao.outputDistribuicao(solicitacoes)		
 		saida = solucao.outputCSV(agendamentosFinais,salas)
-		
+		naoatendidas= solucao.outputCSVNaoAtendidas(naoAgendadas)
 		#cria o tipo na pasta de agendamento de salas
 		pastaAgenda=raiz.get('agenda')
 		pastaAgendamentosDeSalas=pastaAgenda.get('agendamentosDeSalas')      
 		idObj = str(random.getrandbits(64))
-		nome="Agendamentos realizados em "+str(datetime.now().day)+"/"+str(datetime.now().month)+"/"+str(datetime.now().year)+" - "+str(datetime.now().hour)+":"+str(datetime.now().minute)+":"+str(datetime.now().second)
-		_createObjectByType('sistema.agenda.agendamento',pastaAgendamentosDeSalas,title=nome,info=info,saida=saida,id=idObj)
+		
+		strDia=""
+		if datetime.now().day <10:
+			strDia="0"+str(datetime.now().day)
+		else:
+			strDia=str(datetime.now().day)
+			
+		strMes=""
+		if datetime.now().month <10:
+			strMes="0"+str(datetime.now().month)
+		else:
+			strMes=str(datetime.now().month)
+			
+		strHora=""
+		if datetime.now().hour <10:
+			strHora="0"+str(datetime.now().hour)
+		else:
+			strHora=str(datetime.now().hour)
+			
+		strMinuto=""
+		minuto=datetime.now().minute
+		if minuto <10:
+			strMinuto="0"+str(minuto)
+		else:
+			strMinuto=str(minuto)
+			
+		strSegundo=""
+		seg=datetime.now().second
+		if seg <10:
+			strSegundo="0"+str(seg)
+		else:
+			strSegundo=str(seg)
+			
+		nome="Agendamentos realizados em "+strDia+"/"+strMes+"/"+str(datetime.now().year)+" - "+strHora+":"+strMinuto+":"+strSegundo
+		_createObjectByType('sistema.agenda.agendamento',pastaAgendamentosDeSalas,title=nome,info=info,saida=saida,id=idObj,naoagendadas=naoatendidas)
 		obj=pastaAgendamentosDeSalas.get(idObj)
 		contextURL = obj.absolute_url()+"?inicial=1;final=10"
-		self.request.response.redirect(contextURL)
-		
-		# sdm = self.context.session_data_manager
-		# session = sdm.getSessionData(create=True)
-		# session.set("info", info)
-		# session.set("saida", saida)
-		
-		# IStatusMessage(self.request).addStatusMessage(u"Solucao encontrada para o melhor agendamento das solicitacoes!","info")
-
-		# contextURL = raiz.absolute_url()
-		# self.request.response.redirect(contextURL+"/@@download_agendamento_salas")
-		
-    
+		self.request.response.redirect(contextURL)		
+		    
     @button.buttonAndHandler(u"Cancelar")
     def handleCancel(self, action):
 		contextURL = self.context.absolute_url()

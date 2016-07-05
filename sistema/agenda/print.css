@@ -1,0 +1,51 @@
+div.navbar-inner ul.breadcrumb ul.nav #header div.top,
+{
+	display:none;
+}
+
+#form-widgets-saida textarea {
+	white-space: pre !important;
+	word-wrap: normal !important;
+	overflow-x: scroll !important;
+}
+
+#content textarea {
+    font: 150% Monaco, "Courier New", Courier, monospace;
+    width: 100%;
+	height: 278px;
+	white-space: pre !important;
+	word-wrap: normal !important;
+	overflow-x: scroll !important;
+}
+
+.type-sistema.agenda.evento{
+ color:white;
+}
+
+
+.fc-event{	
+	background-color:#3c3948 !important;
+}
+.fc-content a:hover {
+    color: #FFF !important;
+}
+
+.state-published {
+    color: #C5A671 !important;
+}
+
+.state-agendado {
+    color: #DEBF9D !important;
+}
+
+.state-private {
+    color: #D2913C  !important;
+}
+
+.state-terminado {
+    color: #776B59  !important;
+}
+
+.state-em_analise {
+    color: green  !important;
+}

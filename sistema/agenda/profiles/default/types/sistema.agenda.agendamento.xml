@@ -31,6 +31,7 @@
   <property name="view_methods">
    <element value="view"/>
    <element value="relatorio"/>
+   <element value="naoagendadas"/>
   </property>
   <property name="default_view_fallback">False</property>
   <property name="add_permission">cmf.AddPortalContent</property>
@@ -43,12 +44,16 @@
   <alias from="sharing" to="@@sharing" />
 
   <!-- Actions -->
-  <action title="View" action_id="view" category="object" condition_expr=""
+  <action title="Aulas agendadas" action_id="view" category="object" condition_expr=""
     url_expr="string:${object_url}/" visible="True">
     <permission value="View" />
   </action>
   <action title="Relatorio" action_id="relatorio" category="object" condition_expr=""
     url_expr="string:${object_url}/@@relatorio?hoje=1" visible="True">
+    <permission value="View" />
+  </action>
+  <action title="Aulas nao agendadas" action_id="naoagendadas" category="object" condition_expr=""
+    url_expr="string:${object_url}/@@naoagendadas" visible="True">
     <permission value="View" />
   </action>
   <action title="Edit" action_id="edit" category="object" condition_expr=""

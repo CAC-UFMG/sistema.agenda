@@ -28,6 +28,7 @@
     name="sistema.agenda"
     directory="resources" />
   <browser:resource name="agenda.css" file="agenda.css" />
+  <browser:resource name="print.css" file="print.css" />
   
   <browser:page
           for="*"
