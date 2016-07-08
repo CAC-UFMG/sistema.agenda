@@ -14,28 +14,29 @@
       <div class="tab-content"  tal:define="global inicial python: getattr(request,'inicial','1'); global final python:getattr(request,'final','10'); global hoje python:bool(int(getattr(request,'hoje',0)))">
 		<h2>AULAS NÃO AGENDADAS</h2><br/>		
 		
-	    <table class="table table-striped table-bordered"  tal:define="global agendamentos python: view.processaAgendamentosNaoRealizados(inicial,final)">
-	     <tr tal:define="colunas python: agendamentos[0]">		
+	    <table class="listing"   tal:define="global agendamentos python: view.processaAgendamentosNaoRealizados(inicial,final)">
+	     <thead tal:define="colunas python: agendamentos[0]">		
 			
-			<td>				
+			<th>				
 				<strong>INICIO</strong>
-			</td>
-			<td>				
+			</th>
+			<th>				
 				<strong>FIM</strong>
-			</td>
-			<td>				
+			</th>
+			<th>				
 				<strong>DATA I.</strong>
-			</td>
-			<td>				
+			</th>
+			<th>				
 				<strong>DATA F.</strong>
-			</td>
-			<td>				
+			</th>
+			<th>				
 				<strong>UN.</strong>
-			</td>
-			<td>				
+			</th>
+			<th>				
 				<strong  tal:content="python: colunas[8]"/>
-			</td>
-			</tr>
+			</th>
+			</thead>
+			<tbody>
 		 <tr tal:repeat="dados python: agendamentos[1]">		
 			
 			<td>				
@@ -56,7 +57,7 @@
 			<td>				
 				<strong  tal:content="python: dados[8]"/>
 			</td>
-			</tr>
+			</tr></tbody>
 	    </table>   
 		<div tal:define="strSeguintes python: context.absolute_url()+'/@@naoagendadas?inicial='+str(int(agendamentos[2])+10)+chr(59)+'final='+str(int(agendamentos[3])+10)+chr(59);strAnteriores python: context.absolute_url()+'/@@naoagendadas?inicial='+str(int(agendamentos[2])-10)+chr(59)+'final='+str(int(agendamentos[3])-10)+chr(59)">
 			<a href="" tal:attributes="href python: strAnteriores">Anteriores </a>

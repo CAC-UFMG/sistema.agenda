@@ -175,45 +175,79 @@ class relatorio_geral_eventos(BrowserView):
 		schema = getUtility(IDexterityFTI, name=tipo).lookupSchema()
 		campos=getFieldsInOrder(schema)    
 		dados={}
-		dados['dataInicial']= str(conteudo.start.day)+'/'+str(conteudo.start.month)+' de '+str(conteudo.start.year)
-		dados['dataFinal']=str(conteudo.end.day)+'/'+str(conteudo.end.month)+' de '+str(conteudo.end.year)
-		dados['horaInicial']=str(conteudo.start.hour)+':'+str(conteudo.start.minute)
-		dados['horaFinal']=str(conteudo.end.hour)+':'+str(conteudo.end.minute)
+		
+		strDia=str(conteudo.start.day)
+		if conteudo.start.day <10:
+			strDia="0"+str(conteudo.start.day)
+		
+		strMes=str(conteudo.start.month)
+		if conteudo.start.month <10:
+			strMes="0"+str(conteudo.start.month)
+			
+		strDiaf=str(conteudo.end.day)
+		if conteudo.end.day <10:
+			strDiaf="0"+str(conteudo.end.day)
+			
+		strMesf=str(conteudo.end.month)
+		if conteudo.end.month <10:
+			strMesf="0"+str(conteudo.end.month)
+			
+		strh=str(conteudo.start.hour)
+		if conteudo.start.hour <10:
+			strh="0"+str(conteudo.start.hour)
+			
+		strm=str(conteudo.start.minute)
+		if conteudo.start.minute <10:
+			strm="0"+str(conteudo.start.minute)
+			
+		strhf=str(conteudo.end.hour)
+		if conteudo.end.hour <10:
+			strhf="0"+str(conteudo.end.hour)
+			
+		strmf=str(conteudo.end.minute)
+		if conteudo.end.minute <10:
+			strmf="0"+str(conteudo.end.minute)
+			
+		dados['dataInicial']= strDia+'/'+strMes+' de '+str(conteudo.start.year)
+		dados['dataFinal']=strDiaf+'/'+strMesf+' de '+str(conteudo.end.year)
+		dados['horaInicial']=strh+':'+strm
+		dados['horaFinal']=strhf+':'+strmf
+		
 		for campo,val in campos:
 			valor =getattr(conteudo,campo)
 			idCampo = campo      
+			valorStr=""
 			if valor is None:
-				valor=''
+				valorStr=''
 			else:     
 				#se o campo for relacional      
 				if isinstance(valor,list) and len(valor) and isinstance(valor[0], RelationValue):
-						lista=valor
-						valor=[]
+						lista=valor						
 						for educandoMatriculado in lista:
 							at=getattr(educandoMatriculado,'to_id',None)
 							if at:
 								obj = intids.queryObject(at)
-								valor.append(obj.title)
+								valorStr+=str(obj.title)+" "
 				else:
-					valor=str(valor)          							
+					valorStr=str(valor)          							
 				# se o campo for data
 				if isinstance(valor,date):
-					valor=str(valor)						
+					valorStr=str(valor)						
 				if isinstance(valor,str):          
-					valor=valor.decode('utf-8')				
+					valorStr=valor.decode('utf-8')				
 				if isinstance(valor,set):
-					valor=[str(i) for i in valor]
+					valorStr=[str(i) for i in valor]			
 				if isinstance(valor,datetime):
-					valor=str(valor)          
+					valorStr=str(valor)          
 				if isinstance(valor,time):
-					valor=str(valor)      
+					valorStr=str(valor)      
 				if valor is callable:
-					valor=valor()                    
+					valorStr=valor()                    
 				if isinstance(valor,bool):
-					valor=str(valor)
+					valorStr=str(valor)
 				if isinstance(valor,NamedBlobImage) or isinstance(valor,NamedBlobFile):
-					valor='arquivo anexado' 
-			dados[idCampo]= valor        
+					valorStr='arquivo anexado' 
+			dados[idCampo]= valorStr        
 		listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','equipe','servicosExtras','cpf','categoria']
 		for i in listaExclusao:
 			if i in dados.keys():

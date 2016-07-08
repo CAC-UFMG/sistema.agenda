@@ -26,7 +26,7 @@ msgstr " "
 #. Default: "Open End"
 #: plone/app/event/dx/behaviors.py:119
 msgid "label_event_open_end"
-msgstr "Evento sem horário para terminar"
+msgstr "Evento sem data para terminar"
 
 
 #. Default: "This event is open ended."

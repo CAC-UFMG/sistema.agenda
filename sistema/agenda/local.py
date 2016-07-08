@@ -39,9 +39,9 @@ class Ilocal(form.Schema, IImageScaleTraversable):
     andar = schema.TextLine(title=_(u"Andar"),required=False)
     unidade = schema.TextLine(title=_(u"Unidade"))
     tipo = schema.Choice(title=u"Tipo",required=True,vocabulary=tipoEspaco)
+    capacidadeTotal = schema.TextLine(title=_(u"Capacidade total"),required=False)
 	
-    form.fieldset('capacidade',label=u"Capacidade", fields=['capacidadeTotal','capacidadeCadeirantes','capacidadeObesos'])
-    capacidadeTotal = schema.TextLine(title=_(u"Total"),required=False)
+    form.fieldset('capacidade',label=u"Publico especial", fields=['capacidadeCadeirantes','capacidadeObesos'])    
     capacidadeCadeirantes = schema.TextLine(title=_(u"Cadeirantes"),required=False)
     capacidadeObesos = schema.TextLine(title=_(u"Obesos"),required=False)
 

@@ -11,17 +11,19 @@
 <metal:main fill-slot="content-core">
   <metal:content-core define-macro="content-core">	  
 	  <div class="tab-content"  tal:define="global inicial python: getattr(request,'inicial','1'); global final python:getattr(request,'final','10')">
-	    <table class="table table-striped table-bordered" tal:define="agendamentos python: view.processaAgendamentos(inicial,final)">
-	     <tr>
-			<td tal:repeat="coluna python: agendamentos[0]">
+	    <table class="listing" tal:define="agendamentos python: view.processaAgendamentos(inicial,final)">
+	     <THEAD>		 
+			<th tal:repeat="coluna python: agendamentos[0]">
 				<strong tal:content="coluna"/>
-			</td>
-		 </tr>
+			</th>		
+		 </THEAD>
+		 <TBODY>
 		 <tr tal:repeat="dados python: agendamentos[1]">
 			<td tal:repeat="dado dados">				
 				<strong  tal:replace="dado"/>
 			</td>
 	     </tr>
+		 </TBODY>
 	    </table>   
 	<div tal:define="strSeguintes python: '?inicial='+str(int(inicial)+10)+chr(59)+'final='+str(int(final)+10);strAnteriores python: '?inicial='+str(int(inicial)-10)+chr(59)+'final='+str(int(final)-10)">
 		<a href="" tal:attributes="href python: strAnteriores">Anteriores </a>

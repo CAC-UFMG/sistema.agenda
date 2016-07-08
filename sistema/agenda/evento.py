@@ -166,12 +166,14 @@ def adicionaEvento(evento, event):
         for local in evento.local:   
            i = getattr(local,'to_id',None)		
            if i:            
+		    #source_object e o local
             source_object = intids.queryObject(i)
-            titulo =  source_object.title 		
-            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
+            titulo =  source_object.title 	
+            if source_object.id!='externo':
+             for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
               wf = getToolByName(objEventoCadastrado,'portal_workflow')
-              estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
+              estado = wf.getInfoFor(objEventoCadastrado,'review_state')              		
               if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
                 if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
@@ -215,8 +217,9 @@ def modificaEvento(evento):
     if len(evento.local):   
         for local in evento.local:                          
             source_object = local
-            titulo =  source_object.title 		
-            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
+            titulo =  source_object.title 	
+            if source_object.id!='externo':			
+             for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
               wf = getToolByName(objEventoCadastrado,'portal_workflow')
               estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
@@ -251,8 +254,9 @@ def trasitaEvento(evento,event):
            i = getattr(loc,'to_id',None)		
            if i:            
             source_object = intids.queryObject(i)
-            titulo =  source_object.title            
-            for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
+            titulo =  source_object.title        
+            if source_object.id!='externo':			
+             for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)              
               estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
               if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
