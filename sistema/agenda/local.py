@@ -11,6 +11,7 @@ from plone.dexterity.content import Item,Container
 
 from plone.directives import dexterity, form
 from plone.app.textfield import RichText
+from plone.namedfile import field as namedfile
 from plone.namedfile.field import NamedImage, NamedFile
 from plone.namedfile.field import NamedBlobImage, NamedBlobFile
 from plone.namedfile.interfaces import IImageScaleTraversable
@@ -34,7 +35,7 @@ class Ilocal(form.Schema, IImageScaleTraversable):
     """
 
     title = schema.TextLine(title=_(u"Nome do local"))
-
+    foto = namedfile.NamedBlobImage(title=_(u"Foto"), required=False)
     bloco = schema.TextLine(title=_(u"Bloco"),required=False)
     andar = schema.TextLine(title=_(u"Andar"),required=False)
     unidade = schema.TextLine(title=_(u"Unidade"))
