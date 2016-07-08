@@ -27,7 +27,7 @@ def criaPastas(context):
       raiz.plone_log("Criando pastas iniciais.")      
       for item in raiz.listFolderContents(contentFilter={"portal_type":["Folder","Document"]}):
         raiz.manage_delObjects([item.getId()])
-      _createObjectByType('Folder',raiz,id='agenda',title="Agenda")
+      _createObjectByType('Folder',raiz,id='agenda',title="Eventos")
       pastaAgenda=raiz.get('agenda')      
       _createObjectByType('Folder',pastaAgenda,id='preagenda',title="Pre Agendamentos")
 	  #Cria pasta de agendamentos de salas
@@ -59,10 +59,11 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.local',pastaLocais,id='gramado-reitoria',title='Gramado da Reitoria',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='praca-servicos',title='Praca de Servicos',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-nobre',title='Auditorio Nobre do CAD 1',unidade='CAD1')
-        _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-i',title='Auditorio 1 do Cad 1',unidade='CAD1')
-        _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-i',title='Auditorio 2 do Cad 1',unidade='CAD1')
+        _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-i',title='Auditorio do quarto andar do Cad 1',unidade='CAD1')
+        _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-i',title='Auditorio do terceiro andar do Cad 1',unidade='CAD1')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-ii',title='Auditorio 1 do Cad 2',unidade='CAD2')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-ii',title='Auditorio 2 do Cad 2',unidade='CAD2')
+        _createObjectByType('sistema.agenda.local',pastaLocais,id='externo',title='Espaco externo',unidade='UNIDADE')		
 		
         kitBasicoEquipamentos=[
 		  {'id':'mic-sure',
@@ -101,7 +102,8 @@ def criaPastas(context):
             
       field = listagem.getField('query')
       field.set(listagem, [{'i': 'portal_type', 'o':'plone.app.querystring.operation.selection.is','v':'sistema.agenda.evento'},
-	  {'i': 'review_state', 'o':'plone.app.querystring.operation.selection.is','v':'agendado'}])	  
+	  {'i': 'review_state', 'o':'plone.app.querystring.operation.selection.is','v':'agendado'},
+	  {'i': 'start', 'o':'plone.app.querystring.operation.date.lessThanRelativeDate','v':'30'}])	  
       raiz.setLayout(listagem.id)
       listagem.setExcludeFromNav(True)
       listagem.reindexObject(idxs=['exclude_from_nav'])
@@ -118,7 +120,7 @@ def criaPastas(context):
       workflowTool.doActionFor(listagem, "publish") 	 
 	  
       pastaAgenda.manage_permission('Add portal content',('Anonymous',))	  
-      pastaAgenda.manage_permission('sistema.agenda: ModificaEvento',('Anonymous',))	   
+      pastaAgenda.manage_permission('sistema.agenda: AdicionaEvento',('Anonymous',))	   
       pastaAgenda.manage_permission('Delete objects',('Anonymous',))	  
       pastaPreAgenda.manage_permission('View management screens',('Anonymous',))
  

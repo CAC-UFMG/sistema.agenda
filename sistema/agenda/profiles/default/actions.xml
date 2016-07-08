@@ -102,7 +102,7 @@
  <object name="portal_tabs" meta_type="CMF Action Category">
     <object name="relatoriosemanal" meta_type="CMF Action">   
      <property name="url_expr">python: "/"+context.portal_url.getPortalObject().id+"/agenda/relatorio_semanal_eventos"</property>     
-     <property name="title">Agenda Semanal</property>
+     <property name="title">Eventos/Semana</property>
      <property name="visible">True</property>
     </object>  
   </object>

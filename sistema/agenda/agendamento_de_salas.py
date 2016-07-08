@@ -953,7 +953,7 @@ class agendamento_de_salas(form.SchemaForm):
 		salas=[]
 		
 		linhas=arquivo.splitlines()		
-		for linha in linhas:              
+		for linha in linhas[1:]:              
 				registros= linha.split(';')				
 				capacidade = int(registros[0])
 			

@@ -2,11 +2,15 @@
     xmlns="http://namespaces.zope.org/zope"
     i18n_domain="sistema.agenda">
 
+	<permission
+        id="sistema.agenda.adicionaEvento"
+        title="sistema.agenda: AdicionaEvento"
+        />
+	
     <permission
         id="sistema.agenda.modificaEvento"
         title="sistema.agenda: ModificaEvento"
         />
-
 
     <permission
         id="sistema.agenda.visualizaEvento"
