@@ -36,9 +36,11 @@ class relatorio_semanal_eventos(BrowserView):
      for evento in pastaAgenda.listFolderContents():        
         if checkPermission('sistema.agenda.visualizaEvento', evento) and evento.portal_type=='sistema.agenda.evento':            
             diaEvento=datetime(evento.start.year,evento.start.month,evento.start.day)
+            diaFimEvento=datetime(evento.end.year,evento.end.month,evento.end.day)
             semanaEvento = diaEvento.isocalendar()[1]
+            semanaFimEvento = diaFimEvento.isocalendar()[1]
             semanaHoje = hoje.isocalendar()[1]
-            indicadorMesmaSemana = semanaEvento==semanaHoje
+            indicadorMesmaSemana = semanaEvento==semanaHoje or semanaFimEvento==semanaHoje
             horaEvento=evento.start.time()			
             horaEventoStr=str(evento.start.astimezone(timezone(evento.timezone)).time())
             local= ''
@@ -51,8 +53,20 @@ class relatorio_semanal_eventos(BrowserView):
             
             if indicadorMesmaSemana and estado=='agendado':
               vazio=False
-              resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url}
-              semana[str(diaEvento.weekday())].append(resultado)
+              resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url}              
+              if semanaFimEvento==semanaHoje and semanaEvento!=semanaHoje:
+                ultimoDia=diaFimEvento.weekday()
+                i=0
+                while i<=ultimoDia:
+                  semana[str(i)].append(resultado)
+                  i+=1
+              else:
+                ultimoDia=diaFimEvento.weekday()
+                primeiroDia=diaEvento.weekday()
+                i=primeiroDia
+                while i<=ultimoDia:
+                  semana[str(i)].append(resultado)
+                  i+=1                
         
      if not vazio:		   
        for i in semana.keys():

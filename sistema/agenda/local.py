@@ -35,10 +35,14 @@ class Ilocal(form.Schema, IImageScaleTraversable):
     """
 
     title = schema.TextLine(title=_(u"Nome do local"))
-    foto = namedfile.NamedBlobImage(title=_(u"Foto"), required=False)
+    fotopalco = namedfile.NamedBlobImage(title=_(u"Foto do palco"), required=False)
+    fotoplateia = namedfile.NamedBlobImage(title=_(u"Foto da plateia"), required=False)
     bloco = schema.TextLine(title=_(u"Bloco"),required=False)
     andar = schema.TextLine(title=_(u"Andar"),required=False)
     unidade = schema.TextLine(title=_(u"Unidade"))
+    altura = schema.TextLine(title=_(u"Altura do palco"),required=False)
+    largura = schema.TextLine(title=_(u"Largura do palco"),required=False)
+    profundidade = schema.TextLine(title=_(u"Profundidade do palco"),required=False)
     tipo = schema.Choice(title=u"Tipo",required=True,vocabulary=tipoEspaco)
     capacidadeTotal = schema.TextLine(title=_(u"Capacidade total"),required=False)
 	

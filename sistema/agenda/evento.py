@@ -264,7 +264,7 @@ def trasitaEvento(evento,event):
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
                   evento.plone_utils.addPortalMessage(msg, 'error')
                   raise WorkflowException(Invalid(msg))				  
-                  #evento.REQUEST.response.redirect(evento.absolute_url()+'/@@edit')
+      enviaEmail(evento)
                   
     
 
@@ -275,7 +275,10 @@ def enviaEmail(solicitacao):
 	del info[solicitacao.id]['equipe']	
 	mt = getToolByName(solicitacao,'portal_membership')
 	emailAgendador = mt.getMemberById('agendador').email
-	mensagem = "Solicitação de agendamento.\n\n"
+	wf = getToolByName(solicitacao,'portal_workflow')
+	estado = str(wf.getInfoFor(solicitacao,'review_state'))
+	mensagem = "Solicitação de agendamento\n\n"
+	mensagem = "ESTADO ATUAL: "+str(estado).upper()+"\n\n"
 	mensagem = mensagem + str('responsavel').upper()+" "+ str(info[solicitacao.id]['responsavel'])+"\n"    
 	mensagem = mensagem + str('email').upper()+" "+ str(info[solicitacao.id]['email'])+"\n"    
 	mensagem = mensagem + str('cpf').upper()+" "+ str(info[solicitacao.id]['cpf'])+"\n"    
