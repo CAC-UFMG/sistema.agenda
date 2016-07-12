@@ -59,45 +59,344 @@ def criaPastas(context):
         _createObjectByType('sistema.agenda.local',pastaLocais,id='gramado-reitoria',title='Gramado da Reitoria',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='praca-servicos',title='Praca de Servicos',unidade='Reitoria')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-nobre',title='Auditorio Nobre do CAD 1',unidade='CAD1')
-        _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-i',title='Auditorio do quarto andar do Cad 1',unidade='CAD1')
-        _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-i',title='Auditorio do terceiro andar do Cad 1',unidade='CAD1')
+        _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-i',title='Auditorio do segundo andar do Cad 1',unidade='CAD1')
+        _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-i',title='Auditorio do quarto andar do Cad 1',unidade='CAD1')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-um-cad-ii',title='Auditorio 1 do Cad 2',unidade='CAD2')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='auditorio-dois-cad-ii',title='Auditorio 2 do Cad 2',unidade='CAD2')
         _createObjectByType('sistema.agenda.local',pastaLocais,id='externo',title='Espaco externo',unidade='UNIDADE')		
 		
-        kitBasicoEquipamentos=[
+        kitBasicoEquipamentos={
+		'auditorio-nobre':[
+		  {'id':'microfonemesa-cad-i-1',
+		   'title':'Microfone de mesa 1', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-2',
+		   'title':'Microfone de mesa 2', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-3',
+		   'title':'Microfone de mesa 3', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-4',
+		   'title':'Microfone de mesa 4', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-5',
+		   'title':'Microfone de mesa 5', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-6',
+		   'title':'Microfone de mesa 6', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-cad-i-1',
+		   'title':'Microfone de mao com fio 1', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-cad-i-2',
+		   'title':'Microfone de mao com fio 2', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-cad-i-3',
+		   'title':'Microfone de mao com fio 3', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-cad-i-4',
+		   'title':'Microfone de mao com fio 4', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-semfio-cad-i-1',
+		   'title':'Microfone de mao sem fio 1', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-semfio-cad-i-2',
+		   'title':'Microfone de mao sem fio 2', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'projetor-multimidia-cad-i-1',
+		   'title':'Projetor multimidia VGA', 
+		   'tipo':'projetor-multimidia', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'tela-de-projecao-cad-i-1',
+		   'title':'Tela de projecao 218 polegadas', 
+		   'tipo':'tela-de-projecao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'sistema-de-transmissao-cad-i-1',
+		   'title':'Sistema de transmissao com 2 cameras', 
+		   'tipo':'sistema-de-trasmissao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'sistema-de-som-cad-i-1',
+		   'title':'Sistema de som com 12 caixas de teto e frontais', 
+		   'tipo':'sistema-de-som', 
+		   'patrimonio':'000000'
+		  },
+		],
+		
+		'auditorio-um-cad-i':[
+		  {'id':'microfonemesa-cad-i-1-um',
+		   'title':'Microfone de mesa 1', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-2-um',
+		   'title':'Microfone de mesa 2', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-3-um',
+		   'title':'Microfone de mesa 3', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'microfonemao-cad-i-1-um',
+		   'title':'Microfone de mao com fio 1', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-cad-i-2-um',
+		   'title':'Microfone de mao com fio 2', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },		
+		  {'id':'microfonemao-semfio-cad-i-1-um',
+		   'title':'Microfone de mao sem fio 1', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },	
+		  {'id':'projetor-multimidia-cad-i-1-um',
+		   'title':'Projetor multimidia VGA 2', 
+		   'tipo':'projetor-multimidia', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'projetor-multimidia-cad-i-2-um',
+		   'title':'Projetor multimidia VGA 1', 
+		   'tipo':'projetor-multimidia', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'tela-de-projecao-cad-i-1-um',
+		   'title':'Tela de projecao 118 polegadas 1', 
+		   'tipo':'tela-de-projecao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'tela-de-projecao-cad-i-2-um',
+		   'title':'Tela de projecao 118 polegadas 2', 
+		   'tipo':'tela-de-projecao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'sistema-de-transmissao-cad-i-1-um',
+		   'title':'Sistema de transmissao com 2 cameras', 
+		   'tipo':'sistema-de-trasmissao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'sistema-de-som-cad-i-1-um',
+		   'title':'Sistema de som com 12 caixas de teto e frontais', 
+		   'tipo':'sistema-de-som', 
+		   'patrimonio':'000000'
+		  },
+		],
+		
+		'auditorio-dois-cad-i':[
+		  {'id':'microfonemesa-cad-i-1-dois',
+		   'title':'Microfone de mesa 1', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-2-dois',
+		   'title':'Microfone de mesa 2', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-i-3-dois',
+		   'title':'Microfone de mesa 3', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'microfonemao-cad-i-1-dois',
+		   'title':'Microfone de mao com fio 1', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-cad-i-2-dois',
+		   'title':'Microfone de mao com fio 2', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },		
+		  {'id':'microfonemao-semfio-cad-i-1-dois',
+		   'title':'Microfone de mao sem fio 1', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },	
+		  {'id':'projetor-multimidia-cad-i-1-dois',
+		   'title':'Projetor multimidia VGA 1', 
+		   'tipo':'projetor-multimidia', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'projetor-multimidia-cad-i-2-dois',
+		   'title':'Projetor multimidia VGA 2', 
+		   'tipo':'projetor-multimidia', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'tela-de-projecao-cad-i-1-dois',
+		   'title':'Tela de projecao 118 polegadas 1', 
+		   'tipo':'tela-de-projecao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'tela-de-projecao-cad-i-2-dois',
+		   'title':'Tela de projecao 118 polegadas 2', 
+		   'tipo':'tela-de-projecao', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'sistema-de-som-cad-i-1-dois',
+		   'title':'Sistema de som com 12 caixas de teto e frontais', 
+		   'tipo':'sistema-de-som', 
+		   'patrimonio':'000000'
+		  },
+		],
+		
+		'auditorio-um-cad-ii':[
+		  {'id':'microfonemesa-cad-ii-1-um',
+		   'title':'Microfone de mesa 1', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-ii-2-um',
+		   'title':'Microfone de mesa 2', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'microfonemesa-cad-ii-3-um',
+		   'title':'Microfone de mesa 3', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'microfonemao-cad-ii-1-um',
+		   'title':'Microfone de mao com fio 1', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-cad-ii-2-um',
+		   'title':'Microfone de mao com fio 2', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },		
+		  {'id':'microfonemao-semfio-cad-ii-1-um',
+		   'title':'Microfone de mao sem fio 1', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },
+          {'id':'microfonemao-semfio-cad-ii-2-um',
+		   'title':'Microfone de mao sem fio 2', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'projetor-multimidia-cad-ii-1-um',
+		   'title':'Projetor multimidia VGA', 
+		   'tipo':'projetor-multimidia', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'tela-de-projecao-cad-ii-1-um',
+		   'title':'Tela de projecao 188 polegadas', 
+		   'tipo':'tela-de-projecao', 
+		   'patrimonio':'000000'
+		  },		  		  
+		  {'id':'sistema-de-som-cad-ii-1-um',
+		   'title':'Sistema de som com caixas frontais', 
+		   'tipo':'sistema-de-som', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'sistema-de-transmissao-cad-ii-1-um',
+		   'title':'Sistema de transmissao com 2 cameras', 
+		   'tipo':'sistema-de-trasmissao', 
+		   'patrimonio':'000000'
+		  },
+		],
+		
+		'auditorio-dois-cad-ii':[
+		   {'id':'microfonemesa-cad-ii-1-dois',
+		   'title':'Microfone de mesa 1', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-cad-ii-2-dois',
+		   'title':'Microfone de mesa 2', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'microfonemesa-cad-ii-3-dois',
+		   'title':'Microfone de mesa 3', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'microfonemao-cad-ii-1-dois',
+		   'title':'Microfone de mao com fio 1', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-cad-ii-2-dois',
+		   'title':'Microfone de mao com fio 2', 
+		   'tipo':'microfone-de-mao', 
+		   'patrimonio':'000000'
+		  },		
+		  {'id':'microfonemao-semfio-cad-ii-1-dois',
+		   'title':'Microfone de mao sem fio 1', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },
+          {'id':'microfonemao-semfio-cad-ii-2-dois',
+		   'title':'Microfone de mao sem fio 2', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'projetor-multimidia-cad-ii-1-dois',
+		   'title':'Projetor multimidia VGA', 
+		   'tipo':'projetor-multimidia', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'tela-de-projecao-cad-ii-1-dois',
+		   'title':'Tela de projecao 188 polegadas', 
+		   'tipo':'tela-de-projecao', 
+		   'patrimonio':'000000'
+		  },		  		  
+		  {'id':'sistema-de-som-cad-ii-1-dois',
+		   'title':'Sistema de som com caixas frontais', 
+		   'tipo':'sistema-de-som', 
+		   'patrimonio':'000000'
+		  },
+		],
+		
+		'auditorio-reitoria':[
 		  {'id':'mic-sure',
 		   'title':'Microfone sure', 
 		   'tipo':'microfone', 
 		   'patrimonio':'13574361'
 		  },
-		  {'id':'mic-sure-2',
-		   'title':'Microfone sure 2', 
-		   'tipo':'microfone', 
-		   'patrimonio':'135744361'
-		  },
-		  {'id':'mic-guzik',
-		   'title':'Microfone mesa', 
-		   'tipo':'microfone', 
-		   'patrimonio':'1374361'
-		  },
-		  {'id':'mic-guzik-2',
-		   'title':'Microfone mesa 2', 
-		   'tipo':'microfone', 
-		   'patrimonio':'137436'
-		  },
-		  {'id':'projetor',
-		   'title':'Projetor multimidia', 
-		   'tipo':'projetor', 
-		   'patrimonio':'13745636'
-		  },
-		]        
+		]		
+		}        
         for local in pastaLocais.listFolderContents():
           workflowTool.doActionFor(local, "publish")
-          for equipamento in kitBasicoEquipamentos:
-            _createObjectByType('sistema.agenda.recurso',local,id=equipamento['id'],title=equipamento['title'],tipo=equipamento['tipo'],patrimonio=equipamento['patrimonio'],local=local.title)
-            rec=local.get(equipamento['id'])
-            workflowTool.doActionFor(rec, "publish")
+          idLocal = local.id
+          if kitBasicoEquipamentos.has_key(idLocal):
+            for equipamento in kitBasicoEquipamentos[idLocal]:
+              _createObjectByType('sistema.agenda.recurso',local,id=equipamento['id'],title=equipamento['title'],tipo=equipamento['tipo'],patrimonio=equipamento['patrimonio'],local=local.title)
+              rec=local.get(equipamento['id'])
+              workflowTool.doActionFor(rec, "publish")
 
             
       field = listagem.getField('query')
