@@ -49,6 +49,7 @@ class Sala(object):
 	quadroDisponibilidade=None
 	baseQuadroHorarios=None
 	id=None
+	nomeDaSala=""
 	
 	
 	def __init__(self,capacidade,horarioI,horarioF, diaI, diaF):
@@ -483,7 +484,10 @@ class Solucao(object):
 				for i in solicitacao.diaSemana:
 					strDias+=i+"-"
 				strDias=strDias[:-1]
-				out+=str(solicitacao.disciplina)+";"+str(solicitacao.unidade)+";"+str(solicitacao.capacidade)+";"+str(sala.id)+";"+strDias+";"+str(solicitacao.curso)+";"+str(solicitacao.cod)+";"+str(solicitacao.turma)+";"+str(solicitacao.professor)+";"+str(solicitacao.diaI)+";"+str(solicitacao.diaF)+";"+str(solicitacao.contatoProfessor)+";"+str(solicitacao.horarioI)+";"+str(solicitacao.horarioF)+"\n"
+				nomeSala = sala.id
+				if sala.nomeDaSala!="":
+					nomeSala = sala.nomeDaSala
+				out+=str(solicitacao.disciplina)+";"+str(solicitacao.unidade)+";"+str(solicitacao.capacidade)+";"+str(nomeSala)+";"+strDias+";"+str(solicitacao.curso)+";"+str(solicitacao.cod)+";"+str(solicitacao.turma)+";"+str(solicitacao.professor)+";"+str(solicitacao.diaI)+";"+str(solicitacao.diaF)+";"+str(solicitacao.contatoProfessor)+";"+str(solicitacao.horarioI)+";"+str(solicitacao.horarioF)+"\n"
 		return out
 		
 	def outputCSVNaoAtendidas(self,solicitacoes):
@@ -956,8 +960,12 @@ class agendamento_de_salas(form.SchemaForm):
 		for linha in linhas[1:]:              
 				registros= linha.split(';')				
 				capacidade = int(registros[0])
+				nomeDaSala=""
+				if len(registros)>1:
+					nomeDaSala=registros[1]
 			
 				salaAtual = Sala(capacidade,horarioInicioAtendimento,horarioFimAtendimento,diaInicioAtendimento,diaFimAtendimento)
+				salaAtual.nomeDaSala=nomeDaSala
 				salas.append(salaAtual)      
 		return salas
 		

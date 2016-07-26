@@ -329,7 +329,7 @@ def criaPastas(context):
 		],
 		
 		'auditorio-dois-cad-ii':[
-		   {'id':'microfonemesa-cad-ii-1-dois',
+		  {'id':'microfonemesa-cad-ii-1-dois',
 		   'title':'Microfone de mesa 1', 
 		   'tipo':'microfone-de-mesa', 
 		   'patrimonio':'000000'
@@ -382,10 +382,35 @@ def criaPastas(context):
 		],
 		
 		'auditorio-reitoria':[
-		  {'id':'mic-sure',
-		   'title':'Microfone sure', 
-		   'tipo':'microfone', 
-		   'patrimonio':'13574361'
+		  {'id':'microfonemesa-reitoria-1',
+		   'title':'Microfone de mesa 1', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemesa-reitoria-2',
+		   'title':'Microfone de mesa 2', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },		  
+		  {'id':'microfonemesa-reitoria-3',
+		   'title':'Microfone de mesa 3', 
+		   'tipo':'microfone-de-mesa', 
+		   'patrimonio':'000000'
+		  },		  		  	
+		  {'id':'microfonemao-semfio-reitoria-1',
+		   'title':'Microfone de mao sem fio 1', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-semfio-reitoria-2',
+		   'title':'Microfone de mao sem fio 2', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
+		  },
+		  {'id':'microfonemao-semfio-reitoria-3',
+		   'title':'Microfone de mao sem fio 3', 
+		   'tipo':'microfone-de-mao-sem-fio', 
+		   'patrimonio':'000000'
 		  },
 		]		
 		}        
