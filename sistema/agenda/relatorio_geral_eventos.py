@@ -176,7 +176,7 @@ class relatorio_geral_eventos(BrowserView):
 		dados['TotalEmAnalise']=TotalEmAnalise
 		dados['TotalDeEventos']=TotalDeEventos
 		
-		dados['Congressos']=TotalDeCongressos
+		dados['Congressos']= TotalDeCongressos
 		dados['Colacoes']=TotalDeColacoes
 		dados['Aulas']=TotalDeAulas
 		dados['OutrosTiposDeEventos']=TotalOutros
