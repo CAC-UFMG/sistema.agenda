@@ -34,7 +34,8 @@ class relatorio_geral_eventos(BrowserView):
 		TotalEmSolicitacoes=0
 		TotalTerminado=0
 		TotalEmAnalise=0
-		TotalDeEventos=0
+		TotalCancelado=0
+		TotalDeEventos=0		
 		
 		TotalDeCongressos=0
 		TotalDeColacoes=0
@@ -43,6 +44,9 @@ class relatorio_geral_eventos(BrowserView):
 		
 		TotalCad1=0
 		TotalCad2=0
+		TotalReitoria=0
+		TotalPraca=0
+		TotalExterno=0
 		
 		DuracaoMedia=datetime.now()-datetime.now()
 		
@@ -50,15 +54,19 @@ class relatorio_geral_eventos(BrowserView):
 		dados['TotalEmSolicitacoes']=0
 		dados['TotalTerminado']=0
 		dados['TotalEmAnalise']=0
-		dados['TotalDeEventos']=0
+		dados['TotalCancelado']=0
+		dados['TotalDeEventos']=0		
 		
 		dados['Congressos']=0
 		dados['Colacoes']=0
 		dados['Aulas']=0
-		dados['Outros']=0
+		dados['OutrosTiposDeEventos']=0
 		
 		dados['Cad1']=0
 		dados['Cad2']=0
+		dados['Reitoria']=0
+		dados['Praca']=0
+		dados['Externo']=0
 		
 		dados['DuracaoMedia']=datetime.now()-datetime.now()
 		
@@ -83,6 +91,8 @@ class relatorio_geral_eventos(BrowserView):
 					TotalEmAnalise=TotalEmAnalise+1
 				if estado=='terminado':
 					TotalTerminado=TotalTerminado+1
+				if estado=='cancelado':
+					TotalCancelado=TotalCancelado+1
 				if evento.local:
 				 if len(evento.local) and isinstance(evento.local[0], RelationValue):
 					lista=evento.local					
@@ -94,6 +104,12 @@ class relatorio_geral_eventos(BrowserView):
 								TotalCad1=TotalCad1+1
 							if str(obj.unidade).upper()=='CAD2' or str(obj.unidade).upper()=='CAD 2':
 								TotalCad2=TotalCad2+1
+							if str(obj.unidade).upper()=='REITORIA':
+								TotalReitoria=TotalReitoria+1
+							if str(obj.unidade).upper()=='PRACA':
+								TotalPraca=TotalPraca+1
+							if str(obj.unidade).upper()=='EXTERNO':
+								TotalExterno=TotalExterno+1								
 			
 				DuracaoMedia = DuracaoMedia + evento.end-evento.start			
 				tipo = evento.tipo
@@ -120,6 +136,8 @@ class relatorio_geral_eventos(BrowserView):
 					TotalEmAnalise=TotalEmAnalise+1
 				if estado=='terminado':
 					TotalTerminado=TotalTerminado+1
+				if estado=='cancelado':
+					TotalCancelado=TotalCancelado+1					
 				if evento.local:
 				  if len(evento.local) and isinstance(evento.local[0], RelationValue):
 					lista=evento.local					
@@ -131,6 +149,12 @@ class relatorio_geral_eventos(BrowserView):
 								TotalCad1=TotalCad1+1
 							if str(obj.unidade).upper()=='CAD2' or str(obj.unidade).upper()=='CAD 2':
 								TotalCad2=TotalCad2+1
+							if str(obj.unidade).upper()=='REITORIA':
+								TotalReitoria=TotalReitoria+1
+							if str(obj.unidade).upper()=='PRACA':
+								TotalPraca=TotalPraca+1
+							if str(obj.unidade).upper()=='EXTERNO':
+								TotalExterno=TotalExterno+1									
 			
 				DuracaoMedia = DuracaoMedia + evento.end-evento.start			
 				tipo = evento.tipo
@@ -148,16 +172,20 @@ class relatorio_geral_eventos(BrowserView):
 		dados['TotalAgendados']=TotalAgendados
 		dados['TotalEmSolicitacoes']=TotalEmSolicitacoes
 		dados['TotalTerminado']=TotalTerminado
+		dados['TotalCancelado']=TotalCancelado
 		dados['TotalEmAnalise']=TotalEmAnalise
 		dados['TotalDeEventos']=TotalDeEventos
 		
 		dados['Congressos']=TotalDeCongressos
 		dados['Colacoes']=TotalDeColacoes
 		dados['Aulas']=TotalDeAulas
-		dados['Outros']=TotalOutros
+		dados['OutrosTiposDeEventos']=TotalOutros
 		
 		dados['Cad1']=TotalCad1
 		dados['Cad2']=TotalCad2
+		dados['Reitoria']=TotalReitoria
+		dados['Praca']=TotalPraca
+		dados['Externo']=TotalExterno		
 		
 		if TotalDeEventos:
 			DuracaoMediaHoras = float(DuracaoMedia.seconds)/3600
