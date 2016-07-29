@@ -933,24 +933,26 @@ class agendamento_de_salas(form.SchemaForm):
 		solicitacoes=[]
 		
 		conjlinhas=arquivo.splitlines()		
-		for linha in conjlinhas:              
-				registros = linha.split(';')     
-				unidade = registros[1]
-				disciplina = registros[2]
-				codDisciplina = registros[3]
-				turma = registros[4]
-				capacidade = int(registros[5])
+		
+		for linha in conjlinhas[1:]:              
+			registros = linha.split(';')     
+			if len(registros)==10:		
+				unidade = registros[0]
+				disciplina = registros[1]
+				codDisciplina = registros[2]
+				turma = registros[3]
+				capacidade = int(registros[4])
+			
+				diaDaSemana = registros[5]
+			
+				horarioInicio = datetime.strptime(registros[6], '%H:%M')
+				horarioFim = datetime.strptime(registros[7], '%H:%M')
 				
-				diaDaSemana = registros[6]
-				
-				horarioInicio = datetime.strptime(registros[7], '%H:%M')
-				horarioFim = datetime.strptime(registros[8], '%H:%M')
-				
-				dataInicio = datetime.strptime(registros[9], '%Y/%m/%d')
-				dataFim = datetime.strptime(registros[10], '%Y/%m/%d')			
-				
+				dataInicio = datetime.strptime(registros[8], '%d/%m/%Y')
+				dataFim = datetime.strptime(registros[9], '%d/%m/%Y')										
+			
 				solicitacaoAtual = Solicitacao(capacidade,horarioInicio.time(),horarioFim.time(),dataInicio.date(),dataFim.date(),unidade,diaDaSemana,disciplina,'',codDisciplina,turma)
-				solicitacoes.append(solicitacaoAtual)      
+				solicitacoes.append(solicitacaoAtual) 						
 		return solicitacoes
 		
     def leSalas(self,arquivo,horarioInicioAtendimento,horarioFimAtendimento,diaInicioAtendimento,diaFimAtendimento):		
@@ -958,7 +960,7 @@ class agendamento_de_salas(form.SchemaForm):
 		
 		linhas=arquivo.splitlines()		
 		for linha in linhas[1:]:              
-				registros= linha.split(';')				
+				registros= linha.split(';')					
 				capacidade = int(registros[0])
 				nomeDaSala=""
 				if len(registros)>1:
@@ -967,6 +969,7 @@ class agendamento_de_salas(form.SchemaForm):
 				salaAtual = Sala(capacidade,horarioInicioAtendimento,horarioFimAtendimento,diaInicioAtendimento,diaFimAtendimento)
 				salaAtual.nomeDaSala=nomeDaSala
 				salas.append(salaAtual)      
+								
 		return salas
 		
     @button.buttonAndHandler(u'Enviar')
@@ -991,8 +994,8 @@ class agendamento_de_salas(form.SchemaForm):
 		salas=[]
 		solicitacoes=[]
 			
-		raiz =self.context
-				
+		raiz =self.context			
+		
 		solicitacoes=self.leSolicitacoes(data["csv_solicitacoes"].data)  
 		salas=self.leSalas(data["csv_salas"].data,horarioInicioAtendimento,horarioFimAtendimento,diaInicioAtendimento,diaFimAtendimento)  				
 		
