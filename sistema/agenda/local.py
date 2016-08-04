@@ -92,7 +92,7 @@ class View(dexterity.DisplayForm):
             hoje=datetime(dia.year,dia.month,dia.day)
             di=datetime(obj.start.year,obj.start.month,obj.start.day)
             df=datetime(obj.end.year,obj.end.month,obj.end.day)
-            if di>=hoje or df<=hoje:
+            if df>=hoje:
               result.append(obj)
      return result
 	 
