@@ -57,18 +57,18 @@ class relatorio_geral_eventos(BrowserView):
 		dados['TotalCancelado']=0
 		dados['TotalDeEventos']=0		
 		
-		dados['Congressos']=0
-		dados['Colacoes']=0
-		dados['Aulas']=0
-		dados['OutrosTiposDeEventos']=0
+		#dados['Congressos']=0
+		#dados['Colacoes']=0
+		#dados['Aulas']=0
+		#dados['OutrosTiposDeEventos']=0
 		
-		dados['Cad1']=0
-		dados['Cad2']=0
-		dados['Reitoria']=0
-		dados['Praca']=0
-		dados['Externo']=0
+		#dados['Cad1']=0
+		#dados['Cad2']=0
+		#dados['Reitoria']=0
+		#dados['Praca']=0
+		#dados['Externo']=0
 		
-		dados['DuracaoMedia']=datetime.now()-datetime.now()
+		#dados['DuracaoMedia']=datetime.now()-datetime.now()
 		
 		pastaAgenda = self.context     
 		pastaSolicitacoes = self.context.preagenda
@@ -176,23 +176,23 @@ class relatorio_geral_eventos(BrowserView):
 		dados['TotalEmAnalise']=TotalEmAnalise
 		dados['TotalDeEventos']=TotalDeEventos
 		
-		dados['Congressos']= TotalDeCongressos
-		dados['Colacoes']=TotalDeColacoes
-		dados['Aulas']=TotalDeAulas
-		dados['OutrosTiposDeEventos']=TotalOutros
+		#dados['Congressos']= TotalDeCongressos
+		#dados['Colacoes']=TotalDeColacoes
+		#dados['Aulas']=TotalDeAulas
+		#dados['OutrosTiposDeEventos']=TotalOutros
 		
-		dados['Cad1']=TotalCad1
-		dados['Cad2']=TotalCad2
-		dados['Reitoria']=TotalReitoria
-		dados['Praca']=TotalPraca
-		dados['Externo']=TotalExterno		
+		#dados['Cad1']=TotalCad1
+		#dados['Cad2']=TotalCad2
+		#dados['Reitoria']=TotalReitoria
+		#dados['Praca']=TotalPraca
+		#dados['Externo']=TotalExterno		
 		
 		if TotalDeEventos:
 			DuracaoMediaHoras = float(DuracaoMedia.seconds)/3600
 			DuracaoMedia=round(DuracaoMediaHoras/TotalDeEventos,2)
 		else:
 			DuracaoMedia=0
-		dados['DuracaoMedia']=DuracaoMedia
+		#dados['DuracaoMedia']=DuracaoMedia
 		
 		return dados
 		
