@@ -33,49 +33,49 @@
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['0']">
 	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
-		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['1']">
 	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
-		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['2']">
 	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
-		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['3']">
 	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
-		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		       
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['4']">
 	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
-		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['5']">
 	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
-		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>
 		  <TD>
 		  	  <DIV TAL:REPEAT="evento python: eventos['6']">
 	            <A TAL:ATTRIBUTES="HREF evento/link"><B TAL:CONTENT="evento/titulo"></B></A> -
-		        <DIV TAL:REPLACE="evento/local"><BR/></DIV>
+		        
 		        <U TAL:CONTENT="evento/horarioStr"></U>
               <BR/></DIV>			  
 		  </TD>

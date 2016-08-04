@@ -161,6 +161,8 @@ def adicionaEvento(evento, event):
   fim=getattr(evento,'end')
   haLocal=getattr(evento,'local')
   haEquipe=getattr(evento,'equipe')
+  titulosLocais=[]
+  strLocalParaTitulo=''
   if haLocal:
     if len(evento.local):   
         for local in evento.local:   
@@ -168,7 +170,8 @@ def adicionaEvento(evento, event):
            if i:            
 		    #source_object e o local
             source_object = intids.queryObject(i)
-            titulo =  source_object.title 	
+            titulo =  source_object.title
+            titulosLocais.append(titulo)			
             if source_object.id!='externo':
              for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
@@ -179,6 +182,9 @@ def adicionaEvento(evento, event):
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
                   evento.plone_utils.addPortalMessage(msg, 'error')				  				  
                   raise Invalid(msg)                   
+  for nomeLocal in titulosLocais:
+    strLocalParaTitulo+=' '+nomeLocal
+  evento.title = getattr(evento,'title') +' em ['+strLocalParaTitulo+']'
   if haEquipe:
     if len(evento.equipe):   
         for local in evento.equipe:    
@@ -204,8 +210,37 @@ def adicionaEvento(evento, event):
     modified(result)
   enviaEmail(evento)
   
-  
 
+@grok.subscribe(Ievento, IObjectModifiedEvent)
+def modificaEventoAposedicao(evento,event):  
+  intids = getUtility(IIntIds)       
+  inicio=getattr(evento,'start',getattr(evento,'start',None))
+  fim=getattr(evento,'end',getattr(evento,'end',None))
+  haLocal=getattr(evento,'local')
+  
+  titulosLocais=[]
+  strLocalParaTitulo=''
+  if haLocal and inicio and fim:
+    if len(evento.local):   
+        for local in evento.local: 
+           i = getattr(local,'to_id',None)		
+           if i:            		    
+            source_object = intids.queryObject(i)            
+            titulo =  source_object.title 	
+            titulosLocais.append(titulo)			            
+  for nomeLocal in titulosLocais:
+    strLocalParaTitulo+=' '+nomeLocal
+  strtitle=str(getattr(evento,'title'))
+  i=strtitle.find('[')
+  tituloAnterior=''
+  if strtitle[i-4:i]==' em ':
+    tituloAnterior = strtitle[:i-4]
+  else:
+    tituloAnterior = strtitle[:i]
+  if i==-1:
+    tituloAnterior = 'Evento de '+getattr(evento,'responsavel')
+  evento.title = tituloAnterior +' em ['+strLocalParaTitulo+']'
+  
 def modificaEvento(evento):    
   catalog = getUtility(ICatalog)
   intids = getUtility(IIntIds) 
@@ -217,7 +252,7 @@ def modificaEvento(evento):
     if len(evento.local):   
         for local in evento.local:                          
             source_object = local
-            titulo =  source_object.title 	
+            titulo =  source_object.title 	            		
             if source_object.id!='externo':			
              for eventoCadastrado in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)
@@ -227,6 +262,7 @@ def modificaEvento(evento):
                 if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id                  
                   raise WidgetActionExecutionError('local', Invalid(msg))                  
+  
   if haEquipe and inicio and fim:
     if len(evento.equipe):   
         for local in evento.equipe:              

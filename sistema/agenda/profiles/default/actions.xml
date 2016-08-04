@@ -102,7 +102,7 @@
  <object name="portal_tabs" meta_type="CMF Action Category">
     <object name="relatoriosemanal" meta_type="CMF Action">   
      <property name="url_expr">python: "/"+context.portal_url.getPortalObject().id+"/agenda/relatorio_semanal_eventos"</property>     
-     <property name="title">Eventos/Semana</property>
+     <property name="title">Ag.Semanal</property>
      <property name="visible">True</property>
     </object>  
   </object>
@@ -111,7 +111,7 @@
     <object name="salas" meta_type="CMF Action">   
      <property name="url_expr">string:${globals_view/navigationRootUrl}/@@agendamentoDeSalas</property>
      <property name="available_expr">python:member and ('Site Administrator' in member.getRoles() or 'Manager' in member.getRoles())</property>
-     <property name="title">Aulas</property>
+     <property name="title">Ag.Salas</property>
      <property name="visible">True</property>
 	</object>
  </object>
