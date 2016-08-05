@@ -155,6 +155,25 @@ class Ievento(form.Schema, IImageScaleTraversable):
 def idDefault(data):      
     return  random.getrandbits(64)
 	
+	
+def substituiLetrasInvalidas(evento): 
+	letras=[('ç','c'),('ã','a')]
+	descricao = getattr(evento,'description')
+	responsavel = getattr(evento,'responsavel')
+	titulo = getattr(evento,'title')
+	instituicao = getattr(evento,'instituicao')
+	unidade = getattr(evento,'unidade')
+	campos=[descricao,responsavel,titulo,instituicao,unidade]
+	for campo in campos:
+		for letra in letras:
+			campo.replace(letra[0],letra[1])
+	evento.unidade=unidade.replace(letra[0],letra[1])
+	evento.instituicao=instituicao
+	evento.title=titulo
+	evento.responsavel=responsavel
+	evento.description=descricao
+
+	
 @grok.subscribe(Ievento, IObjectAddedEvent)
 def adicionaEvento(evento, event):  
   catalog = getUtility(ICatalog)
@@ -162,7 +181,7 @@ def adicionaEvento(evento, event):
   inicio=getattr(evento,'start')
   fim=getattr(evento,'end')
   haLocal=getattr(evento,'local')
-  haEquipe=getattr(evento,'equipe')
+  haEquipe=getattr(evento,'equipe')  
   titulosLocais=[]
   strLocalParaTitulo=''
   if haLocal:
@@ -218,8 +237,7 @@ def modificaEventoAposedicao(evento,event):
   intids = getUtility(IIntIds)       
   inicio=getattr(evento,'start',getattr(evento,'start',None))
   fim=getattr(evento,'end',getattr(evento,'end',None))
-  haLocal=getattr(evento,'local')
-  
+  haLocal=getattr(evento,'local')  
   titulosLocais=[]
   strLocalParaTitulo=''
   if haLocal and inicio and fim:
@@ -315,9 +333,12 @@ def enviaEmail(solicitacao):
 	emailAgendador = mt.getMemberById('agendador').email
 	wf = getToolByName(solicitacao,'portal_workflow')
 	estado = str(wf.getInfoFor(solicitacao,'review_state'))
+	resp=info[solicitacao.id]['responsavel']
+	let = "çãáéíóúâêõêâôü"
+
 	mensagem = "Solicitação de agendamento\n\n"
 	mensagem = "ESTADO ATUAL: "+str(estado).upper()+"\n\n"
-	mensagem = mensagem + str('responsavel').upper()+" "+ str(info[solicitacao.id]['responsavel'])+"\n"    
+	#mensagem = mensagem + str('responsavel').upper()+" "+ str(resp)+"\n"    
 	mensagem = mensagem + str('email').upper()+" "+ str(info[solicitacao.id]['email'])+"\n"    
 	mensagem = mensagem + str('cpf').upper()+" "+ str(info[solicitacao.id]['cpf'])+"\n"    
 	mensagem = mensagem + str('telefone').upper()+" "+ str(info[solicitacao.id]['telefone'])+"\n\n"    
@@ -328,8 +349,8 @@ def enviaEmail(solicitacao):
 	del info[solicitacao.id]['responsavel']
 	del info[solicitacao.id]['local']
 	del info[solicitacao.id]['cpf']
-	del info[solicitacao.id]['telefone']
-	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone']
+	del info[solicitacao.id]['telefone']	
+	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title']
 	for i in listaExclusao:
 		if i in info[solicitacao.id].keys():
 			del info[solicitacao.id][i]
