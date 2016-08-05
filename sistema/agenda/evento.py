@@ -56,7 +56,7 @@ sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
 u'Capacitacao','Workshop','Prova',u'Recepcao','Solenidade','Festividade',u'Reuniao']
 sortTiposEvento.sort()
 tiposEvento = SimpleVocabulary.fromValues(sortTiposEvento)
-listaServicosExtras = SimpleVocabulary.fromValues(['Rede WiFi','Transmissao interna','Transmissao via internet','Traducao simultanea',])
+listaServicosExtras = SimpleVocabulary.fromValues(['Rede WiFi','Transmissao interna','Transmissao via internet','Traducao simultanea','Uso de paineis',])
 
 def telefoneValidation(data):
 	tel = data.replace("(","")
@@ -125,7 +125,9 @@ class Ievento(form.Schema, IImageScaleTraversable):
     """
     form.write_permission(equipe=permissaoAdm)
     form.write_permission(categoria=permissaoAdm)             
-	
+
+    title=schema.TextLine(title=u"Nome do evento",required=True)
+    description=schema.Text(title=u"Descrição do evento",description=u"Informe os equipamentos, os serviços necessários e a programação do evento",required=True)	
     id=schema.TextLine(title=u"Número identificador desta solicitação.")	    
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
@@ -410,15 +412,6 @@ class evento(Item):
     grok.implements(Ievento)
 
  
-# View class
-# The view will automatically use a similarly named template in
-# evento_templates.
-# Template filenames should be all lower case.
-# The view will render when you request a content object with this
-# interface with "/@@sampleview" appended.
-# You may make this the default view for content objects
-# of this type by uncommenting the grok.name line below or by
-# changing the view class name and template filename to View / view.pt.
 
 class SampleView(grok.View):
     """ sample view class """

@@ -19,8 +19,8 @@
   <property name="klass">sistema.agenda.evento.evento</property>
 
   <property name="behaviors">     
-     <element value="plone.app.dexterity.behaviors.metadata.IBasic"/>	 
-	 <element value="plone.app.event.dx.behaviors.IEventBasic"/>	 
+     <!--<element value="plone.app.dexterity.behaviors.metadata.IBasic"/>	 -->
+     <element value="plone.app.event.dx.behaviors.IEventBasic"/>	 
   </property>
 
   <!-- View information -->
