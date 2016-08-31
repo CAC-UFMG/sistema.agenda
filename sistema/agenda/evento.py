@@ -234,6 +234,7 @@ def adicionaEvento(evento, event):
 
 @grok.subscribe(Ievento, IObjectModifiedEvent)
 def modificaEventoAposedicao(evento,event):  
+ if isinstance(event,IObjectModifiedEvent):
   intids = getUtility(IIntIds)       
   inicio=getattr(evento,'start',getattr(evento,'start',None))
   fim=getattr(evento,'end',getattr(evento,'end',None))
@@ -350,7 +351,7 @@ def enviaEmail(solicitacao):
 	del info[solicitacao.id]['local']
 	del info[solicitacao.id]['cpf']
 	del info[solicitacao.id]['telefone']	
-	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title']
+	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title','unidade']
 	for i in listaExclusao:
 		if i in info[solicitacao.id].keys():
 			del info[solicitacao.id][i]

@@ -27,7 +27,7 @@ def criaPastas(context):
       raiz.plone_log("Criando pastas iniciais.")      
       for item in raiz.listFolderContents(contentFilter={"portal_type":["Folder","Document"]}):
         raiz.manage_delObjects([item.getId()])
-      _createObjectByType('Folder',raiz,id='agenda',title="Eventos")
+      _createObjectByType('Folder',raiz,id='agenda',title="Agenda")
       pastaAgenda=raiz.get('agenda')      
       _createObjectByType('Folder',pastaAgenda,id='preagenda',title="Pre Agendamentos")
 	  #Cria pasta de agendamentos de salas
