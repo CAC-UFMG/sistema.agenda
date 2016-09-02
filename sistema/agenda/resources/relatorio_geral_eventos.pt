@@ -44,10 +44,10 @@
 		<TBODY>
 	    <TR TAL:REPEAT="evento eventos">
 		  <TD TAL:REPEAT="coluna python: sorted(evento.keys())" >
-			<DIV TAL:CONDITION="python: coluna in ['cpf','telefone','email','equipe']">
+			<DIV TAL:CONDITION="python: coluna in ['cpf','telefone','email','equipe','description']">
 				<DIV TAL:CONDITION="python: 'Site Administrator' in member.getRoles()" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
 			</DIV>
-			<DIV TAL:CONDITION="python: coluna not in ['cpf','telefone','email','equipe']" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
+			<DIV TAL:CONDITION="python: coluna not in ['cpf','telefone','email','equipe','description']" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
 		  </TD>		  	  		  		  	  
 		</TR>
 		</TBODY>	  

@@ -257,12 +257,12 @@ class relatorio_geral_eventos(BrowserView):
 								obj = intids.queryObject(at)
 								valorStr+=str(obj.title)+" "
 				else:
-					valorStr=str(valor)          							
+					valorStr=valor       							
 				# se o campo for data
 				if isinstance(valor,date):
 					valorStr=str(valor)						
 				if isinstance(valor,str):          
-					valorStr=valor.decode('utf-8')				
+					valorStr=valor.decode('iso-8859-1')				
 				if isinstance(valor,set):
 					valorStr=[str(i) for i in valor]			
 				if isinstance(valor,datetime):
@@ -283,6 +283,7 @@ class relatorio_geral_eventos(BrowserView):
 		
 		dados['Publico']=dados['previsaoDePublico']
 		del dados['previsaoDePublico']
+		del dados['description']
 		return dados
 	
 	def obtemDadosDeEventos(self):	
