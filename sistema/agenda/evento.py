@@ -234,14 +234,14 @@ def adicionaEvento(evento, event):
 
 @grok.subscribe(Ievento, IObjectModifiedEvent)
 def modificaEventoAposedicao(evento,event):  
- if isinstance(event,IObjectModifiedEvent):
+  #if isinstance(event,IObjectModifiedEvent):
   intids = getUtility(IIntIds)       
   inicio=getattr(evento,'start',getattr(evento,'start',None))
   fim=getattr(evento,'end',getattr(evento,'end',None))
   haLocal=getattr(evento,'local')  
   titulosLocais=[]
   strLocalParaTitulo=''
-  if haLocal and inicio and fim:
+  if haLocal:
     if len(evento.local):   
         for local in evento.local: 
            i = getattr(local,'to_id',None)		
