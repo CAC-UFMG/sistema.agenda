@@ -54,19 +54,24 @@ class relatorio_semanal_eventos(BrowserView):
             if indicadorMesmaSemana and estado=='agendado':
               vazio=False
               resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url}              
+			  #Se o evento comecou antes e termina nessa semana
               if semanaFimEvento==semanaHoje and semanaEvento!=semanaHoje:
                 ultimoDia=diaFimEvento.weekday()
                 i=0
                 while i<=ultimoDia:
                   semana[str(i)].append(resultado)
                   i+=1
+			  #Se o evento eh da semana atual
               else:
                 ultimoDia=diaFimEvento.weekday()
                 primeiroDia=diaEvento.weekday()
-                i=primeiroDia
-                while i<=ultimoDia:
-                  semana[str(i)].append(resultado)
-                  i+=1                
+                j=primeiroDia      
+                if ultimoDia!=primeiroDia:				
+                 while j<=ultimoDia:
+                  semana[str(j)].append(resultado)
+                  j+=1                
+                else:                 
+                  semana[str(primeiroDia)].append(resultado)                  
         
      if not vazio:		   
        for i in semana.keys():

@@ -99,13 +99,13 @@
     </object>  
   </object>
 
- <object name="portal_tabs" meta_type="CMF Action Category">
+ <!--<object name="portal_tabs" meta_type="CMF Action Category">
     <object name="relatoriosemanal" meta_type="CMF Action">   
      <property name="url_expr">python: "/"+context.portal_url.getPortalObject().id+"/agenda/relatorio_semanal_eventos"</property>     
      <property name="title">Ag.Semanal</property>
      <property name="visible">True</property>
     </object>  
-  </object>
+  </object>-->
   
  <object name="portal_tabs" meta_type="CMF Action Category">
     <object name="salas" meta_type="CMF Action">   
