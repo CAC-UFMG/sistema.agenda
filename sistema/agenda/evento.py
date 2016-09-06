@@ -261,12 +261,15 @@ def modificaEventoAposedicao(evento,event):
   if i==-1:
     tituloAnterior = 'Evento de '+getattr(evento,'responsavel')
   evento.title = tituloAnterior +' em ['+strLocalParaTitulo+']'
-  
+
+#Executado ao adicionar o objeto a titulo de validacao com os dados anteriores a edicao
 def modificaEvento(evento):    
   catalog = getUtility(ICatalog)
   intids = getUtility(IIntIds) 
-  inicio=getattr(evento,'start',getattr(evento.__context__,'start',None))
-  fim=getattr(evento,'end',getattr(evento.__context__,'end',None))
+  #inicio=getattr(evento,'start',getattr(evento.__context__,'start',None))
+  #fim=getattr(evento,'end',getattr(evento.__context__,'end',None))
+  inicio=getattr(evento,'start',None)
+  fim=getattr(evento,'end',None)
   haLocal=getattr(evento,'local')
   haEquipe=getattr(evento,'equipe')
   if haLocal and inicio and fim:
@@ -317,7 +320,7 @@ def trasitaEvento(evento,event):
               objEventoCadastrado = intids.queryObject(eventoCadastrado.from_id)              
               estado = wf.getInfoFor(objEventoCadastrado,'review_state')	 
               if objEventoCadastrado is not None and objEventoCadastrado.id != evento.id and (estado=='agendado' or estado=='prereservado'):
-                if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):
+                if (evento.start >= objEventoCadastrado.start and evento.start <= objEventoCadastrado.end) or (evento.end <= objEventoCadastrado.end and evento.end >= objEventoCadastrado.start) or (evento.end >= objEventoCadastrado.end and evento.start <= objEventoCadastrado.start):				   
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
                   evento.plone_utils.addPortalMessage(msg, 'error')
                   raise WorkflowException(Invalid(msg))				  
