@@ -251,7 +251,7 @@ def modificaEventoAposedicao(evento,event):
             titulosLocais.append(titulo)			            
   for nomeLocal in titulosLocais:
     strLocalParaTitulo+=' '+nomeLocal
-  strtitle=str(getattr(evento,'title'))
+  strtitle=getattr(evento,'title')
   i=strtitle.find('[')
   tituloAnterior=''
   if strtitle[i-4:i]==' em ':
@@ -342,7 +342,7 @@ def enviaEmail(solicitacao):
 
 	mensagem = "Solicitação de agendamento\n\n"
 	mensagem = "ESTADO ATUAL: "+str(estado).upper()+"\n\n"
-	#mensagem = mensagem + str('responsavel').upper()+" "+ str(resp)+"\n"    
+	#mensagem = mensagem + str('responsavel').upper()+" "+ resp+"\n"    
 	mensagem = mensagem + str('email').upper()+" "+ str(info[solicitacao.id]['email'])+"\n"    
 	mensagem = mensagem + str('cpf').upper()+" "+ str(info[solicitacao.id]['cpf'])+"\n"    
 	mensagem = mensagem + str('telefone').upper()+" "+ str(info[solicitacao.id]['telefone'])+"\n\n"    
