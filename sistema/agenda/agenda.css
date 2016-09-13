@@ -23,7 +23,8 @@
 
 
 .fc-event{	
-	background-color:#3c3948 !important;
+	background-color: rgba(16, 1, 21, 0.81) !important;	
+	padding-left: 3px !important;
 }
 .fc-content a:hover {
     color: #FFF !important;
@@ -34,7 +35,7 @@
 }
 
 .state-agendado {
-    color: #DEBF9D !important;
+    color: RGBA(222, 191, 157, 0.76) !important;
 }
 
 .state-private {
