@@ -75,7 +75,7 @@ class relatorio_semanal_eventos(BrowserView):
         
      if not vazio:		   
        for i in semana.keys():
-           semana[i]=sorted(semana[i],key=lambda evnt:evnt.values()[2])
+           semana[i]=sorted(semana[i],key=lambda evnt:evnt['horario'])
      else:		 
        semana=[]  	 
      return semana
