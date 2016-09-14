@@ -35,8 +35,8 @@ class relatorio_semanal_eventos(BrowserView):
      wf = getToolByName(pastaAgenda,'portal_workflow')     
      for evento in pastaAgenda.listFolderContents():        
         if checkPermission('sistema.agenda.visualizaEvento', evento) and evento.portal_type=='sistema.agenda.evento':            
-            diaEvento=datetime(evento.start.year,evento.start.month,evento.start.day)
-            diaFimEvento=datetime(evento.end.year,evento.end.month,evento.end.day)
+            diaEvento=datetime(evento.start.year,evento.start.month,evento.start.astimezone(timezone(evento.timezone)).day)
+            diaFimEvento=datetime(evento.end.year,evento.end.month,evento.end.astimezone(timezone(evento.timezone)).day)
             semanaEvento = diaEvento.isocalendar()[1]
             semanaFimEvento = diaFimEvento.isocalendar()[1]
             semanaHoje = hoje.isocalendar()[1]
@@ -66,10 +66,10 @@ class relatorio_semanal_eventos(BrowserView):
                 ultimoDia=diaFimEvento.weekday()
                 primeiroDia=diaEvento.weekday()
                 j=primeiroDia      
-                if ultimoDia!=primeiroDia:				
-                 while j<=ultimoDia:
-                  semana[str(j)].append(resultado)
-                  j+=1                
+                if ultimoDia!=primeiroDia:    
+                  while j<=ultimoDia:
+                    semana[str(j)].append(resultado)
+                    j+=1                
                 else:                 
                   semana[str(primeiroDia)].append(resultado)                  
         
