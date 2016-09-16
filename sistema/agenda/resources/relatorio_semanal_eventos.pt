@@ -10,22 +10,23 @@
 
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main"
-        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;eventos view/obtemEventosDaSemana">
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;dias view/obtemDiasDaSemana;eventos view/obtemEventosDaSemana">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
         <h1 class="documentFirstHeading" tal:content="string: Agenda semanal" /><br/>
+		<A HREF="./impresso"><B>IMPRIMIR</B></A><br/><br/>
 	  <DIV TAL:CONDITION="python: len(eventos)==0">SEM EVENTOS NESSA SEMANA</DIV>
       <TABLE CLASS="listing" TAL:CONDITION="python: len(eventos)!=0">
 	  	<THEAD>		
 		 <TR>		
-		  <TH>SEGUNDA</TH>
-		  <TH>TERÇA</TH>
-		  <TH>QUARTA</TH>
-		  <TH>QUINTA</TH>
-		  <TH>SEXTA</TH>
-		  <TH>SÁBADO</TH>
-		  <TH>DOMINGO</TH>
+		  <TH>SEGUNDA <DIV TAL:REPLACE="python: dias[0]"/> </TH>
+		  <TH>TERÇA <DIV TAL:REPLACE="python: dias[1]"/> </TH>
+		  <TH>QUARTA <DIV TAL:REPLACE="python: dias[2]"/> </TH>
+		  <TH>QUINTA <DIV TAL:REPLACE="python: dias[3]"/> </TH>
+		  <TH>SEXTA <DIV TAL:REPLACE="python: dias[4]"/> </TH>
+		  <TH>SÁBADO <DIV TAL:REPLACE="python: dias[5]"/> </TH>
+		  <TH>DOMINGO  <DIV TAL:REPLACE="python: dias[6]"/> </TH>
 		 </TR>		
 		</THEAD>
 		<TBODY>

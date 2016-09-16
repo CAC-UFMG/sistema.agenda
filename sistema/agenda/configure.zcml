@@ -44,6 +44,13 @@
           class=".relatorio_semanal_eventos.relatorio_semanal_eventos"
           />
 		  
+  <browser:page
+          for="*"
+          name="impresso"
+          permission="zope2.Public"
+          class=".impresso.impresso"
+          />		  
+		  
 	<browser:page
           for="*"
           name="relatorio_geral_eventos"

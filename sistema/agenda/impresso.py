@@ -5,13 +5,16 @@ from zope.component import getUtility
 from zope.security import checkPermission
 from datetime import datetime, timedelta
 from pytz import timezone
+from zope.intid.interfaces import IIntIds
 
 
 
-class relatorio_semanal_eventos(BrowserView):
+ 
+
+class impresso(BrowserView):
     """ Render the title and description of item only (example)
     """
-    index = ViewPageTemplateFile("resources/relatorio_semanal_eventos.pt")
+    index = ViewPageTemplateFile("resources/impresso.pt")
 	
     def render(self):
         return self.index()
@@ -75,9 +78,24 @@ class relatorio_semanal_eventos(BrowserView):
             else:
               local= 'sem local definido'
             
+            haEquipe=getattr(evento,'equipe')  
+            responsaveis=''
+            
+            intids = getUtility(IIntIds) 
+            if haEquipe:
+              if len(evento.equipe):   
+                 for membro in evento.equipe:    
+                    i = getattr(membro,'to_id',None)		
+                    if i:            
+                      source_object = intids.queryObject(i)
+                      titulo =  source_object.title 	
+                      responsaveis += ' '+ titulo
+						
+			
             if indicadorMesmaSemana and (estado=='agendado' or estado=='terminado'):
               vazio=False
-              resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url}              
+              contato = evento.telefone #+' - '+evento.email
+              resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url,'contato':contato,'responsaveis':responsaveis}              
 			  #Se o evento comecou antes e termina nessa semana
               if semanaFimEvento==semanaHoje and semanaEvento!=semanaHoje:
                 ultimoDia=diaFimEvento.weekday()
@@ -103,7 +121,4 @@ class relatorio_semanal_eventos(BrowserView):
      else:		 
        semana=[]  	 
      return semana
-	 
-
-
 	 
