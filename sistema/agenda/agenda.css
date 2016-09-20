@@ -1,3 +1,18 @@
+.tbimpresso td{
+	border:0.1em solid black;
+	padding:2px !important;
+	padding-left:5px !important;
+}
+
+.tbimpresso #diasem{
+	padding:5px !important;
+	font-size:125% !important;
+}
+
+.tbimpresso th{
+	border:0.1em solid black;
+}
+
 .search-query {
 	width:120px;
 }

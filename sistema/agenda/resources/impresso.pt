@@ -58,7 +58,7 @@
         <h1 class="documentFirstHeading" tal:content="string: Agenda semanal - CAC UFMG" /><br/>
 		<A HREF="./relatorio_semanal_eventos"><B>VOLTAR</B></A><br/><br/>
 	  <DIV TAL:CONDITION="python: len(eventos)==0">SEM EVENTOS NESSA SEMANA</DIV>
-      <TABLE CLASS="listing" TAL:CONDITION="python: len(eventos)!=0" width=800>
+      <TABLE  class="tbimpresso" TAL:CONDITION="python: len(eventos)!=0" width=800>
 	  	<THEAD>
 			<TH>HORÁRIO</TH>
 			<TH>EVENTO</TH>
@@ -69,7 +69,7 @@
 		
 		<TBODY>		
 		 
-		<TR ><TD COLSPAN=4 style="background-color:rgba(225,225,225,25); text-align:center"><B>SEGUNDA <DIV TAL:REPLACE="python: dias[0]"/></B> </TD></TR>
+		<TR ><TD id="diasem" COLSPAN=4 style="background-color:rgba(225,225,225,25); text-align:center"><B>SEGUNDA <DIV TAL:REPLACE="python: dias[0]"/></B> </TD></TR>
 	    <TR TAL:REPEAT="evento python: eventos['0']">		  
 		  <TD>
 		  	  <DIV>
@@ -93,7 +93,7 @@
 		  </TD>
 		</TR>
 		
-		<TR  ><TD COLSPAN=4 style="background-color:rgba(225,225,225,25); text-align:center"><B>TERÇA <DIV TAL:REPLACE="python: dias[1]"/></B></TD> </TR>
+		<TR  ><TD COLSPAN=4 id="diasem" style="background-color:rgba(225,225,225,25); text-align:center"><B>TERÇA <DIV TAL:REPLACE="python: dias[1]"/></B></TD> </TR>
 	    <TR TAL:REPEAT="evento python: eventos['1']">		  
 		  <TD>
 		  	  <DIV>
@@ -117,7 +117,7 @@
 		  </TD>
 		</TR>
 		
-		<TR  ><TD COLSPAN=4 style="background-color:rgba(225,225,225,25); text-align:center"><B>QUARTA <DIV TAL:REPLACE="python: dias[2]"/></B> </TD></TR>
+		<TR  ><TD COLSPAN=4 id="diasem" style="background-color:rgba(225,225,225,25); text-align:center"><B>QUARTA <DIV TAL:REPLACE="python: dias[2]"/></B> </TD></TR>
 	    <TR TAL:REPEAT="evento python: eventos['2']">		  
 		  <TD>
 		  	  <DIV>
@@ -141,7 +141,7 @@
 		  </TD>
 		</TR>
 		
-		<TR  ><TD COLSPAN=4 style="background-color:rgba(225,225,225,25); text-align:center"><B>QUINTA <DIV TAL:REPLACE="python: dias[3]"/></B></TD> </TR>
+		<TR  ><TD COLSPAN=4 id="diasem" style="background-color:rgba(225,225,225,25); text-align:center"><B>QUINTA <DIV TAL:REPLACE="python: dias[3]"/></B></TD> </TR>
 	    <TR TAL:REPEAT="evento python: eventos['3']">		  
 		  <TD>
 		  	  <DIV>
@@ -165,7 +165,7 @@
 		  </TD>
 		</TR>
 		
-		<TR  ><TD COLSPAN=4 style="background-color:rgba(225,225,225,25); text-align:center"><B>SEXTA <DIV TAL:REPLACE="python: dias[4]"/></B> </TD></TR>
+		<TR  ><TD COLSPAN=4 id="diasem" style="background-color:rgba(225,225,225,25); text-align:center"><B>SEXTA <DIV TAL:REPLACE="python: dias[4]"/></B> </TD></TR>
 	    <TR TAL:REPEAT="evento python: eventos['4']">		  
 		  <TD>
 		  	  <DIV>
@@ -189,7 +189,7 @@
 		  </TD>
 		</TR>
 		
-		<TR  ><TD COLSPAN=4 style="background-color:rgba(225,225,225,25); text-align:center"><B>SÁBADO <DIV TAL:REPLACE="python: dias[5]"/></B></TD> </TR>
+		<TR  ><TD COLSPAN=4 id="diasem" style="background-color:rgba(225,225,225,25); text-align:center"><B>SÁBADO <DIV TAL:REPLACE="python: dias[5]"/></B></TD> </TR>
 	    <TR TAL:REPEAT="evento python: eventos['5']">		  
 		  <TD>
 		  	  <DIV>
@@ -213,7 +213,7 @@
 		  </TD>
 		</TR>
 		
-		<TR><TD COLSPAN=4 style="background-color:rgba(225,225,225,25); text-align:center"><B>DOMINGO <DIV TAL:REPLACE="python: dias[6]"/></B></TD> </TR>
+		<TR><TD COLSPAN=4 id="diasem" style="background-color:rgba(225,225,225,25); text-align:center"><B>DOMINGO <DIV TAL:REPLACE="python: dias[6]"/></B></TD> </TR>
 	    <TR TAL:REPEAT="evento python: eventos['6']">		  
 		  <TD>
 		  	  <DIV>
