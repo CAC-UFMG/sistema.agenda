@@ -68,8 +68,8 @@ class impresso(BrowserView):
             semanaEvento = diaEvento.isocalendar()[1]
             semanaFimEvento = diaFimEvento.isocalendar()[1]            
             indicadorMesmaSemana = semanaEvento==semanaHoje or semanaFimEvento==semanaHoje
-            horaEvento=evento.start.time()			
-            horaEventoStr=str(evento.start.astimezone(timezone(evento.timezone)).time())
+            horaEvento=evento.start.time()						
+            horaEventoStr=str(evento.start.astimezone(timezone(evento.timezone)).time())+" - "+str(evento.end.astimezone(timezone(evento.timezone)).time())
             local= ''
             estado = wf.getInfoFor(evento,'review_state')	 
             if evento.local is not None:
