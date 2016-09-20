@@ -63,7 +63,7 @@ def telefoneValidation(data):
 	tel = tel.replace(")","")
 	tel = tel.replace("-","")
 	tel = tel.replace(" ","")
-	if not tel.isdigit() or len(data)<7 or data[-5]!= "-" or data[0]!="(" or data[3]!=")" or data.count(" ")>0:
+	if not tel.isdigit() or len(tel)<8 or data[-5]!= "-" or data[0]!="(" or data[3]!=")" or data.count(" ")>1:
 	 	raise Invalid(_(u"O número deve ser no formato (XX)XXXXX-XXXX"))
 	return True
 	
@@ -126,8 +126,7 @@ class Ievento(form.Schema, IImageScaleTraversable):
     form.write_permission(equipe=permissaoAdm)
     form.write_permission(categoria=permissaoAdm)             
 
-    title=schema.TextLine(title=u"Nome do evento",required=True)
-    description=schema.Text(title=u"Descrição do evento",description=u"Informe os equipamentos, os serviços necessários e a programação do evento",required=True)	
+    title=schema.TextLine(title=u"Nome do evento",required=True)  
     id=schema.TextLine(title=u"Número identificador desta solicitação.")	    
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
@@ -141,10 +140,13 @@ class Ievento(form.Schema, IImageScaleTraversable):
     responsavel=schema.TextLine(title=u"Responsável pelo evento",description=u'Indique o nome completo do responsável pelo evento.',required=True)
     instituicao=schema.TextLine(title=u"Instituição",description=u'Informe qual a instituição ligada ao evento',required=True,default=u'UFMG')
     unidade=schema.TextLine(title=u"Unidade",description=u'Informe a unidade ou departamento que está fazendo a solicitação',required=True)
-    telefone=schema.TextLine(title=u"Telefone",description=u'Informe o contato telefônico do responsável pelo evento',required=True,constraint=telefoneValidation)
+    telefone=schema.TextLine(title=u"Telefone",description=u'Informe o contato telefônico do responsável pelo evento',required=True,constraint=telefoneValidation,default=u'(31)3409-5000')
     email=schema.TextLine(title=u"E-mail",description=u'Informe o email do responsável pelo evento',required=True,constraint=validateaddress)
     cpf=schema.TextLine(title=u"CPF",constraint=cpfValidation, description=u'Informe o cpf do responsável pelo evento',required=True)
-			  
+
+    form.fieldset('detalhes',label=u"Detalhes do evento", fields=['description'] )
+    description=schema.Text(title=u"Descrição do evento",description=u"Informe os equipamentos, os serviços necessários e a programação do evento",required=True)		
+	
     @invariant
     def validaDados(data):
       modificaEvento(data)

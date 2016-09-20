@@ -25,3 +25,14 @@ msgstr "Listagem de eventos"
 msgid "event_view"
 msgstr "Evento"
 
+msgid "label_contenttree_browse"
+msgstr "Pesquisar"
+
+msgid "label_contenttree_add"
+msgstr "Adicionar"
+
+msgid "heading_contenttree_browse"
+msgstr "Selecione os itens"
+
+msgid "heading_contenttree_help"
+msgstr "Pressione CTRL e clique para selecionar vários"
