@@ -94,7 +94,7 @@ class impresso(BrowserView):
 			
             if indicadorMesmaSemana and (estado=='agendado' or estado=='terminado'):
               vazio=False
-              contato = evento.responsavel +' - '+evento.telefone
+              contato = evento.responsavel +' - '+ evento.unidade +' - '+ evento.telefone
               resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url,'contato':contato,'responsaveis':responsaveis}              
 			  #Se o evento comecou antes e termina nessa semana
               if semanaFimEvento==semanaHoje and semanaEvento!=semanaHoje:
