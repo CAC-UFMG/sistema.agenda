@@ -54,8 +54,12 @@ input#form-widgets-equipe-widgets-query{
     color: #FFF !important;
 }
 
+.ui-widget-content{	
+	background:#65595980 !important;
+}
+
 .ui-state-highlight{
-	background:#3b3b3b !important;
+	background:#42383866 !important;
 	border:1px solid white !important;
 }
 
