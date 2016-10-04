@@ -46,13 +46,17 @@ input#form-widgets-equipe-widgets-query{
  color:white;
 }
 
-
 .fc-event{	
-	background-color: rgba(16, 1, 21, 0.81) !important;	
+	background-color: #908888cc !important;	
 	padding-left: 3px !important;
 }
 .fc-content a:hover {
     color: #FFF !important;
+}
+
+.ui-state-highlight{
+	background:#3b3b3b !important;
+	border:1px solid white !important;
 }
 
 .state-published {
@@ -60,7 +64,9 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .state-agendado {
-    color: RGBA(222, 191, 157, 0.76) !important;
+    color: RGBA(0, 0, 0, 0.8) !important;
+	text-align:center;
+	font-size: 11px !important;
 }
 
 .state-private {
@@ -68,9 +74,14 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .state-terminado {
-    color: #776B59  !important;
+    color: #010E0199 !important;
 }
 
 .state-em_analise {
     color: green  !important;
+}
+
+.state-cancelado {
+    color: #5A1B1B80  !important;
+	font-style:italic;
 }
