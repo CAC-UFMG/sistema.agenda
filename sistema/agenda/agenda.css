@@ -43,7 +43,11 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .type-sistema.agenda.evento{
- color:white;
+	color:white;
+}
+
+.ui-widget-header{
+	font-size:larger !important;	
 }
 
 .fc-event{	
@@ -70,7 +74,7 @@ input#form-widgets-equipe-widgets-query{
 .state-agendado {
     color: RGBA(0, 0, 0, 0.8) !important;
 	text-align:center;
-	font-size: 11px !important;
+	font-size: 11px !important;	
 }
 
 .state-private {
