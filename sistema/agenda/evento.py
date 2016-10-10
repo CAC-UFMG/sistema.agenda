@@ -204,7 +204,12 @@ def adicionaEvento(evento, event):
                 if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id
                   evento.plone_utils.addPortalMessage(msg, 'error')				  				  
-                  raise Invalid(msg)                   
+                  raise Invalid(msg)  
+  else:
+    if not haLocal or len(evento.local)==0:  
+      evento.plone_utils.addPortalMessage('Selecione um ou mais locais para o evento. Pressione a tecla BACKSPACE para voltar.', 'error')				  				  
+      raise Invalid('Local obrigatorio') 
+	   
   for nomeLocal in titulosLocais:
     strLocalParaTitulo+=' '+nomeLocal
   evento.title = getattr(evento,'title') +' em ['+strLocalParaTitulo+']'
@@ -244,13 +249,20 @@ def modificaEventoAposedicao(evento,event):
   titulosLocais=[]
   strLocalParaTitulo=''
   if haLocal:
-    if len(evento.local):   
+    if len(haLocal):   
         for local in evento.local: 
            i = getattr(local,'to_id',None)		
            if i:            		    
             source_object = intids.queryObject(i)            
             titulo =  source_object.title 	
-            titulosLocais.append(titulo)			            
+            titulosLocais.append(titulo)	
+  else:
+    if not haLocal or len(haLocal)==0:  
+      evento.plone_utils.addPortalMessage('Selecione um ou mais locais para o evento.', 'error')				  				  
+      #raise Invalid('Local obrigatorio') 
+      raise WidgetActionExecutionError('local', Invalid('Selecione um ou mais locais para o evento.'))                  
+
+			
   for nomeLocal in titulosLocais:
     strLocalParaTitulo+=' '+nomeLocal
   strtitle=getattr(evento,'title')
@@ -288,7 +300,7 @@ def modificaEvento(evento):
                 if (inicio >= objEventoCadastrado.start and inicio <= objEventoCadastrado.end) or (fim <= objEventoCadastrado.end and fim >= objEventoCadastrado.start) or (fim >= objEventoCadastrado.end and inicio <= objEventoCadastrado.start):
                   msg="LOCAL NAO DISPONIVEL:"+titulo+". Conflito de agendamento com uma solicitacao previamente aprovada. Solicitacao: "+objEventoCadastrado.title +". Codigo: "+objEventoCadastrado.id                  
                   raise WidgetActionExecutionError('local', Invalid(msg))                  
-  
+                     
   if haEquipe and inicio and fim:
     if len(evento.equipe):   
         for local in evento.equipe:              
