@@ -51,7 +51,7 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .fc-event{	
-	background-color: #908888cc !important;	
+	background-color: rgba(130, 114, 83, 0.54) !important;	
 	padding-left: 3px !important;
 }
 .fc-content a:hover {
@@ -59,12 +59,12 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .ui-widget-content{	
-	background:#65595980 !important;
+	background:rgba(130, 114, 83, 0.47) !important;
 }
 
 .ui-state-highlight{
-	background:#42383866 !important;
-	border:1px solid white !important;
+	background:rgba(101, 89, 89, 0.41) !important;
+	border:1px solid yellow !important;
 }
 
 .state-published {
@@ -82,7 +82,7 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .state-terminado {
-    color: #010E0199 !important;
+    color: rgba(71, 83, 69, 0.87) !important;
 }
 
 .state-em_analise {
@@ -90,6 +90,6 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .state-cancelado {
-    color: #5A1B1B80  !important;
+    color: rgba(130, 83, 83, 0.67)  !important;
 	font-style:italic;
 }
