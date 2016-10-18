@@ -51,7 +51,7 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .fc-event{	
-	background-color: rgba(130, 114, 83, 0.54) !important;	
+	background-color: rgba(137, 127, 108, 0.5) !important;	
 	padding-left: 3px !important;
 }
 .fc-content a:hover {
@@ -59,7 +59,7 @@ input#form-widgets-equipe-widgets-query{
 }
 
 .ui-widget-content{	
-	background:rgba(130, 114, 83, 0.47) !important;
+	background:rgba(150, 145, 136, 0.55) !important;
 }
 
 .ui-state-highlight{
