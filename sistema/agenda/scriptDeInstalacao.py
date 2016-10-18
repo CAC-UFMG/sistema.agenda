@@ -38,10 +38,12 @@ def criaPastas(context):
       
       
       pastaPreAgenda=pastaAgenda.get('preagenda')  
+      _createObjectByType('Collection',pastaPreAgenda,id='lista',title="Listagem de solicitacoes")
       pastaAgendamentosDeSalas=pastaAgenda.get('agendamentosDeSalas') 
       pastaEquipe=raiz.get('equipe')      
       pastaLocais=raiz.get('locais')    
       listagem = raiz.get('listagem')	  
+      lista = pastaPreAgenda.get('lista')	  
 	  
       if pastaEquipe:
 	    pass
@@ -432,7 +434,22 @@ def criaPastas(context):
       listagem.setExcludeFromNav(True)
       listagem.reindexObject(idxs=['exclude_from_nav'])
       listagem.reindexObject(idxs=['exclude_from_nav'])
-      listagem.setLayout("event_listing")	        
+      listagem.setLayout("event_listing")
+
+      field = lista.getField('query')
+      field.set(lista, [{'i': 'portal_type', 'o':'plone.app.querystring.operation.selection.is','v':'sistema.agenda.evento'},
+	  {'i': 'review_state', 'o':'plone.app.querystring.operation.selection.is','v':('solicitacao','em_analise','prereservado')},
+	  {'i': 'start', 'o':'plone.app.querystring.operation.date.lessThanRelativeDate','v':'120'}])	  
+	  
+      field = lista.getField('customViewFields')
+      field.set(lista,['Title','start','end','review_state','getId','ModificationDate'])
+	  
+      pastaPreAgenda.setLayout(lista.id)
+      lista.setExcludeFromNav(True)
+      lista.reindexObject(idxs=['exclude_from_nav'])
+      lista.reindexObject(idxs=['exclude_from_nav'])
+      lista.setLayout("tabular_view")
+	  
       pastaAgenda.setLayout("solgemafullcalendar_view")	  
       pastaEquipe.setLayout("folder_summary_view")
       pastaLocais.setLayout("folder_summary_view")	  

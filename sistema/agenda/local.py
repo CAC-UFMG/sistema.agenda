@@ -94,6 +94,7 @@ class View(dexterity.DisplayForm):
             df=datetime(obj.end.year,obj.end.month,obj.end.day)
             if df>=hoje:
               result.append(obj)
+     result=sorted(result,key=lambda evnt:evnt.start)
      return result
 	 
     def equipamentosNesseLocal(self):
