@@ -10,6 +10,7 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import random
 from plone.app.event.dx.behaviors import IEventBasic,IEventRecurrence
+from pytz import timezone
 
 
 from plone.dexterity.content import Item
@@ -340,7 +341,13 @@ def trasitaEvento(evento,event):
                   raise WorkflowException(Invalid(msg))				  
       enviaEmail(evento)
                   
-    
+def retiraAcento(entrada):	
+	let = "çãàáéíóúâêõêâôü"
+	substitutas={'ç':'c','ã':'a','à':'a','á':'a','é':'e','í':'i','ó':'o','ú':'u','â':'a','ê':'a','õ':'o','ê':'e','â':'a','ô':'o','ü':'u'}
+	for acentuada in entrada:
+		if substitutas.has_key(acentuada):
+			entrada=entrada.replace(acentuada,substitutas[acentuada])
+	return entrada
 
 def enviaEmail(solicitacao):
 	servidor = getToolByName(solicitacao,'MailHost')
@@ -352,23 +359,61 @@ def enviaEmail(solicitacao):
 	wf = getToolByName(solicitacao,'portal_workflow')
 	estado = str(wf.getInfoFor(solicitacao,'review_state'))
 	resp=info[solicitacao.id]['responsavel']
-	let = "çãáéíóúâêõêâôü"
-
+	resp=retiraAcento(resp)
+	titulo = retiraAcento(info[solicitacao.id]['title'])
 	mensagem = "Solicitação de agendamento\n\n"
-	mensagem = "ESTADO ATUAL: "+str(estado).upper()+"\n\n"
+	mensagem = mensagem + 'EVENTO: '+ str(titulo.encode('iso-8859-1'))+'\n'
+	mensagem = mensagem +"ESTADO ATUAL: "+str(estado).upper()+"\n\n"
 	#mensagem = mensagem + str('responsavel').upper()+" "+ resp+"\n"    
-	mensagem = mensagem + str('email').upper()+" "+ str(info[solicitacao.id]['email'])+"\n"    
-	mensagem = mensagem + str('cpf').upper()+" "+ str(info[solicitacao.id]['cpf'])+"\n"    
-	mensagem = mensagem + str('telefone').upper()+" "+ str(info[solicitacao.id]['telefone'])+"\n\n"    
-	mensagem = mensagem + str('local solicitado').upper()+" "+ str(info[solicitacao.id]['local'])+"\n"    
-	mensagem = mensagem + str("Data de começo ").upper()+ str(solicitacao.start.day)+'/'+str(solicitacao.start.month)+' de '+str(solicitacao.start.year)+' às '+str(solicitacao.start.hour)+' e '+str(solicitacao.start.minute)+"\n" 
-	mensagem = mensagem + str("Data de término ").upper()+str(solicitacao.end.day)+'/'+str(solicitacao.end.month)+' de '+str(solicitacao.end.year)+' até '+str(solicitacao.end.hour)+' e '+str(solicitacao.end.minute)+"\n\n" 
+	mensagem = mensagem + str('email:').upper()+" "+ str(info[solicitacao.id]['email'])+"\n"    
+	mensagem = mensagem + str('cpf:').upper()+" "+ str(info[solicitacao.id]['cpf'])+"\n"    
+	mensagem = mensagem + str('telefone:').upper()+" "+ str(info[solicitacao.id]['telefone'])+"\n\n"    
+	
+	strDia=str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).day)
+	if solicitacao.start.astimezone(timezone(solicitacao.timezone)).day <10:
+		strDia="0"+str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).day)
+	
+	strMes=str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).month)
+	if solicitacao.start.astimezone(timezone(solicitacao.timezone)).month <10:
+		strMes="0"+str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).month)
+		
+	strDiaf=str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).day)
+	if solicitacao.end.astimezone(timezone(solicitacao.timezone)).day <10:
+		strDiaf="0"+str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).day)
+		
+	strMesf=str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).month)
+	if solicitacao.end.astimezone(timezone(solicitacao.timezone)).month <10:
+		strMesf="0"+str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).month)
+		
+	strh=str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).hour)
+	if solicitacao.start.astimezone(timezone(solicitacao.timezone)).hour <10:
+		strh="0"+str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).hour)
+		
+	strm=str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).minute)
+	if solicitacao.start.astimezone(timezone(solicitacao.timezone)).minute <10:
+		strm="0"+str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).minute)
+		
+	strhf=str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).hour)
+	if solicitacao.end.astimezone(timezone(solicitacao.timezone)).hour <10:
+		strhf="0"+str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).hour)
+		
+	strmf=str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).minute)
+	if solicitacao.end.astimezone(timezone(solicitacao.timezone)).minute <10:
+		strmf="0"+str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).minute)
+		
+	dataInicial= strDia+'/'+strMes+' de '+str(solicitacao.start.astimezone(timezone(solicitacao.timezone)).year)
+	dataFinal=strDiaf+'/'+strMesf+' de '+str(solicitacao.end.astimezone(timezone(solicitacao.timezone)).year)
+	horaInicial=strh+':'+strm
+	horaFinal=strhf+':'+strmf
+	
+	mensagem = mensagem + str("Data inicial: ").upper()+ dataInicial+' às '+horaInicial+"\n" 
+	mensagem = mensagem + str("Data final: ").upper()+dataFinal+' até '+horaFinal+"\n\n" 
 	del info[solicitacao.id]['email']
 	del info[solicitacao.id]['responsavel']
 	del info[solicitacao.id]['local']
 	del info[solicitacao.id]['cpf']
 	del info[solicitacao.id]['telefone']	
-	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title','unidade']
+	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title','unidade','servicosextras']
 	for i in listaExclusao:
 		if i in info[solicitacao.id].keys():
 			del info[solicitacao.id][i]
@@ -376,9 +421,10 @@ def enviaEmail(solicitacao):
 	lista=info[solicitacao.id].keys()
 	for dado in lista:		
 		mensagem = mensagem + str(dado).upper()+" "+ str(info[solicitacao.id][dado])+"\n"    
+		
 	mensagem = mensagem + "\n\n ESTES DADOS SERVEM PARA SUA CONFERÊNCIA. ESTA É UMA MENSAGEM AUTOMÁTICA. POR FAVOR NÃO RESPONDA A ESSE EMAIL."  
 	emailsEnvolvidos = solicitacao.email+";"+emailAgendador
-	titulo="Proposta de agendamento de "+solicitacao.responsavel
+	titulo="Proposta de agendamento de "+solicitacao.responsavel.encode('iso-8859-1')
 	emailConta = 'nav@cac.ufmg.br'
 	#existe um comando que é validateSingleEmailAddress para que serve?
 	if servidor.smtp_host !='':
@@ -427,7 +473,7 @@ def obtemTodasInformacoesDeConteudo(conteudo):
 		
       idCampo = campo      
       if isinstance(valor,str):          
-        valor=valor.decode('utf-8')
+        valor=valor.decode('iso-8859-1')
       if isinstance(valor,list):
         valor=str(valor)          
       if isinstance(valor,set):
