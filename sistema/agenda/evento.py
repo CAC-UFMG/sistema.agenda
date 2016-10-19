@@ -361,7 +361,7 @@ def enviaEmail(solicitacao):
 	resp=info[solicitacao.id]['responsavel']
 	resp=retiraAcento(resp)
 	titulo = retiraAcento(info[solicitacao.id]['title'])
-	mensagem = "Solicitação de agendamento\n\n"
+	mensagem = "Proposta de agendamento\n\n"
 	mensagem = mensagem + 'EVENTO: '+ str(titulo.encode('iso-8859-1'))+'\n'
 	mensagem = mensagem +"ESTADO ATUAL: "+str(estado).upper()+"\n\n"
 	#mensagem = mensagem + str('responsavel').upper()+" "+ resp+"\n"    
@@ -406,8 +406,8 @@ def enviaEmail(solicitacao):
 	horaInicial=strh+':'+strm
 	horaFinal=strhf+':'+strmf
 	
-	mensagem = mensagem + str("Data inicial: ").upper()+ dataInicial+' às '+horaInicial+"\n" 
-	mensagem = mensagem + str("Data final: ").upper()+dataFinal+' até '+horaFinal+"\n\n" 
+	mensagem = mensagem + str("Data inicial: ").upper()+ dataInicial+' - '+horaInicial+"\n" 
+	mensagem = mensagem + str("Data final: ").upper()+dataFinal+' - '+horaFinal+"\n\n" 
 	del info[solicitacao.id]['email']
 	del info[solicitacao.id]['responsavel']
 	del info[solicitacao.id]['local']
