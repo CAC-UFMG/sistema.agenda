@@ -51,12 +51,13 @@
 
       </head>
 
-<div tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;dias view/obtemDiasDaSemana;eventos view/obtemEventosDaSemana">
+<div tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;dias view/obtemDiasDaSemana;deslocamento python: getattr(request,'deslocamento',0);eventos python: view.obtemEventosDaSemana(int(deslocamento))">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
         <h1 class="documentFirstHeading" tal:content="string: Agenda semanal - CAC UFMG" /><br/>
 		<A HREF="./relatorio_semanal_eventos"><B>VOLTAR</B></A><br/><br/>
+		<A HREF="" tal:attributes="href python:'./impresso?deslocamento='+str(int(deslocamento)+1)"><B>PRÓXIMA SEMANA</B></A><br/><br/>
 	  <DIV TAL:CONDITION="python: len(eventos)==0">SEM EVENTOS NESSA SEMANA</DIV>
       <TABLE  class="tbimpresso" TAL:CONDITION="python: len(eventos)!=0" width=800>
 	  	<THEAD>
