@@ -6,7 +6,7 @@ from zope.security import checkPermission
 from datetime import datetime, timedelta
 from pytz import timezone
 from zope.intid.interfaces import IIntIds
-
+import calendar
 
 
  
@@ -22,11 +22,18 @@ class impresso(BrowserView):
     def __call__(self):
         return self.render()
 
-    def obtemDiasDaSemana(self):	    
+    def obtemDiasDaSemana(self,deslocamento=0):	    
      dias = [0,0,0,0,0,0,0]
      
      hoje=datetime.today()   
      semanaHoje = hoje.isocalendar()[1]
+
+     if deslocamento!=0:		           
+       semanaHoje = hoje.isocalendar()[1]+deslocamento
+       proximoMes=0
+       if (hoje.day+deslocamento*7) > calendar.monthrange(hoje.year,hoje.month)[1]:
+         proximoMes=1
+       hoje=datetime(hoje.year,hoje.month+proximoMes,(hoje.day+deslocamento*7)%calendar.monthrange(hoje.year,hoje.month+proximoMes)[1])	   
 	 
      umDia = timedelta(days=1)	 
      dDestaSemana = hoje.weekday()
