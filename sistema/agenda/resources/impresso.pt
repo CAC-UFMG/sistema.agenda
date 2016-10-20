@@ -51,7 +51,7 @@
 
       </head>
 
-<div tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;dias view/obtemDiasDaSemana;deslocamento python: getattr(request,'deslocamento',0);eventos python: view.obtemEventosDaSemana(int(deslocamento))">
+<div tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;deslocamento python: getattr(request,'deslocamento',0);dias python: view.obtemDiasDaSemana(int(deslocamento));eventos python: view.obtemEventosDaSemana(int(deslocamento))">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
