@@ -255,7 +255,7 @@ class relatorio_geral_eventos(BrowserView):
 							at=getattr(educandoMatriculado,'to_id',None)
 							if at:
 								obj = intids.queryObject(at)
-								valorStr+=str(obj.title)+" "
+								valorStr+=str(obj.title.encode('iso-8859-1'))+" "
 				else:
 					valorStr=valor       							
 				# se o campo for data
