@@ -44,7 +44,7 @@ class impresso(BrowserView):
 	   
      return dias	
 	  
-    def obtemEventosDaSemana(self):	
+    def obtemEventosDaSemana(self,deslocamento=0):	
      pastaAgenda = self.context     
      
      semana={}
@@ -57,7 +57,10 @@ class impresso(BrowserView):
      semana['6']=[]
 	 
      hoje=datetime.today()   
-     semanaHoje = hoje.isocalendar()[1]	 
+     semanaHoje = hoje.isocalendar()[1]
+     
+     if deslocamento!=0:		           
+   	   semanaHoje = hoje.isocalendar()[1]+deslocamento
      
      vazio=True	 
      wf = getToolByName(pastaAgenda,'portal_workflow')     
