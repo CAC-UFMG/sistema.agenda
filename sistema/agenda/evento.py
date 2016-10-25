@@ -57,7 +57,7 @@ sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
 u'Capacitacao','Workshop','Prova',u'Recepcao','Solenidade','Festividade',u'Reuniao']
 sortTiposEvento.sort()
 tiposEvento = SimpleVocabulary.fromValues(sortTiposEvento)
-listaServicosExtras = SimpleVocabulary.fromValues(['Rede WiFi','Transmissao interna','Transmissao via internet','Traducao simultanea','Uso de paineis',])
+listaServicosExtras = SimpleVocabulary.fromValues(['Rede WiFi','Transmissao interna','Transmissao via internet','Traducao simultanea',])
 
 def telefoneValidation(data):
 	tel = data.replace("(","")
@@ -74,6 +74,11 @@ def validateaddress(data):
         checkEmailAddress(data)
     except EmailAddressInvalid:
     	  raise Invalid(u"XXXX@XXX.XXX ")
+    return True	
+	
+def validatetitle(data):
+    if '"' in data or "'" in data:
+       raise Invalid(u"Não é permitido aspas no nome do evento.")
     return True	
 	
 def publicoValidation(data):
@@ -127,7 +132,7 @@ class Ievento(form.Schema, IImageScaleTraversable):
     form.write_permission(equipe=permissaoAdm)
     form.write_permission(categoria=permissaoAdm)             
 
-    title=schema.TextLine(title=u"Nome do evento",required=True)  
+    title=schema.TextLine(title=u"Nome do evento",required=True,constraint=validatetitle)  
     id=schema.TextLine(title=u"Número identificador desta solicitação.")	    
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
@@ -361,7 +366,7 @@ def enviaEmail(solicitacao):
 	resp=info[solicitacao.id]['responsavel']
 	resp=retiraAcento(resp)
 	titulo = retiraAcento(info[solicitacao.id]['title'])
-	mensagem = "Proposta de agendamento\n\n"
+	mensagem = "Solicitação de agendamento\n\n"
 	mensagem = mensagem + 'EVENTO: '+ str(titulo.encode('iso-8859-1'))+'\n'
 	mensagem = mensagem +"ESTADO ATUAL: "+str(estado).upper()+"\n\n"
 	#mensagem = mensagem + str('responsavel').upper()+" "+ resp+"\n"    
@@ -406,12 +411,14 @@ def enviaEmail(solicitacao):
 	horaInicial=strh+':'+strm
 	horaFinal=strhf+':'+strmf
 	
-	mensagem = mensagem + str("Data inicial: ").upper()+ dataInicial+' - '+horaInicial+"\n" 
-	mensagem = mensagem + str("Data final: ").upper()+dataFinal+' - '+horaFinal+"\n\n" 
+	mensagem = mensagem + str("Data inicial: ").upper()+ dataInicial+' às '+horaInicial+"\n" 
+	mensagem = mensagem + str("Data final: ").upper()+dataFinal+' até '+horaFinal+"\n\n" 
+	mensagem = mensagem + str("Protocolo: ").upper()+str(info[solicitacao.id]['id'])+"\n\n" 
 	del info[solicitacao.id]['email']
 	del info[solicitacao.id]['responsavel']
 	del info[solicitacao.id]['local']
 	del info[solicitacao.id]['cpf']
+	del info[solicitacao.id]['id']
 	del info[solicitacao.id]['telefone']	
 	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title','unidade','servicosextras']
 	for i in listaExclusao:
@@ -422,7 +429,7 @@ def enviaEmail(solicitacao):
 	for dado in lista:		
 		mensagem = mensagem + str(dado).upper()+" "+ str(info[solicitacao.id][dado])+"\n"    
 		
-	mensagem = mensagem + "\n\n ESTES DADOS SERVEM PARA SUA CONFERÊNCIA. ESTA É UMA MENSAGEM AUTOMÁTICA. POR FAVOR NÃO RESPONDA A ESSE EMAIL."  
+	mensagem = mensagem + "\n\n ESTES DADOS FORAM ENVIADOS APENAS PARA SEREM CONFERIDOS . ESTA MENSAGEM NUNCA DEVE SER RESPONDIDA."  
 	emailsEnvolvidos = solicitacao.email+";"+emailAgendador
 	titulo="Proposta de agendamento de "+solicitacao.responsavel.encode('iso-8859-1')
 	emailConta = 'nav@cac.ufmg.br'
@@ -477,8 +484,13 @@ def obtemTodasInformacoesDeConteudo(conteudo):
       if isinstance(valor,list):
         valor=str(valor)          
       if isinstance(valor,set):
-        valor=str(valor)          
-      if isinstance(valor,date):
+        valsaida=''	  
+        for val in valor:
+           valsaida=str(val)+' '
+        valor=str(valsaida)          
+        if valor== '':
+          valor="nenhum"		
+      if isinstance(valor,date):        	  
         valor=str(valor)          
       if isinstance(valor,time):
         valor=str(valor)      
