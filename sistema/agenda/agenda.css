@@ -57,6 +57,9 @@ input#form-widgets-equipe-widgets-query{
 .fc-content a:hover {
     color: #FFF !important;
 }
+.fc-day-number{
+    color:black;
+}
 
 .ui-widget-content{	
 	background:rgba(150, 145, 136, 0.55) !important;
