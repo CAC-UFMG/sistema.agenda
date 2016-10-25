@@ -73,8 +73,8 @@ class impresso(BrowserView):
      wf = getToolByName(pastaAgenda,'portal_workflow')     
      for evento in pastaAgenda.listFolderContents():        
         if checkPermission('sistema.agenda.visualizaEvento', evento) and evento.portal_type=='sistema.agenda.evento':            
-            diaEvento=datetime(evento.start.year,evento.start.month,evento.start.astimezone(timezone(evento.timezone)).day)
-            diaFimEvento=datetime(evento.end.year,evento.end.month,evento.end.astimezone(timezone(evento.timezone)).day)
+            diaEvento=datetime(evento.start.year,evento.start.astimezone(timezone(evento.timezone)).month,evento.start.astimezone(timezone(evento.timezone)).day)
+            diaFimEvento=datetime(evento.end.year,evento.end.astimezone(timezone(evento.timezone)).month,evento.end.astimezone(timezone(evento.timezone)).day)
             semanaEvento = diaEvento.isocalendar()[1]
             semanaFimEvento = diaFimEvento.isocalendar()[1]            
             indicadorMesmaSemana = semanaEvento==semanaHoje or semanaFimEvento==semanaHoje
