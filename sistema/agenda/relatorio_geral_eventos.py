@@ -16,6 +16,7 @@ from zope.intid.interfaces import IIntIds
 from zc.relation.interfaces import ICatalog
 from Acquisition import aq_inner, aq_parent
 from datetime import datetime,date,time
+from pytz import timezone
 
 class relatorio_geral_eventos(BrowserView):
 	""" Render the title and description of item only (example)
@@ -220,21 +221,21 @@ class relatorio_geral_eventos(BrowserView):
 		if conteudo.end.month <10:
 			strMesf="0"+str(conteudo.end.month)
 			
-		strh=str(conteudo.start.hour)
-		if conteudo.start.hour <10:
-			strh="0"+str(conteudo.start.hour)
+		strh=str(conteudo.start.astimezone(timezone(conteudo.timezone)).hour)
+		if conteudo.start.astimezone(timezone(conteudo.timezone)).hour <10:
+			strh="0"+str(conteudo.start.astimezone(timezone(conteudo.timezone)).hour)
 			
-		strm=str(conteudo.start.minute)
-		if conteudo.start.minute <10:
-			strm="0"+str(conteudo.start.minute)
+		strm=str(conteudo.start.astimezone(timezone(conteudo.timezone)).minute)
+		if conteudo.start.astimezone(timezone(conteudo.timezone)).minute <10:
+			strm="0"+str(conteudo.start.astimezone(timezone(conteudo.timezone)).minute)
 			
-		strhf=str(conteudo.end.hour)
-		if conteudo.end.hour <10:
-			strhf="0"+str(conteudo.end.hour)
+		strhf=str(conteudo.end.astimezone(timezone(conteudo.timezone)).hour)
+		if conteudo.end.astimezone(timezone(conteudo.timezone)).hour <10:
+			strhf="0"+str(conteudo.end.astimezone(timezone(conteudo.timezone)).hour)
 			
-		strmf=str(conteudo.end.minute)
-		if conteudo.end.minute <10:
-			strmf="0"+str(conteudo.end.minute)
+		strmf=str(conteudo.end.astimezone(timezone(conteudo.timezone)).minute)
+		if conteudo.end.astimezone(timezone(conteudo.timezone)).minute <10:
+			strmf="0"+str(conteudo.end.astimezone(timezone(conteudo.timezone)).minute)
 			
 		dados['dataInicial']= strDia+'/'+strMes+' de '+str(conteudo.start.year)
 		dados['dataFinal']=strDiaf+'/'+strMesf+' de '+str(conteudo.end.year)
