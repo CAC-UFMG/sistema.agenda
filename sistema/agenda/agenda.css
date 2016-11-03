@@ -8,6 +8,10 @@ input#form-widgets-equipe-widgets-query{
 	
 }
 
+#formfield-form-widgets-IEventBasic-open_end,#formfield-form-widgets-IEventBasic-whole_day{
+	visibility:hidden !important;	
+}
+
 .tbimpresso td{
 	border:0.1em solid black;
 	padding:2px !important;
