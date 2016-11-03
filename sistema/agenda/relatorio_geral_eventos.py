@@ -205,21 +205,21 @@ class relatorio_geral_eventos(BrowserView):
 		campos=getFieldsInOrder(schema)    
 		dados={}
 		
-		strDia=str(conteudo.start.day)
-		if conteudo.start.day <10:
-			strDia="0"+str(conteudo.start.day)
+		strDia=str(conteudo.start.astimezone(timezone(conteudo.timezone)).day)
+		if conteudo.start.astimezone(timezone(conteudo.timezone)).day <10:
+			strDia="0"+str(conteudo.start.astimezone(timezone(conteudo.timezone)).day)
 		
-		strMes=str(conteudo.start.month)
-		if conteudo.start.month <10:
-			strMes="0"+str(conteudo.start.month)
+		strMes=str(conteudo.start.astimezone(timezone(conteudo.timezone)).month)
+		if conteudo.start.astimezone(timezone(conteudo.timezone)).month <10:
+			strMes="0"+str(conteudo.start.astimezone(timezone(conteudo.timezone)).month)
 			
-		strDiaf=str(conteudo.end.day)
-		if conteudo.end.day <10:
-			strDiaf="0"+str(conteudo.end.day)
+		strDiaf=str(conteudo.end.astimezone(timezone(conteudo.timezone)).day)
+		if conteudo.end.astimezone(timezone(conteudo.timezone)).day <10:
+			strDiaf="0"+str(conteudo.end.astimezone(timezone(conteudo.timezone)).day)
 			
-		strMesf=str(conteudo.end.month)
-		if conteudo.end.month <10:
-			strMesf="0"+str(conteudo.end.month)
+		strMesf=str(conteudo.end.astimezone(timezone(conteudo.timezone)).month)
+		if conteudo.end.astimezone(timezone(conteudo.timezone)).month <10:
+			strMesf="0"+str(conteudo.end.astimezone(timezone(conteudo.timezone)).month)
 			
 		strh=str(conteudo.start.astimezone(timezone(conteudo.timezone)).hour)
 		if conteudo.start.astimezone(timezone(conteudo.timezone)).hour <10:
@@ -237,8 +237,8 @@ class relatorio_geral_eventos(BrowserView):
 		if conteudo.end.astimezone(timezone(conteudo.timezone)).minute <10:
 			strmf="0"+str(conteudo.end.astimezone(timezone(conteudo.timezone)).minute)
 			
-		dados['dataInicial']= strDia+'/'+strMes+' de '+str(conteudo.start.year)
-		dados['dataFinal']=strDiaf+'/'+strMesf+' de '+str(conteudo.end.year)
+		dados['dataInicial']= strDia+'/'+strMes+'/'+str(conteudo.start.year)
+		dados['dataFinal']=strDiaf+'/'+strMesf+'/'+str(conteudo.end.year)
 		dados['horaInicial']=strh+':'+strm
 		dados['horaFinal']=strhf+':'+strmf
 		
