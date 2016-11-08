@@ -290,21 +290,19 @@ class relatorio_geral_eventos(BrowserView):
 	def obtemDadosDeEventos(self):	
 		pastaAgenda = self.context     
 		pastaSolicitacoes = self.context.preagenda
-		result = []
-		hoje=datetime.today()   
-		vazio=True	 
+		result = []		  			 
 		wf = getToolByName(pastaAgenda,'portal_workflow')     
 		for evento in pastaSolicitacoes.listFolderContents():        
 			if checkPermission('sistema.agenda.visualizaEvento', evento) and evento.portal_type=='sistema.agenda.evento':
 				dados = self.obtemTodasInformacoesDeConteudo(evento)
-				estado = wf.getInfoFor(evento,'review_state')	 
+				estado = wf.getInfoFor(evento,'review_state')	
 				dados['estado']=estado                       
 				result.append(dados)  
 		for evento in pastaAgenda.listFolderContents():        
 			if checkPermission('sistema.agenda.visualizaEvento', evento) and evento.portal_type=='sistema.agenda.evento':
 				dados = self.obtemTodasInformacoesDeConteudo(evento)
-				estado = wf.getInfoFor(evento,'review_state')	 
-				dados['estado']=estado                       
+				estado = wf.getInfoFor(evento,'review_state')
+				dados['estado']=estado				
 				result.append(dados)        
 		return result
 	 

@@ -11,7 +11,7 @@
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main"
         tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;
-		eventos view/obtemDadosDeEventos;
+		eventos python: [evento for evento in view.obtemDadosDeEventos() if evento['estado'] not in ('terminado','evento_nao_aprovado','cancelado')];
 		member python: context.portal_membership.getAuthenticatedMember();
 		estatistica view/obtemEstatisticasDeEventos">
 
@@ -42,9 +42,9 @@
 		 </TR>		
 		</THEAD>
 		<TBODY>
-	    <TR TAL:REPEAT="evento eventos">
+	    <TR TAL:REPEAT="evento eventos" >
 		  <TD TAL:REPEAT="coluna python: ['title','responsavel','id','estado','dataInicial','dataFinal','horaInicial','horaFinal','tipo','instituicao','email','Publico','telefone','local','unidade']" >
-			<DIV TAL:CONDITION="python: coluna in ['telefone','email','equipe']">
+			<DIV TAL:CONDITION="python: coluna in ['telefone','email','equipe']" >
 				<DIV TAL:CONDITION="python: 'Site Administrator' in member.getRoles()" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
 			</DIV>
 			<DIV TAL:CONDITION="python: coluna not in ['telefone','email','equipe']" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
