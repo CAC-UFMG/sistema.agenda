@@ -22,6 +22,7 @@ from zope.intid.interfaces import IIntIds
 from zope.security import checkPermission
 from zc.relation.interfaces import ICatalog
 from datetime import datetime
+from pytz import timezone
 
 from sistema.agenda import MessageFactory as _
 
@@ -95,8 +96,15 @@ class View(dexterity.DisplayForm):
             di=datetime(obj.start.year,obj.start.month,obj.start.day)
             df=datetime(obj.end.year,obj.end.month,obj.end.day)
             if df>=hoje and (estado=='agendado' or estado=='prereservado'):
-              result.append(obj)
-     result=sorted(result,key=lambda evnt:evnt.start)
+              result.append({'title_or_id':obj.title_or_id(),
+			  'diaI':str(obj.start.astimezone(timezone(obj.timezone)).day),
+			  'mesI':str(obj.start.astimezone(timezone(obj.timezone)).month),
+			  'diaF':str(obj.end.astimezone(timezone(obj.timezone)).day),
+			  'mesF':str(obj.end.astimezone(timezone(obj.timezone)).month),
+			  'absolute_url':obj.absolute_url(),
+			  'start':obj.start,
+			  })
+     result=sorted(result,key=lambda evnt:evnt['start'])
      return result
 	 
     def equipamentosNesseLocal(self):

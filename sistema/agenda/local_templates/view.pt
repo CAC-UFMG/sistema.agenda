@@ -35,8 +35,8 @@
 		      <strong>Eventos agendados</strong>
 		        
             </td>
-			<td><div tal:repeat="relacionado python: view.eventoNesseLocal()">
-                  <a tal:content="python: relacionado.title_or_id()+' de '+str(relacionado.start.day)+'/'+str(relacionado.start.month) +' ate '+str(relacionado.end.day)+'/'+str(relacionado.end.month)" tal:attributes="href relacionado/absolute_url"> </a><br/>
+			<td><div tal:repeat="relacionado python: view.eventoNesseLocal()" >
+                  <a tal:content="python: relacionado['title_or_id']+' de '+relacionado['diaI']+'/'+relacionado['mesI']+' ate '+relacionado['diaF']+'/'+relacionado['mesF']" tal:attributes="href python: relacionado['absolute_url']"> </a><br/>
                 </div></td>
 		   </tr>
 	    </table>   
