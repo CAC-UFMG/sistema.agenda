@@ -6,7 +6,7 @@ from zope import schema
 from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-
+from Products.CMFCore.utils import getToolByName
 from plone.dexterity.content import Item,Container
 
 from plone.directives import dexterity, form
@@ -87,12 +87,14 @@ class View(dexterity.DisplayForm):
      result = []
      for rel in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
         obj = intids.queryObject(rel.from_id)
+		wf = getToolByName(obj,'portal_workflow')
         if obj is not None and checkPermission('zope2.View', obj):
-            dia=datetime.today()            
+            dia=datetime.today()          
+            estado = wf.getInfoFor(obj,'review_state') 
             hoje=datetime(dia.year,dia.month,dia.day)
             di=datetime(obj.start.year,obj.start.month,obj.start.day)
             df=datetime(obj.end.year,obj.end.month,obj.end.day)
-            if df>=hoje:
+            if df>=hoje and (estado=='agendado' or estado=='prereservado'):
               result.append(obj)
      result=sorted(result,key=lambda evnt:evnt.start)
      return result
