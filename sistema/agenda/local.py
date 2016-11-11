@@ -87,7 +87,7 @@ class View(dexterity.DisplayForm):
      result = []
      for rel in catalog.findRelations(dict(to_id=intids.getId(aq_inner(source_object)), from_attribute='local')):
         obj = intids.queryObject(rel.from_id)
-		wf = getToolByName(obj,'portal_workflow')
+        wf = getToolByName(obj,'portal_workflow')
         if obj is not None and checkPermission('zope2.View', obj):
             dia=datetime.today()          
             estado = wf.getInfoFor(obj,'review_state') 
