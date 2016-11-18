@@ -99,7 +99,7 @@ class relatorio_geral_eventos(BrowserView):
 					lista=evento.local					
 					for local in lista:
 						at=getattr(local,'to_id',None)
-						if at or False:
+						if at and False:
 							obj = intids.queryObject(at)
 							if str(obj.unidade).upper()=='CAD1' or str(obj.unidade).upper()=='CAD 1':
 								TotalCad1=TotalCad1+1
@@ -144,7 +144,7 @@ class relatorio_geral_eventos(BrowserView):
 					lista=evento.local					
 					for local in lista:
 						at=getattr(local,'to_id',None)
-						if at:
+						if at and False:
 							obj = intids.queryObject(at)
 							if str(obj.unidade).upper()=='CAD1' or str(obj.unidade).upper()=='CAD 1':
 								TotalCad1=TotalCad1+1
