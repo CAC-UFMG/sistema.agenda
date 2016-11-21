@@ -75,7 +75,7 @@ class relatorio_semanal_eventos(BrowserView):
             else:
               local= 'sem local definido'
             
-            if indicadorMesmaSemana and (estado=='agendado' or estado=='terminado'):
+            if indicadorMesmaSemana and estado=='agendado':
               vazio=False
               resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url}              
 			  #Se o evento comecou antes e termina nessa semana
