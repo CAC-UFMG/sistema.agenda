@@ -29,17 +29,19 @@
 			<td><div tal:repeat="relacionado python: view.equipamentosNesseLocal()">
                   <a tal:content="relacionado/title_or_id" tal:attributes="href relacionado/absolute_url"> </a>
                 </div></td>
-		   </tr>
-          <tr>
-		    <td><br/>
-		      <strong>Eventos agendados</strong>
-		        
-            </td>
-			<td><div tal:repeat="relacionado python: view.eventoNesseLocal()" >
-                  <a tal:content="python: relacionado['title_or_id']+' de '+relacionado['diaI']+'/'+relacionado['mesI']+' ate '+relacionado['diaF']+'/'+relacionado['mesF']" tal:attributes="href python: relacionado['absolute_url']"> </a><br/>
-                </div></td>
-		   </tr>
-	    </table>   
+		   </tr>      
+	    </table><BR/>
+		<strong>Eventos agendados</strong>
+		<table class="table table-striped table-bordered">
+			<th>NOME DO EVENTO</th>
+			<th>DATA DE INÍCIO</th>
+			<th>DATA DE TÉRMINO</th>
+			<tr tal:repeat="relacionado python: view.eventoNesseLocal()" >
+				<td> <a tal:content="python: relacionado['title_or_id']" tal:attributes="href python: relacionado['absolute_url']"> </a></td>
+				<td tal:content="python: relacionado['diaI']+'/'+relacionado['mesI']"></td>
+				<td tal:content="python: relacionado['diaF']+'/'+relacionado['mesF']"></td>
+			</tr>					  
+		</table>  
 	</div>
   </metal:content-core>
 </metal:main>
