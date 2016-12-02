@@ -102,7 +102,7 @@ class impresso(BrowserView):
                       responsaveis += ' '+ titulo
 						
 			
-            if indicadorMesmaSemana and estado=='agendado':
+            if indicadorMesmaSemana and estado=='agendado' and evento.start.year==hoje.year:
               vazio=False
               contato = evento.responsavel +' - '+ evento.unidade +' - '+ evento.telefone
               resultado ={'titulo':evento.title.upper(),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url,'contato':contato,'responsaveis':responsaveis}              
