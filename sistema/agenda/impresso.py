@@ -109,7 +109,7 @@ class impresso(BrowserView):
               else: 				
                 contato = evento.responsavel +' - '+ evento.unidade +' - '+ evento.telefone 
               atendimento=[]
-			  if evento.atendimento:
+              if evento.atendimento:
                 atendimento= [i for i in evento.atendimento] 
             
               if not len(atendimento):
