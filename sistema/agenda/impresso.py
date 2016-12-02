@@ -108,7 +108,10 @@ class impresso(BrowserView):
                 contato = evento.responsavel +' - '+ evento.unidade +' - '+ evento.telefone +' - '+ str(evento.celular)                                                        
               else: 				
                 contato = evento.responsavel +' - '+ evento.unidade +' - '+ evento.telefone 
-              atendimento= [i for i in evento.atendimento] 
+              atendimento=[]
+			  if evento.atendimento:
+                atendimento= [i for i in evento.atendimento] 
+            
               if not len(atendimento):
                 atendimento=''			  
               resultado ={'titulo':evento.title.upper()+' '+str(atendimento),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url,'contato':contato,'responsaveis':responsaveis}              
