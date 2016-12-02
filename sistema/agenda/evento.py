@@ -52,6 +52,7 @@ from plone.autoform.interfaces import IFormFieldProvider
 from zope.interface import alsoProvides
 
 listaDeCategorias = SimpleVocabulary.fromValues(['Interno','Externo'])
+listaAtendimento = SimpleVocabulary.fromValues(['Emprestimo de equipamento','Emprestimo de espaco','Equipe tecnica'])
 sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
 'Palestra',u'Forum',u'Simposio','Mostra','Congresso','Encontro','Ensaio','Montagem',u'Manutencao',
 u'Capacitacao','Workshop','Prova',u'Recepcao','Solenidade','Festividade',u'Reuniao']
@@ -131,22 +132,26 @@ class Ievento(form.Schema, IImageScaleTraversable):
     """
     form.write_permission(equipe=permissaoAdm)
     form.write_permission(categoria=permissaoAdm)             
+    form.write_permission(atendimento=permissaoAdm)             
 
     title=schema.TextLine(title=u"Nome do evento",required=True,constraint=validatetitle)  
     id=schema.TextLine(title=u"Número identificador desta solicitação.")	    
     categoria=schema.Choice(title=u"Categoria",description=u'PARA O AGENDADOR: Informe se o evento é da UFMG (interno) ou não (externo)',required=False,vocabulary=listaDeCategorias)
+    atendimento=schema.Set(title=u"Atendimento",description=u'PARA O AGENDADOR: Informe o tipo de atendimento que sera prestado.',required=False, value_type=schema.Choice(source=listaAtendimento))
     tipo=schema.Choice(title=u"Tipo",required=True,vocabulary=tiposEvento)	
     local=RelationList(title=u"Local",description=u'Escolha os espaços a serem agendados',required=True,value_type=RelationChoice(title=u'Local',required=True,source=pastaLocais))
     equipe=RelationList(title=u"Equipe",description=u'PARA O AGENDADOR: Informe a equipe para este evento',required=False,value_type=RelationChoice(title=u'Equipe',required=True,source=pastaEquipe))	
     previsaoDePublico=schema.TextLine(title=u"Previsão de Público",description=u'Informe a previsão do número de participantes',required=True,constraint=publicoValidation)
     servicosExtras=schema.Set(title=u"Serviços Extras",description=u'O evento necessita de algum destes serviços?',required=False, value_type=schema.Choice(source=listaServicosExtras))
     form.widget('servicosExtras', CheckBoxFieldWidget)
+    form.widget('atendimento', CheckBoxFieldWidget)
 	
-    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','cpf','instituicao','unidade','telefone','email'] ) 
+    form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','cpf','instituicao','unidade','telefone','celular','email'] ) 
     responsavel=schema.TextLine(title=u"Responsável pelo evento",description=u'Indique o nome completo do responsável pelo evento.',required=True)
     instituicao=schema.TextLine(title=u"Instituição",description=u'Informe qual a instituição ligada ao evento',required=True,default=u'UFMG')
     unidade=schema.TextLine(title=u"Unidade",description=u'Informe a unidade ou departamento que está fazendo a solicitação',required=True)
     telefone=schema.TextLine(title=u"Telefone",description=u'Informe o contato telefônico do responsável pelo evento',required=True,constraint=telefoneValidation,default=u'(31)3409-5000')
+    celular=schema.TextLine(title=u"Celular",description=u'Informe o celular do responsável pelo evento',required=True,constraint=telefoneValidation)
     email=schema.TextLine(title=u"E-mail",description=u'Informe o email do responsável pelo evento',required=True,constraint=validateaddress)
     cpf=schema.TextLine(title=u"CPF",constraint=cpfValidation, description=u'Informe o cpf do responsável pelo evento',required=True)
 
