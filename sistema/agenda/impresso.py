@@ -105,7 +105,9 @@ class impresso(BrowserView):
             if indicadorMesmaSemana and estado=='agendado' and evento.start.year==hoje.year:
               vazio=False
               contato = evento.responsavel +' - '+ evento.unidade +' - '+ evento.telefone +' - '+ evento.celular                                                        
-              atendimento= [i for i in evento.atendimento]
+              atendimento= [i for i in evento.atendimento] 
+              if not len(atendimento):
+                atendimento=''			  
               resultado ={'titulo':evento.title.upper()+' '+str(atendimento),'local':local.title,'horario':horaEvento,'diaSemana':diaEvento.weekday(),'horarioStr':horaEventoStr,'link':evento.absolute_url,'contato':contato,'responsaveis':responsaveis}              
 			  #Se o evento comecou antes e termina nessa semana
               if semanaFimEvento==semanaHoje and semanaEvento!=semanaHoje:
