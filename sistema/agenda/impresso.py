@@ -104,7 +104,7 @@ class impresso(BrowserView):
 			
             if indicadorMesmaSemana and estado=='agendado' and evento.start.year==hoje.year:
               vazio=False
-              contato = evento.responsavel +' - '+ evento.unidade +' - '+ evento.telefone +' - '+ evento.celular                                                        
+              contato = evento.responsavel +' - '+ evento.unidade +' - '+ evento.telefone +' - '+ str(evento.celular)                                                        
               atendimento= [i for i in evento.atendimento] 
               if not len(atendimento):
                 atendimento=''			  
