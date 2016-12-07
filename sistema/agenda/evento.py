@@ -197,6 +197,15 @@ def adicionaEvento(evento, event):
   haEquipe=getattr(evento,'equipe')  
   titulosLocais=[]
   strLocalParaTitulo=''
+  
+  hoje=datetime.today()
+  iniComp = datetime(year=inicio.astimezone(timezone(evento.timezone)).year,month=inicio.astimezone(timezone(evento.timezone)).month,day=inicio.astimezone(timezone(evento.timezone)).day,hour=inicio.astimezone(timezone(evento.timezone)).hour,minute=inicio.astimezone(timezone(evento.timezone)).minute)  
+  if inicio and iniComp<hoje:
+    msg="Data de inicio incorreta: "+str(iniComp.day)+"/"+str(iniComp.month)+"/"+str(iniComp.year)+" "+str(iniComp.hour)+":"+str(iniComp.minute)+". UTILIZE A TECLA BACKSPACE PARA VOLTAR E CORRRIGIR."
+    evento.plone_utils.addPortalMessage(msg, 'error')
+    raise Invalid(msg)
+	
+	
   if haLocal:
     if len(evento.local):   
         for local in evento.local:   
@@ -259,6 +268,7 @@ def modificaEventoAposedicao(evento,event):
   haLocal=getattr(evento,'local')  
   titulosLocais=[]
   strLocalParaTitulo=''
+
   if haLocal:
     if len(haLocal):   
         for local in evento.local: 
@@ -296,7 +306,7 @@ def modificaEvento(evento):
   inicio=getattr(evento,'start',None)
   fim=getattr(evento,'end',None)
   haLocal=getattr(evento,'local')
-  haEquipe=getattr(evento,'equipe')
+  haEquipe=getattr(evento,'equipe')   
   if haLocal and inicio and fim:
     if len(evento.local):   
         for local in evento.local:                          
