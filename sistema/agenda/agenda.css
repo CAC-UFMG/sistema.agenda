@@ -3,7 +3,7 @@ input#form-widgets-local-widgets-query {
 	
 }
 
-dl.error{
+dl.error, div#formfield-form-widgets-local{
 	font-size:150% !important;	
 }
 
