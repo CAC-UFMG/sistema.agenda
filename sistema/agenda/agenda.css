@@ -3,6 +3,10 @@ input#form-widgets-local-widgets-query {
 	
 }
 
+dl.error{
+	font-size:150% !important;	
+}
+
 input#form-widgets-equipe-widgets-query{
 	visibility:hidden !important;
 	
