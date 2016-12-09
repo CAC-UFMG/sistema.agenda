@@ -65,11 +65,11 @@ class relatorio_geral_eventos(BrowserView):
 		#dados['Aulas']=0
 		#dados['OutrosTiposDeEventos']=0
 		
-		#dados['Cad1']=0
-		#dados['Cad2']=0
-		#dados['Reitoria']=0
-		#dados['Praca']=0
-		#dados['Externo']=0
+		dados['EventosCad1']=0
+		dados['EventosCad2']=0
+		dados['EventosReitoria']=0
+		#dados['EventosPraca']=0
+		dados['EventosExterno']=0
 		
 		#dados['DuracaoMedia']=datetime.now()-datetime.now()
 		
@@ -112,7 +112,7 @@ class relatorio_geral_eventos(BrowserView):
 					lista=evento.local					
 					for local in lista:
 						at=getattr(local,'to_id',None)
-						if at and False:
+						if at:
 							obj = intids.queryObject(at)
 							if str(obj.unidade).upper()=='CAD1' or str(obj.unidade).upper()=='CAD 1':
 								TotalCad1=TotalCad1+1
@@ -122,7 +122,7 @@ class relatorio_geral_eventos(BrowserView):
 								TotalReitoria=TotalReitoria+1
 							if str(obj.unidade).upper()=='PRACA':
 								TotalPraca=TotalPraca+1
-							if str(obj.unidade).upper()=='EXTERNO':
+							if str(obj.unidade).upper()=='UNIDADE':
 								TotalExterno=TotalExterno+1								
 			
 				DuracaoMedia = DuracaoMedia + evento.end-evento.start			
@@ -168,7 +168,7 @@ class relatorio_geral_eventos(BrowserView):
 					lista=evento.local					
 					for local in lista:
 						at=getattr(local,'to_id',None)
-						if at and False:
+						if at:
 							obj = intids.queryObject(at)
 							if str(obj.unidade).upper()=='CAD1' or str(obj.unidade).upper()=='CAD 1':
 								TotalCad1=TotalCad1+1
@@ -178,7 +178,7 @@ class relatorio_geral_eventos(BrowserView):
 								TotalReitoria=TotalReitoria+1
 							if str(obj.unidade).upper()=='PRACA':
 								TotalPraca=TotalPraca+1
-							if str(obj.unidade).upper()=='EXTERNO':
+							if str(obj.unidade).upper()=='UNIDADE':
 								TotalExterno=TotalExterno+1									
 			
 				DuracaoMedia = DuracaoMedia + evento.end-evento.start			
@@ -207,11 +207,10 @@ class relatorio_geral_eventos(BrowserView):
 		#dados['Aulas']=TotalDeAulas
 		#dados['OutrosTiposDeEventos']=TotalOutros
 		
-		#dados['Cad1']=TotalCad1
-		#dados['Cad2']=TotalCad2
-		#dados['Reitoria']=TotalReitoria
-		#dados['Praca']=TotalPraca
-		#dados['Externo']=TotalExterno		
+		dados['EventosCad1']=TotalCad1
+		dados['EventosCad2']=TotalCad2
+		dados['EventosReitoria']=TotalReitoria		
+		dados['EventosExterno']=TotalExterno		
 		
 		if TotalDeEventos:
 			DuracaoMediaHoras = float(DuracaoMedia.seconds)/3600
