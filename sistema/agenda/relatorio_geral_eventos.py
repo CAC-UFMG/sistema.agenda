@@ -37,6 +37,7 @@ class relatorio_geral_eventos(BrowserView):
 		TotalEmAnalise=0
 		TotalCancelado=0
 		TotalDeEventos=0		
+		TotalDiasAtendimento=0
 		
 		TotalDeCongressos=0
 		TotalDeColacoes=0
@@ -52,11 +53,12 @@ class relatorio_geral_eventos(BrowserView):
 		DuracaoMedia=datetime.now()-datetime.now()
 		
 		dados['TotalAgendados']=0
-		dados['TotalEmSolicitacoes']=0
+		dados['NaFilaDeEspera']=0
 		dados['TotalTerminado']=0
 		dados['TotalEmAnalise']=0
 		dados['TotalCancelado']=0
-		dados['TotalDeEventos']=0		
+		dados['DemandaTotalDePedidos']=0		
+		dados['DiasDeAtendimento']=0
 		
 		#dados['Congressos']=0
 		#dados['Colacoes']=0
@@ -81,17 +83,28 @@ class relatorio_geral_eventos(BrowserView):
 		eventosAgendados = pastaAgenda.listFolderContents()
 					
 		for evento in eventosSolicitados:
-			if evento.portal_type =='sistema.agenda.evento':
-				TotalDeEventos = TotalDeEventos+1
+			if evento.portal_type =='sistema.agenda.evento':				
 				estado = wf.getInfoFor(evento,'review_state')
 				if estado=='solicitacao':
 					TotalEmSolicitacoes=TotalEmSolicitacoes+1
 				if estado=='agendado':
 					TotalAgendados=TotalAgendados+1
+					dif=0
+					if evento.end.month==evento.start.month:
+						dif=evento.end.day-evento.start.day+1
+					else:
+						dif=evento.end.day+30-evento.start.day+1
+					TotalDiasAtendimento+=dif
 				if estado=='em_analise':
 					TotalEmAnalise=TotalEmAnalise+1
 				if estado=='terminado':
 					TotalTerminado=TotalTerminado+1
+					dif=0
+					if evento.end.month==evento.start.month:
+						dif=evento.end.day-evento.start.day+1
+					else:
+						dif=evento.end.day+30-evento.start.day+1
+					TotalDiasAtendimento+=dif
 				if estado=='cancelado':
 					TotalCancelado=TotalCancelado+1
 				if evento.local:
@@ -126,17 +139,28 @@ class relatorio_geral_eventos(BrowserView):
 							TotalOutros=TotalOutros+1
 				
 		for evento in eventosAgendados:
-			if evento.portal_type =='sistema.agenda.evento':
-				TotalDeEventos = TotalDeEventos+1
+			if evento.portal_type =='sistema.agenda.evento':				
 				estado = wf.getInfoFor(evento,'review_state')
 				if estado=='solicitacao':
 					TotalEmSolicitacoes=TotalEmSolicitacoes+1
 				if estado=='agendado':
 					TotalAgendados=TotalAgendados+1
+					dif=0
+					if evento.end.month==evento.start.month:
+						dif=evento.end.day-evento.start.day+1
+					else:
+						dif=evento.end.day+30-evento.start.day+1
+					TotalDiasAtendimento+=dif
 				if estado=='em_analise':
 					TotalEmAnalise=TotalEmAnalise+1
 				if estado=='terminado':
 					TotalTerminado=TotalTerminado+1
+					dif=0
+					if evento.end.month==evento.start.month:
+						dif=evento.end.day-evento.start.day+1
+					else:
+						dif=evento.end.day+30-evento.start.day+1
+					TotalDiasAtendimento+=dif
 				if estado=='cancelado':
 					TotalCancelado=TotalCancelado+1					
 				if evento.local:
@@ -169,13 +193,14 @@ class relatorio_geral_eventos(BrowserView):
 							TotalDeCongressos=TotalDeCongressos+1
 						else: 
 							TotalOutros=TotalOutros+1
-		
+		TotalDeEventos = TotalAgendados+TotalEmSolicitacoes+TotalTerminado+TotalCancelado+TotalEmAnalise
 		dados['TotalAgendados']=TotalAgendados
-		dados['TotalEmSolicitacoes']=TotalEmSolicitacoes
+		dados['NaFilaDeEspera']=TotalEmSolicitacoes
 		dados['TotalTerminado']=TotalTerminado
 		dados['TotalCancelado']=TotalCancelado
 		dados['TotalEmAnalise']=TotalEmAnalise
-		dados['TotalDeEventos']=TotalDeEventos
+		dados['DemandaTotalDePedidos']=TotalDeEventos
+		dados['DiasDeAtendimento']=TotalDiasAtendimento
 		
 		#dados['Congressos']= TotalDeCongressos
 		#dados['Colacoes']=TotalDeColacoes
