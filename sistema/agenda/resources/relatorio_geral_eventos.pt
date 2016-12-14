@@ -35,19 +35,23 @@
 	  <DIV><h3>Lista de eventos</h3></DIV>
 	  <DIV TAL:CONDITION="python: len(eventos)==0">SEM EVENTOS POR ENQUANTO</DIV>
 	  <DIV class="row-fluid" TAL:CONDITION="python: len(eventos)!=0">
-      <TABLE CLASS="listing">
+      <TABLE CLASS="listing" TAL:DEFINE="global cores python: {'':'','Verde':'green','Vermelho':'red','Amarelo':'#9e690a'}">
 	  	<THEAD>		
 		 <TR>		
-		  <TH TAL:REPEAT="coluna python: ['title','responsavel','id','estado','dataInicial','dataFinal','horaInicial','horaFinal','tipo','email','Publico','telefone','unidade']" TAL:CONTENT="python: coluna.upper()">NOME DA COLUNA</TH>		 
+		  <TH TAL:CONDITION="python: 'Site Administrator' in member.getRoles()"TAL:REPEAT="coluna python: ['Nome do Evento','contato','status','Inicio','Fim','Comeco','Termino','Pri.','Transp.','S.Gerais','Seguranca','Eletrica','email','tel.']" TAL:CONTENT="python: coluna.upper()">NOME DA COLUNA</TH>		 
+		  <TH TAL:CONDITION="python: 'Site Administrator' not in member.getRoles()" TAL:REPEAT="coluna python: ['Nome do Evento','contato','status','Inicio','Fim','Comeco','Termino']" TAL:CONTENT="python: coluna.upper()">NOME DA COLUNA</TH>		 
 		 </TR>		
 		</THEAD>
 		<TBODY>
 	    <TR TAL:REPEAT="evento eventos" >
-		  <TD TAL:REPEAT="coluna python: ['title','responsavel','id','estado','dataInicial','dataFinal','horaInicial','horaFinal','tipo','email','Publico','telefone','unidade']" >
-			<DIV TAL:CONDITION="python: coluna in ['telefone','email','equipe']" >
-				<DIV TAL:CONDITION="python: 'Site Administrator' in member.getRoles()" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
-			</DIV>
-			<DIV TAL:CONDITION="python: coluna not in ['telefone','email','equipe']" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>
+		  <TD TAL:CONDITION="python: 'Site Administrator' in member.getRoles()" TAL:REPEAT="coluna python: ['title','responsavel','estado','dataInicial','dataFinal','horaInicial','horaFinal','prioridadeTransporte','estadoTransporte','estadoServicosGerais','estadoSeguranca','estadoEletrica','email','telefone']" >
+			<DIV  TAL:CONDITION="python: coluna!='title' and coluna!='prioridadeTransporte'" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>					
+			<a TAL:CONDITION="python: coluna=='title'" TAL:CONTENT="python: evento[coluna]" TAL:ATTRIBUTES="HREF python:evento['link']">NOME DA COLUNA</a>					
+			<DIV  TAL:CONDITION="python: coluna=='prioridadeTransporte'" TAL:content="python: evento[coluna]" TAL:ATTRIBUTES="style python:'color:'+ str(cores[evento[coluna]])">NOME DA COLUNA</DIV>								
+		  </TD>		  	  		  		  	  
+		  <TD TAL:CONDITION="python: 'Site Administrator' not in member.getRoles()" TAL:REPEAT="coluna python: ['title','responsavel','estado','dataInicial','dataFinal','horaInicial','horaFinal']" >
+			<DIV  TAL:CONDITION="python: coluna!='title'" TAL:REPLACE="python: evento[coluna]">NOME DA COLUNA</DIV>					
+			<a TAL:CONDITION="python: coluna=='title'" TAL:CONTENT="python: evento[coluna]" TAL:ATTRIBUTES="HREF python:evento['link']">NOME DA COLUNA</a>					
 		  </TD>		  	  		  		  	  
 		</TR>
 		</TBODY>	  

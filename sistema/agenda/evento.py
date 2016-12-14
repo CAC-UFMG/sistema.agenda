@@ -23,6 +23,7 @@ from datetime import datetime,date,time
 from plone.namedfile.interfaces import IImageScaleTraversable
 from z3c.relationfield.schema import RelationChoice, RelationList
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget,CheckBoxFieldWidget
+from z3c.form.browser.radio import RadioWidget
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.WorkflowCore import WorkflowException
@@ -51,7 +52,16 @@ from plone.app.event.dx.behaviors import first_weekday_sun0
 from plone.autoform.interfaces import IFormFieldProvider
 from zope.interface import alsoProvides
 
+
+opcaoEletrica=SimpleVocabulary.fromValues(['Temos a necessidade de auxilio da equipe de eletrica durante o evento','Nao Temos a necessidade de auxilio da equipe de eletrica durante o evento'])
+opcaoSeguranca=SimpleVocabulary.fromValues(['Temos a necessidade de auxilio da seguranca durante o evento','Nao Temos a necessidade de auxilio da seguranca durante o evento'])
+opcaoPaineis=SimpleVocabulary.fromValues(['Solicitamos a disponibilizacao de paineis expositores pretos para o evento','Nao Solicitamos a disponibilizacao de paineis expositores pretos para o evento'])
+opcaoLimpeza=SimpleVocabulary.fromValues(['Solicitamos a limpeza previa do local do evento','Nao Solicitamos a limpeza previa do local do evento'])
+opcaoServicoPrevio=SimpleVocabulary.fromValues(['Solicitamos a ordem de servico previa no local do evento','Nao Solicitamos a ordem de servico previa no local do evento'])	
+opcaoBanheiro=SimpleVocabulary.fromValues(['Solicitamos a abertura dos banheiros durante o evento','Nao Solicitamos a abertura dos banheiros durante o evento'])	
 listaDeCategorias = SimpleVocabulary.fromValues(['Interno','Externo'])
+listaPrioridadeTransporte=SimpleVocabulary.fromValues(['Vermelho','Amarelo','Verde'])
+opcoesEstado = SimpleVocabulary.fromValues(['NA','NAO ENVIADO','SOLICITADO','NAO SERA ATENDIDO','AGENDADO'])
 listaAtendimento = SimpleVocabulary.fromValues(['Emprestimo de equipamento','Emprestimo de espaco','Equipe tecnica'])
 sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
 'Palestra',u'Forum',u'Simposio','Mostra','Congresso','Encontro','Ensaio','Montagem',u'Manutencao',
@@ -59,6 +69,7 @@ u'Capacitacao','Workshop','Prova',u'Recepcao','Solenidade','Festividade',u'Reuni
 sortTiposEvento.sort()
 tiposEvento = SimpleVocabulary.fromValues(sortTiposEvento)
 listaServicosExtras = SimpleVocabulary.fromValues(['Rede WiFi','Transmissao interna','Transmissao via internet','Traducao simultanea',])
+listaVeiculos = SimpleVocabulary.fromValues(['Kombi','Caminhao','Carro'])
 
 def telefoneValidation(data):
 	tel = data.replace("(","")
@@ -157,7 +168,279 @@ class Ievento(form.Schema, IImageScaleTraversable):
 
     form.fieldset('detalhes',label=u"Detalhes do evento", fields=['description'] )
     description=schema.Text(title=u"Descrição do evento",description=u"Informe os equipamentos, os serviços necessários e a programação do evento",required=True)		
+    #anexo = NamedFile(title=u"Anexo",description=u"Quando requerido, adicione aqui o documento da unidade autorizando a realizacao de seu evento.", required=False)
+    #programacao = NamedFile(title=u"Programacao",description=u"Quando possivel anexe a programacao completa do evento.", required=False)
+
+    #ABA transporte	
+    form.fieldset('transporte',label=u"Solicitacao de transporte", fields=[ 'setorTransporte','prioridadeTransporte','responsavelTransporte','emailTransporte','dataSaida',  	
+    'dataRetorno',
+    'tipoVeiculo',
+    'numeroCarregadores',
+    'materialTransportado',
+    'dadosAdicionais',	
+    'localOrigem',
+    'localOrigemResponsavel',
+    'localOrigemCelular',
+    'localOrigemTelefoneFixo',
+    'localOrigemMelhorHorario',
+	'localOrigemSala',
+    'localOrigemAndar',
+    'localOrigemBloco',  	
+    'localDestino',
+    'localDestinoResponsavel',
+    'localDestinoCelular',
+    'localDestinoTelefoneFixo',
+    'localDestinoMelhorHorario',
+	'localDestinoSala',
+    'localDestinoAndar',
+    'localDestinoBloco',	
+    'localDevolucao',
+    'localDevolucaoResponsavel',
+    'localDevolucaoCelular',
+    'localDevolucaoTelefoneFixo',
+    'localDevolucaoMelhorHorario',
+	'localDevolucaoSala',
+    'localDevolucaoAndar',
+    'localDevolucaoBloco','estadoTransporte'] )	
+    form.write_permission(dataSaida=permissaoAdm) 
+    form.write_permission(dataRetorno=permissaoAdm)
+    form.write_permission(tipoVeiculo=permissaoAdm)
+    form.write_permission(numeroCarregadores=permissaoAdm)
+    form.write_permission(materialTransportado=permissaoAdm)
+    form.write_permission(dadosAdicionais=permissaoAdm)
 	
+    form.write_permission(localOrigem=permissaoAdm)
+    form.write_permission(localOrigemResponsavel=permissaoAdm)
+    form.write_permission(localOrigemCelular=permissaoAdm)
+    form.write_permission(localOrigemTelefoneFixo=permissaoAdm)
+    form.write_permission(localOrigemMelhorHorario=permissaoAdm)
+    form.write_permission(localOrigemSala=permissaoAdm)
+    form.write_permission(localOrigemAndar=permissaoAdm)
+    form.write_permission(localOrigemBloco=permissaoAdm)  
+
+	
+    form.write_permission(localDestino=permissaoAdm)
+    form.write_permission(localDestinoResponsavel=permissaoAdm)
+    form.write_permission(localDestinoCelular=permissaoAdm)
+    form.write_permission(localDestinoTelefoneFixo=permissaoAdm)
+    form.write_permission(localDestinoMelhorHorario=permissaoAdm)
+    form.write_permission(localDestinoSala=permissaoAdm)
+    form.write_permission(localDestinoAndar=permissaoAdm)
+    form.write_permission(localDestinoBloco=permissaoAdm)
+	
+    form.write_permission(localDevolucao=permissaoAdm)
+    form.write_permission(localDevolucaoResponsavel=permissaoAdm)
+    form.write_permission(localDevolucaoCelular=permissaoAdm)
+    form.write_permission(localDevolucaoTelefoneFixo=permissaoAdm)
+    form.write_permission(localDevolucaoMelhorHorario=permissaoAdm)
+    form.write_permission(localDevolucaoSala=permissaoAdm)
+    form.write_permission(localDevolucaoAndar=permissaoAdm)
+    form.write_permission(localDevolucaoBloco=permissaoAdm)
+    form.write_permission(setorTransporte=permissaoAdm)
+    form.write_permission(emailTransporte=permissaoAdm)
+    form.write_permission(responsavelTransporte=permissaoAdm)
+	
+	
+    form.read_permission(responsavelTransporte=permissaoAdm) 		
+    form.read_permission(emailTransporte=permissaoAdm) 	
+    form.read_permission(dataSaida=permissaoAdm) 
+    form.read_permission(dataRetorno=permissaoAdm)
+    form.read_permission(tipoVeiculo=permissaoAdm)
+    form.read_permission(numeroCarregadores=permissaoAdm)
+    form.read_permission(materialTransportado=permissaoAdm)
+    form.read_permission(dadosAdicionais=permissaoAdm)	
+    form.read_permission(localOrigem=permissaoAdm)
+    form.read_permission(localOrigemResponsavel=permissaoAdm)
+    form.read_permission(localOrigemCelular=permissaoAdm)
+    form.read_permission(localOrigemTelefoneFixo=permissaoAdm)
+    form.read_permission(localOrigemMelhorHorario=permissaoAdm)
+    form.read_permission(localOrigemSala=permissaoAdm)
+    form.read_permission(localOrigemAndar=permissaoAdm)
+    form.read_permission(localOrigemBloco=permissaoAdm)  	
+    form.read_permission(localDestino=permissaoAdm)
+    form.read_permission(localDestinoResponsavel=permissaoAdm)
+    form.read_permission(localDestinoCelular=permissaoAdm)
+    form.read_permission(localDestinoTelefoneFixo=permissaoAdm)
+    form.read_permission(localDestinoMelhorHorario=permissaoAdm)
+    form.read_permission(localDestinoSala=permissaoAdm)
+    form.read_permission(localDestinoAndar=permissaoAdm)
+    form.read_permission(localDestinoBloco=permissaoAdm)	
+    form.read_permission(localDevolucao=permissaoAdm)
+    form.read_permission(localDevolucaoResponsavel=permissaoAdm)
+    form.read_permission(localDevolucaoCelular=permissaoAdm)
+    form.read_permission(localDevolucaoTelefoneFixo=permissaoAdm)
+    form.read_permission(localDevolucaoMelhorHorario=permissaoAdm)
+    form.read_permission(localDevolucaoSala=permissaoAdm)
+    form.read_permission(localDevolucaoAndar=permissaoAdm)
+    form.read_permission(localDevolucaoBloco=permissaoAdm)
+    form.read_permission(setorTransporte=permissaoAdm)
+    form.read_permission(prioridadeTransporte=permissaoAdm)
+    form.write_permission(prioridadeTransporte=permissaoAdm)
+    
+    setorTransporte=schema.TextLine(title=u"Setor responsavel pelo transporte",required=False)
+    prioridadeTransporte=schema.Choice(title=u"Prioridade do transporte",source=listaPrioridadeTransporte,required=False)
+    responsavelTransporte=schema.TextLine(title=u"Responsavel pelo transporte",required=False)
+    emailTransporte=schema.TextLine(title=u"Email do responsavel pelo transporte",required=False,constraint=validateaddress)
+    dataSaida = schema.Datetime(title=u'Data de saida',required=False)   	
+    dataRetorno = schema.Datetime(title=u'Data de retorno',required=False)
+    tipoVeiculo = schema.Choice(title=u"Tipo do Veiculo",source=listaVeiculos,required=False)
+    numeroCarregadores=schema.TextLine(title=u"Numero de carregadores",constraint=publicoValidation,required=False)
+    materialTransportado=schema.Text(title=u"Material Transportado",description=u"Informe os equipamentos que serao transportados nesta solicitacao.",required=False)		
+    dadosAdicionais=schema.Text(title=u"Dados adicionais",description=u"Informe qualquer outra coisa relevante sobre o transporte.",required=False)		
+	
+    localOrigem=schema.TextLine(title=u"Unidade de Origem",required=False)
+    localOrigemResponsavel=schema.TextLine(title=u"Responsavel no local de origem",required=False)
+    localOrigemCelular=	schema.TextLine(title=u"Celular",constraint=telefoneValidation,default=u'(31)99999-9999',required=False)
+    localOrigemTelefoneFixo=schema.TextLine(title=u"Telefone fixo",constraint=telefoneValidation,default=u'(31)3409-5000',required=False)	
+    localOrigemMelhorHorario=schema.TextLine(title=u"Melhor horario para retirada",required=False)
+    localOrigemSala=schema.TextLine(title=u"Sala de retirada",required=False)
+    localOrigemAndar=schema.TextLine(title=u"Andar",required=False)
+    localOrigemBloco=schema.TextLine(title=u"Bloco",required=False)    
+
+	
+    localDestino=schema.TextLine(title=u"Unidade de destino",required=False)
+    localDestinoResponsavel=schema.TextLine(title=u"Responsavel no local de destino",required=False)
+    localDestinoCelular=schema.TextLine(title=u"Celular",constraint=telefoneValidation,default=u'(31)99999-9999',required=False)
+    localDestinoTelefoneFixo=schema.TextLine(title=u"Telefone fixo",constraint=telefoneValidation,default=u'(31)3409-5000',required=False)	
+    localDestinoMelhorHorario=schema.TextLine(title=u"Melhor horario para recebimento",required=False)
+    localDestinoSala=schema.TextLine(title=u"Sala de entrega",required=False)
+    localDestinoAndar=schema.TextLine(title=u"Andar",required=False)
+    localDestinoBloco=schema.TextLine(title=u"Bloco",required=False)
+	
+    localDevolucao=schema.TextLine(title=u"Unidade de devolucao",required=False)
+    localDevolucaoResponsavel=schema.TextLine(title=u"Responsavel no local de devolucao",required=False)
+    localDevolucaoCelular=schema.TextLine(title=u"Celular",constraint=telefoneValidation,default=u'(31)99999-9999',required=False)
+    localDevolucaoTelefoneFixo=schema.TextLine(title=u"Telefone fixo",constraint=telefoneValidation,default=u'(31)3409-5000',required=False)	
+    localDevolucaoMelhorHorario=schema.TextLine(title=u"Melhor horario para devolucao",required=False)
+    localDevolucaoSala=schema.TextLine(title=u"Sala de entrega",required=False)
+    localDevolucaoAndar=schema.TextLine(title=u"Andar",required=False)
+    localDevolucaoBloco=schema.TextLine(title=u"Bloco",required=False)
+	
+	
+    #ABA servicos gerais	
+    form.fieldset('servicosGerais',label=u"Servicos gerais", fields=['setorServicosGerais',
+	'responsavelServicosGerais',
+	'emailServicosGerais' ,'estadoServicosGerais',
+	'utilizarBanheiro',
+	'responsavelutilizarBanheiro',
+	'celularutilizarBanheiro',
+	'fixoutilizarBanheiro','detalhesutilizarBanheiro',
+	'ordemServicoPrevia',
+	'detalhesordemServicoPrevia',
+	'limpezaPrevia',
+	'detalheslimpezaPrevia',
+	'disponibilizaPaineis',
+	'detalhesdisponibilizaPaineis',
+	'disponibilizaSeguranca',
+	'setordisponibilizaSeguranca','responsaveldisponibilizaSeguranca',
+	'emaildisponibilizaSeguranca',
+	'detalhesdisponibilizaSeguranca', 'estadoSeguranca',
+	'disponibilizaEletrica','setordisponibilizaEletrica','responsaveldisponibilizaEletrica',
+	'emaildisponibilizaEletrica','detalhesdisponibilizaEletrica','estadoEletrica'])	
+	
+    form.write_permission(setorServicosGerais=permissaoAdm)	
+    form.read_permission(setorServicosGerais=permissaoAdm)	
+    form.write_permission(utilizarBanheiro=permissaoAdm)	
+    form.read_permission(utilizarBanheiro=permissaoAdm)	
+    form.write_permission(responsavelutilizarBanheiro=permissaoAdm)	
+    form.read_permission(responsavelutilizarBanheiro=permissaoAdm)
+    form.write_permission(celularutilizarBanheiro=permissaoAdm)	
+    form.read_permission(celularutilizarBanheiro=permissaoAdm)
+    form.write_permission(fixoutilizarBanheiro=permissaoAdm)	
+    form.read_permission(fixoutilizarBanheiro=permissaoAdm)
+    form.write_permission(emailServicosGerais=permissaoAdm)	
+    form.read_permission(emailServicosGerais=permissaoAdm)
+    form.write_permission(responsavelServicosGerais=permissaoAdm)	
+    form.read_permission(responsavelServicosGerais=permissaoAdm)
+    setorServicosGerais=schema.TextLine(title=u"Setor responsavel pelos servicos gerais",required=False)
+    responsavelServicosGerais=schema.TextLine(title=u"Responsavel pelos servicos gerais",required=False)
+    emailServicosGerais=schema.TextLine(title=u"Email do responsavel pelos servicos gerais",required=False,constraint=validateaddress)
+    utilizarBanheiro=schema.Choice(title=u"Necessita utilizar banheiro?",required=False,source=opcaoBanheiro)
+    form.widget('utilizarBanheiro', RadioWidget,onclick=u'desabilitaCaixaTexto(this)')
+    responsavelutilizarBanheiro=schema.TextLine(title=u"Responsavel pela guarda da chave",required=False)
+    celularutilizarBanheiro=schema.TextLine(title=u"Celular",constraint=telefoneValidation,default=u'(31)99999-9999',required=False)
+    fixoutilizarBanheiro=schema.TextLine(title=u"Telefone fixo",constraint=telefoneValidation,default=u'(31)3409-5000',required=False)	
+    form.write_permission(detalhesutilizarBanheiro=permissaoAdm)	
+    form.read_permission(detalhesutilizarBanheiro=permissaoAdm)	    
+    detalhesutilizarBanheiro=schema.Text(title=u"Detalhes do uso dos banheiros",required=False)
+	
+    form.write_permission(ordemServicoPrevia=permissaoAdm)	
+    form.read_permission(ordemServicoPrevia=permissaoAdm)
+    ordemServicoPrevia=schema.Choice(title=u"Necessita ordem de servico previa?",required=False,source=opcaoServicoPrevio)
+    form.widget('ordemServicoPrevia', RadioWidget,onclick=u'desabilitaCaixaTexto(this)')
+    form.write_permission(detalhesordemServicoPrevia=permissaoAdm)	
+    form.read_permission(detalhesordemServicoPrevia=permissaoAdm)	    
+    detalhesordemServicoPrevia=schema.Text(title=u"Detalhes ordem servico previa",required=False)		
+	
+    form.write_permission(limpezaPrevia=permissaoAdm)	
+    form.read_permission(limpezaPrevia=permissaoAdm)
+    limpezaPrevia=schema.Choice(title=u"Necessita limpeza previa?",required=False,source=opcaoLimpeza)
+    form.widget('limpezaPrevia', RadioWidget,onclick=u'desabilitaCaixaTexto(this)')
+    form.write_permission(detalheslimpezaPrevia=permissaoAdm)	
+    form.read_permission(detalheslimpezaPrevia=permissaoAdm)	    
+    detalheslimpezaPrevia=schema.Text(title=u"Detalhes limpeza previa",required=False)
+	
+    form.write_permission(disponibilizaPaineis=permissaoAdm)	
+    form.read_permission(disponibilizaPaineis=permissaoAdm)
+    disponibilizaPaineis=schema.Choice(title=u"Necessita disponibilizar paineis expositores?",required=False,source=opcaoPaineis)
+    form.widget('disponibilizaPaineis', RadioWidget,onclick=u'desabilitaCaixaTexto(this)')
+    form.write_permission(detalhesdisponibilizaPaineis=permissaoAdm)	
+    form.read_permission(detalhesdisponibilizaPaineis=permissaoAdm)	    
+    detalhesdisponibilizaPaineis=schema.Text(title=u"Detalhes da disponibilizacao dos paineis",required=False)
+
+    #ABA seguranca
+    #form.fieldset('seguranca',label=u"Seguranca", fields=['setorSeguranca','disponibilizaSeguranca','detalhesdisponibilizaSeguranca', 'setorEletrica','disponibilizaEletrica'])	
+    form.write_permission(disponibilizaSeguranca=permissaoAdm)		
+    form.read_permission(disponibilizaSeguranca=permissaoAdm)
+    form.write_permission(setordisponibilizaSeguranca=permissaoAdm)	
+    form.read_permission(setordisponibilizaSeguranca=permissaoAdm)
+    form.write_permission(emaildisponibilizaSeguranca=permissaoAdm)	
+    form.read_permission(emaildisponibilizaSeguranca=permissaoAdm)
+    form.write_permission(responsaveldisponibilizaSeguranca=permissaoAdm)	
+    form.read_permission(responsaveldisponibilizaSeguranca=permissaoAdm)
+    setordisponibilizaSeguranca=schema.TextLine(title=u"Setor responsavel pela seguranca",required=False)
+    responsaveldisponibilizaSeguranca=schema.TextLine(title=u"Responsavel pela seguranca",required=False)
+    emaildisponibilizaSeguranca=schema.TextLine(title=u"Email do responsavel pela seguranca",required=False,constraint=validateaddress)
+    disponibilizaSeguranca=schema.Choice(title=u"Necessita seguranca local?",required=False,source=opcaoSeguranca)
+    form.widget('disponibilizaSeguranca', RadioWidget,onclick=u'desabilitaCaixaTexto(this)')
+    form.write_permission(detalhesdisponibilizaSeguranca=permissaoAdm)	
+    form.read_permission(detalhesdisponibilizaSeguranca=permissaoAdm)	    
+    detalhesdisponibilizaSeguranca=schema.Text(title=u"Detalhes da disponibilizacao de segurancas",required=False)
+	
+    #ABA apoio eletrica
+    #form.fieldset('apoioEletrica',label=u"Apoio eletrica ", fields=['setorEletrica','disponibilizaEletrica' ])		
+    form.write_permission(disponibilizaEletrica=permissaoAdm)	
+    form.read_permission(disponibilizaEletrica=permissaoAdm)
+    form.write_permission(setordisponibilizaEletrica=permissaoAdm)	
+    form.read_permission(setordisponibilizaEletrica=permissaoAdm)
+    form.write_permission(responsaveldisponibilizaEletrica=permissaoAdm)	
+    form.read_permission(responsaveldisponibilizaEletrica=permissaoAdm)
+    form.write_permission(emaildisponibilizaEletrica=permissaoAdm)	
+    form.read_permission(emaildisponibilizaEletrica=permissaoAdm)	
+    setordisponibilizaEletrica=schema.TextLine(title=u"Setor responsavel pela eletrica",required=False)	
+    responsaveldisponibilizaEletrica=schema.TextLine(title=u"Responsavel pela eletrica",required=False)
+    emaildisponibilizaEletrica=schema.TextLine(title=u"Email do responsavel pela eletrica",required=False,constraint=validateaddress)
+    disponibilizaEletrica=schema.Choice(title=u"Necessita apoio da equipe de eletrica?",required=False,source=opcaoEletrica)
+    form.widget('disponibilizaEletrica', RadioWidget,onclick=u'desabilitaCaixaTexto(this)')  
+    form.write_permission(detalhesdisponibilizaEletrica=permissaoAdm)	
+    form.read_permission(detalhesdisponibilizaEletrica=permissaoAdm)	
+    detalhesdisponibilizaEletrica=schema.Text(title=u"Detalhes do apoio da equipe de eletrica",required=False)	
+	
+	
+    form.write_permission(estadoTransporte=permissaoAdm)	
+    form.read_permission(estadoTransporte=permissaoAdm)
+    form.write_permission(estadoServicosGerais=permissaoAdm)	
+    form.read_permission(estadoServicosGerais=permissaoAdm)
+    form.write_permission(estadoSeguranca=permissaoAdm)	
+    form.read_permission(estadoSeguranca=permissaoAdm)
+    form.write_permission(estadoEletrica=permissaoAdm)	
+    form.read_permission(estadoEletrica=permissaoAdm)
+	
+    estadoTransporte=schema.Choice(title=u"Estado do pedido de transporte",required=False,source=opcoesEstado)
+    estadoServicosGerais=schema.Choice(title=u"Estado do pedido de servicos gerais",required=False,source=opcoesEstado)
+    estadoSeguranca=schema.Choice(title=u"Estado do pedido de seguranca",required=False,source=opcoesEstado)	
+    estadoEletrica=schema.Choice(title=u"Estado do pedido de eletrica",required=False,source=opcoesEstado)
+
     @invariant
     def validaDados(data):
       modificaEvento(data)
@@ -445,7 +728,7 @@ def enviaEmail(solicitacao):
 		mensagem = mensagem + str(dado).upper()+" "+ str(info[solicitacao.id][dado])+"\n"    
 		
 	mensagem = mensagem + "\n\n ESTES DADOS FORAM ENVIADOS APENAS PARA SEREM CONFERIDOS . ESTA MENSAGEM NUNCA DEVE SER RESPONDIDA."  
-	emailsEnvolvidos = solicitacao.email+";"+emailAgendador
+	emailsEnvolvidos = solicitacao.email#+";"+emailAgendador
 	titulo="Proposta de agendamento de "+solicitacao.responsavel.encode('iso-8859-1')
 	emailConta = 'nav@cac.ufmg.br'
 	#existe um comando que é validateSingleEmailAddress para que serve?
@@ -523,7 +806,6 @@ def obtemTodasInformacoesDeConteudo(conteudo):
 class evento(Item):
     grok.implements(Ievento)
 
- 
 
 class SampleView(grok.View):
     """ sample view class """
@@ -531,6 +813,366 @@ class SampleView(grok.View):
     grok.context(Ievento)
     grok.require('sistema.agenda.visualizaEvento')
 
-    # grok.name('view')
 
-    # Add view methods here
+class Iemails(form.Schema):
+	""" Define form fields """	
+	   
+	corpoEmailTransporte=schema.Text(title=u"Solicitacao de transporte",required=False)
+	corpoEmailServicosGerais=schema.Text(title=u"Solicitacao de servicos gerais",required=False)
+	corpoEmailSeguranca=schema.Text(title=u"Solicitacao de seguranca",required=False)
+	corpoEmailEletrica=schema.Text(title=u"Solicitacao de apoio equipe eletrica",required=False)
+
+@form.default_value(field=Iemails['corpoEmailTransporte'])
+def corpoEmailTransporteDefaultValue(data):
+	evento = data.context
+	
+	dSaida=getattr(evento,'dataSaida','')
+	dRetorno=getattr(evento,'dataRetorno','')	
+	if dSaida!='':
+		
+		strDia=str(dSaida.day)
+		if dSaida.day <10:
+			strDia="0"+str(dSaida.day)
+		
+		strMes=str(dSaida.month)
+		if dSaida.month <10:
+			strMes="0"+str(dSaida.month)
+			
+		strh=str(dSaida.hour)		
+		if dSaida.hour <10:
+			strh="0"+str(dSaida.hour)
+		
+		strm=str(dSaida.minute)
+		if dSaida.minute <10:
+			strm="0"+str(dSaida.minute)
+	
+
+			
+	if dRetorno!='':
+		
+		strDiaf=str(dRetorno.day)
+		if dRetorno.day <10:
+			strDiaf="0"+str(dRetorno.day)
+			
+		strMesf=str(dRetorno.month)
+		if dRetorno.month <10:
+			strMesf="0"+str(dRetorno.month)
+	
+		strhf=str(dRetorno.hour)
+		if dRetorno.hour <10:
+			strhf="0"+str(dRetorno.hour)
+			
+		strmf=str(dRetorno.minute)
+		if dRetorno.minute <10:
+			strmf="0"+str(dRetorno.minute)
+		
+		dataInicial= strDia+'/'+strMes+' de '+str(dSaida.year)
+		dataFinal=strDiaf+'/'+strMesf+' de '+str(dRetorno.year)
+		horaInicial=strh+':'+strm
+		horaFinal=strhf+':'+strmf
+		dSaida=dataInicial+" "+horaInicial
+		dRetorno=dataFinal+' '+horaFinal
+	corpoEmail="""
+Destinatario: %s
+Copia: infra@cac.ufmg.br
+Titulo do email: Solicitacao de transporte para %s (evento - %s)
+=======
+Prezados responsaveis do %s,
+
+Atraves deste email, solicitamos o agendamento de transporte conforme indicado abaixo:
+
+Prioridade deste pedido: %s  
+
+Nome do evento: %s
+
+Local de retirada: %s %s
+Horario de retirada: %s 
+Contato para retirada do material transportado: %s %s %s
+
+Local de entrega: %s %s andar:%s bloco:%s
+Horario de entrega: %s 
+Contato para entrega do material transportado: %s %s %s
+
+Apos o evento, retornar os itens transportados conforme:
+
+Local de devolucao:%s %s
+Horario de devolucao:%s
+Contato para devolucao do material: %s %s %s
+
+Para essa solicitacao, julgamos ser adequado o seguinte veiculo: %s
+Com a seguinte equipe de apoio: %s carregadores
+
+OBSERVACOES: %s . %s
+""" %(evento.emailTransporte,dSaida,evento.prioridadeTransporte,evento.setorTransporte,evento.prioridadeTransporte,
+evento.title,evento.localOrigem,evento.localOrigemSala,dSaida,
+evento.localOrigemResponsavel,evento.localOrigemCelular,evento.localOrigemTelefoneFixo,
+evento.localDestino,evento.localDestinoSala,evento.localDestinoAndar,evento.localDestinoBloco,evento.localDestinoMelhorHorario,
+evento.localDestinoResponsavel,evento.localDestinoCelular,evento.localDestinoTelefoneFixo,
+evento.localDevolucao,evento.localDevolucaoSala,dRetorno,
+evento.localDevolucaoResponsavel,evento.localDevolucaoCelular,evento.localDevolucaoTelefoneFixo,
+evento.tipoVeiculo,evento.numeroCarregadores,evento.materialTransportado,evento.dadosAdicionais)
+
+	corpoEmail+="""
+Duvidas, favor retornar este email para infra@cac.ufmg.br.
+
+Obrigado,
+
+Atenciosamente,
+
+Infraestrutura CAC,
+Tel : 3409-3861,
+Predio da Biblioteca Central - 1 Andar.
+Campus Pampulha
+"""
+
+	return corpoEmail.encode('iso-8859-1')
+
+@form.default_value(field=Iemails['corpoEmailSeguranca'])
+def corpoEmailSegurancaDefaultValue(data):
+	evento = data.context
+	strDia=str(evento.start.astimezone(timezone(evento.timezone)).day)
+	if evento.start.astimezone(timezone(evento.timezone)).day <10:
+		strDia="0"+str(evento.start.astimezone(timezone(evento.timezone)).day)
+	
+	strMes=str(evento.start.astimezone(timezone(evento.timezone)).month)
+	if evento.start.astimezone(timezone(evento.timezone)).month <10:
+		strMes="0"+str(evento.start.astimezone(timezone(evento.timezone)).month)
+		
+	strDiaf=str(evento.end.astimezone(timezone(evento.timezone)).day)
+	if evento.end.astimezone(timezone(evento.timezone)).day <10:
+		strDiaf="0"+str(evento.end.astimezone(timezone(evento.timezone)).day)
+		
+	strMesf=str(evento.end.astimezone(timezone(evento.timezone)).month)
+	if evento.end.astimezone(timezone(evento.timezone)).month <10:
+		strMesf="0"+str(evento.end.astimezone(timezone(evento.timezone)).month)
+		
+	strh=str(evento.start.astimezone(timezone(evento.timezone)).hour)
+	if evento.start.astimezone(timezone(evento.timezone)).hour <10:
+		strh="0"+str(evento.start.astimezone(timezone(evento.timezone)).hour)
+		
+	strm=str(evento.start.astimezone(timezone(evento.timezone)).minute)
+	if evento.start.astimezone(timezone(evento.timezone)).minute <10:
+		strm="0"+str(evento.start.astimezone(timezone(evento.timezone)).minute)
+		
+	strhf=str(evento.end.astimezone(timezone(evento.timezone)).hour)
+	if evento.end.astimezone(timezone(evento.timezone)).hour <10:
+		strhf="0"+str(evento.end.astimezone(timezone(evento.timezone)).hour)
+		
+	strmf=str(evento.end.astimezone(timezone(evento.timezone)).minute)
+	if evento.end.astimezone(timezone(evento.timezone)).minute <10:
+		strmf="0"+str(evento.end.astimezone(timezone(evento.timezone)).minute)
+		
+	dataInicial= strDia+'/'+strMes+' de '+str(evento.start.astimezone(timezone(evento.timezone)).year)
+	dataFinal=strDiaf+'/'+strMesf+' de '+str(evento.end.astimezone(timezone(evento.timezone)).year)
+	horaInicial=strh+':'+strm
+	horaFinal=strhf+':'+strmf
+	corpoEmail="""
+Destinatario: %s
+Copia: infra@cac.ufmg.br
+Titulo do email: Solicitacao de Seguranca Universitaria para %s
+=======
+Prezado responsavel pela Seguranca Universitaria,
+
+Atraves deste email, solicitamos apoio da seguranca universitaria conforme itens abaixo:
+
+Nome do evento: %s
+Data de comeco: %s
+Data de Termino:%s
+Contato: %s %s %s
+
+Detalhes: %s
+
+Duvidas favor retornar este email para infra@cac.ufmg.br.
+
+Obrigado,
+
+Atenciosamente,
+
+Infraestrutura CAC,
+Tel : 3409-3861,
+Predio da Biblioteca Central - 1 Andar.
+Campus Pampulha"""%(evento.emaildisponibilizaSeguranca,dataInicial+" "+horaInicial,
+evento.title,dataInicial+" "+horaInicial,dataFinal+" "+horaFinal,evento.responsavel,evento.telefone,
+evento.celular,evento.detalhesdisponibilizaSeguranca)
+	return corpoEmail.encode('iso-8859-1')
+	
+@form.default_value(field=Iemails['corpoEmailServicosGerais'])
+def corpoEmailServicosGeraisDefaultValue(data):
+	evento = data.context
+	strDia=str(evento.start.astimezone(timezone(evento.timezone)).day)
+	if evento.start.astimezone(timezone(evento.timezone)).day <10:
+		strDia="0"+str(evento.start.astimezone(timezone(evento.timezone)).day)
+	
+	strMes=str(evento.start.astimezone(timezone(evento.timezone)).month)
+	if evento.start.astimezone(timezone(evento.timezone)).month <10:
+		strMes="0"+str(evento.start.astimezone(timezone(evento.timezone)).month)
+		
+	strDiaf=str(evento.end.astimezone(timezone(evento.timezone)).day)
+	if evento.end.astimezone(timezone(evento.timezone)).day <10:
+		strDiaf="0"+str(evento.end.astimezone(timezone(evento.timezone)).day)
+		
+	strMesf=str(evento.end.astimezone(timezone(evento.timezone)).month)
+	if evento.end.astimezone(timezone(evento.timezone)).month <10:
+		strMesf="0"+str(evento.end.astimezone(timezone(evento.timezone)).month)
+		
+	strh=str(evento.start.astimezone(timezone(evento.timezone)).hour)
+	if evento.start.astimezone(timezone(evento.timezone)).hour <10:
+		strh="0"+str(evento.start.astimezone(timezone(evento.timezone)).hour)
+		
+	strm=str(evento.start.astimezone(timezone(evento.timezone)).minute)
+	if evento.start.astimezone(timezone(evento.timezone)).minute <10:
+		strm="0"+str(evento.start.astimezone(timezone(evento.timezone)).minute)
+		
+	strhf=str(evento.end.astimezone(timezone(evento.timezone)).hour)
+	if evento.end.astimezone(timezone(evento.timezone)).hour <10:
+		strhf="0"+str(evento.end.astimezone(timezone(evento.timezone)).hour)
+		
+	strmf=str(evento.end.astimezone(timezone(evento.timezone)).minute)
+	if evento.end.astimezone(timezone(evento.timezone)).minute <10:
+		strmf="0"+str(evento.end.astimezone(timezone(evento.timezone)).minute)
+		
+	dataInicial= strDia+'/'+strMes+' de '+str(evento.start.astimezone(timezone(evento.timezone)).year)
+	dataFinal=strDiaf+'/'+strMesf+' de '+str(evento.end.astimezone(timezone(evento.timezone)).year)
+	horaInicial=strh+':'+strm
+	horaFinal=strhf+':'+strmf
+	corpoEmail="""
+Destinatario: %s
+Copia: infra@cac.ufmg.br
+Titulo do email: Solicitacao de servicos gerais para %s 
+=======
+Prezado responsavel pelos servicos gerais do %s,
+
+Atraves deste email, solicitamos o agendamento de servicos gerais conforme indicado abaixo:
+
+Nome do evento: %s
+Data de comeco: %s
+Data de Termino:%s
+Contato: %s %s %s
+
+""" %(evento.emailServicosGerais,dataInicial+" "+horaInicial,evento.setorServicosGerais,
+evento.title,dataInicial+" "+horaInicial,dataFinal+" "+horaFinal,evento.responsavel,evento.telefone,
+evento.celular)
+
+	if evento.ordemServicoPrevia and evento.ordemServicoPrevia[0:3] != 'Nao':
+		corpoEmail+="""
+Solicitamos ordem de servico previa junto ao DEMAI para o evento: %s.
+Detalhes:%s
+"""%(evento.title, evento.detalhesordemServicoPrevia)
+
+	if evento.limpezaPrevia and evento.limpezaPrevia[0:3] != 'Nao':
+		corpoEmail+="""
+Solicitamos a limpeza previa para: %s.
+Detalhes:%s.
+"""%(evento.title, evento.detalheslimpezaPrevia)
+
+	if evento.utilizarBanheiro and evento.utilizarBanheiro[0:3] != 'Nao':
+		corpoEmail+="""
+Solicitamos a abertura dos banheiros para %s.
+Detalhes: %s.
+"""%(evento.title, evento.detalhesutilizarBanheiro)
+
+	if evento.disponibilizaPaineis and evento.disponibilizaPaineis[0:3] != 'Nao':
+		corpoEmail+="""
+Solicitamos a disponibilidade de paineis expositores para o evento: %s.
+Detalhes: %s.
+"""%(evento.title, evento.detalhesdisponibilizaPaineis)
+
+	corpoEmail+="""
+Duvidas favor retornar este email para infra@cac.ufmg.br.
+
+Obrigado,
+
+Atenciosamente,
+
+Infraestrutura CAC,
+Tel : 3409-3861,
+Predio da Biblioteca Central - 1 Andar.
+Campus Pampulha
+"""
+	return corpoEmail.encode('iso-8859-1')
+
+
+@form.default_value(field=Iemails['corpoEmailEletrica'])
+def corpoEmailEletricaDefaultValue(data):
+	evento = data.context
+	strDia=str(evento.start.astimezone(timezone(evento.timezone)).day)
+	if evento.start.astimezone(timezone(evento.timezone)).day <10:
+		strDia="0"+str(evento.start.astimezone(timezone(evento.timezone)).day)
+	
+	strMes=str(evento.start.astimezone(timezone(evento.timezone)).month)
+	if evento.start.astimezone(timezone(evento.timezone)).month <10:
+		strMes="0"+str(evento.start.astimezone(timezone(evento.timezone)).month)
+		
+	strDiaf=str(evento.end.astimezone(timezone(evento.timezone)).day)
+	if evento.end.astimezone(timezone(evento.timezone)).day <10:
+		strDiaf="0"+str(evento.end.astimezone(timezone(evento.timezone)).day)
+		
+	strMesf=str(evento.end.astimezone(timezone(evento.timezone)).month)
+	if evento.end.astimezone(timezone(evento.timezone)).month <10:
+		strMesf="0"+str(evento.end.astimezone(timezone(evento.timezone)).month)
+		
+	strh=str(evento.start.astimezone(timezone(evento.timezone)).hour)
+	if evento.start.astimezone(timezone(evento.timezone)).hour <10:
+		strh="0"+str(evento.start.astimezone(timezone(evento.timezone)).hour)
+		
+	strm=str(evento.start.astimezone(timezone(evento.timezone)).minute)
+	if evento.start.astimezone(timezone(evento.timezone)).minute <10:
+		strm="0"+str(evento.start.astimezone(timezone(evento.timezone)).minute)
+		
+	strhf=str(evento.end.astimezone(timezone(evento.timezone)).hour)
+	if evento.end.astimezone(timezone(evento.timezone)).hour <10:
+		strhf="0"+str(evento.end.astimezone(timezone(evento.timezone)).hour)
+		
+	strmf=str(evento.end.astimezone(timezone(evento.timezone)).minute)
+	if evento.end.astimezone(timezone(evento.timezone)).minute <10:
+		strmf="0"+str(evento.end.astimezone(timezone(evento.timezone)).minute)
+		
+	dataInicial= strDia+'/'+strMes+' de '+str(evento.start.astimezone(timezone(evento.timezone)).year)
+	dataFinal=strDiaf+'/'+strMesf+' de '+str(evento.end.astimezone(timezone(evento.timezone)).year)
+	horaInicial=strh+':'+strm
+	horaFinal=strhf+':'+strmf
+	corpoEmail="""
+Destinatario: %s
+Copia: infra@cac.ufmg.br
+Titulo do email: Solicitacao de apoio de equipe eletrica para %s
+=======
+Prezado responsavel pelo apoio de equipe eletrica,
+
+Atraves deste email, solicitamos apoio da equipe de eletrica conforme itens abaixo:
+
+Nome do evento: %s
+Data de comeco: %s
+Data de Termino:%s
+Contato: %s %s %s
+
+Detalhes:%s
+
+Duvidas favor retornar este email para infra@cac.ufmg.br.
+
+Obrigado,
+
+Atenciosamente,
+
+Infraestrutura CAC,
+Tel : 3409-3861,
+Predio da Biblioteca Central - 1 Andar.
+Campus Pampulha"""%(evento.emaildisponibilizaEletrica,dataInicial+" "+horaInicial,
+evento.title,dataInicial+" "+horaInicial,dataFinal+" "+horaFinal,evento.responsavel,evento.telefone,
+evento.celular,evento.detalhesdisponibilizaEletrica)
+
+	return corpoEmail.encode('iso-8859-1')
+	
+	
+class emails(form.SchemaForm):
+    """ Define Form handling
+    """
+    grok.name('emails')
+    grok.require('sistema.agenda.modificaEvento')
+    grok.context(Ievento)
+
+    schema = Iemails
+    ignoreContext = True
+
+    label = u"Emails para solicitacao de recursos de atendimento"
+    
+

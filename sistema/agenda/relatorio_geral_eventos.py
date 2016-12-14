@@ -265,6 +265,7 @@ class relatorio_geral_eventos(BrowserView):
 		dados['dataFinal']=strDiaf+'/'+strMesf+'/'+str(conteudo.end.year)
 		dados['horaInicial']=strh+':'+strm
 		dados['horaFinal']=strhf+':'+strmf
+		dados['link']=conteudo.absolute_url()
 		
 		for campo,val in campos:
 			valor =getattr(conteudo,campo)

@@ -1,13 +1,30 @@
 input#form-widgets-local-widgets-query {
-	visibility:hidden !important;
-	
+	visibility:hidden !important;	
+}
+
+#formfield-form-widgets-responsavelutilizarBanheiro,
+#formfield-form-widgets-celularutilizarBanheiro,
+#formfield-form-widgets-fixoutilizarBanheiro,	
+#formfield-form-widgets-detalhesordemServicoPrevia,	
+#formfield-form-widgets-detalheslimpezaPrevia,	
+#formfield-form-widgets-detalhesdisponibilizaPaineis,	
+#formfield-form-widgets-setordisponibilizaSeguranca,
+#formfield-form-widgets-responsaveldisponibilizaSeguranca,
+#formfield-form-widgets-emaildisponibilizaSeguranca,
+#formfield-form-widgets-detalhesdisponibilizaSeguranca, 
+#formfield-form-widgets-setordisponibilizaEletrica,
+#formfield-form-widgets-responsaveldisponibilizaEletrica,
+#formfield-form-widgets-emaildisponibilizaEletrica,
+#formfield-form-widgets-detalhesutilizarBanheiro,
+#formfield-form-widgets-detalhesdisponibilizaEletrica	{
+	display:none;	
 }
 
 dl.error, div#formfield-form-widgets-local{
 	font-size:150% !important;	
 }
 
-input#form-widgets-equipe-widgets-query{
+input#form-widgets-equipe-widgets-query,.documentDescription{
 	visibility:hidden !important;
 	
 }

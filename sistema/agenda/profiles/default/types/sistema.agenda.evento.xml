@@ -49,4 +49,8 @@
     url_expr="string:${object_url}/edit" visible="True">
     <permission value="sistema.agenda: ModificaEvento" />
   </action>
+  <action title="Visualiza emails" action_id="emails" category="object" condition_expr=""
+    url_expr="string:${object_url}/@@emails" visible="True">
+    <permission value="sistema.agenda: ModificaEvento" />
+  </action>  
 </object>
