@@ -897,7 +897,14 @@ def corpoEmailTransporteDefaultValue(data):
 	evento = data.context
 	
 	dSaida=getattr(evento,'dataSaida','')
-	dRetorno=getattr(evento,'dataRetorno','')	
+	dRetorno=getattr(evento,'dataRetorno','')
+	
+	if dSaida==None:
+		dSaida=''
+		
+	if dRetorno==None:
+		dRetorno=''		
+		
 	if dSaida!='':
 		
 		strDia=str(dSaida.day)
