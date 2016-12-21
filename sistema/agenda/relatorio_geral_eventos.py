@@ -60,10 +60,10 @@ class relatorio_geral_eventos(BrowserView):
 		dados['DemandaTotalDePedidos']=0		
 		dados['DiasDeAtendimento']=0
 		
-		#dados['Congressos']=0
-		#dados['Colacoes']=0
-		#dados['Aulas']=0
-		#dados['OutrosTiposDeEventos']=0
+		dados['Congressos']=0
+		dados['Formaturas']=0
+		dados['AulasProvasDefesas']=0
+		dados['ReunioesApresentacoesCulturais']=0
 		
 		dados['EventosCad1']=0
 		dados['EventosCad2']=0
@@ -202,10 +202,10 @@ class relatorio_geral_eventos(BrowserView):
 		dados['DemandaTotalDePedidos']=TotalDeEventos
 		dados['DiasDeAtendimento']=TotalDiasAtendimento
 		
-		#dados['Congressos']= TotalDeCongressos
-		#dados['Colacoes']=TotalDeColacoes
-		#dados['Aulas']=TotalDeAulas
-		#dados['OutrosTiposDeEventos']=TotalOutros
+		dados['Congressos']= TotalDeCongressos		
+		dados['Formaturas']=TotalDeColacoes
+		dados['AulasProvasDefesas']=TotalDeAulas
+		dados['ReunioesApresentacoesCulturais']=TotalOutros		
 		
 		dados['EventosCad1']=TotalCad1
 		dados['EventosCad2']=TotalCad2
