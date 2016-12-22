@@ -21,17 +21,28 @@
 		
 		<TABLE CLASS="listing">
 	  	<THEAD>	
-			<TH TAL:REPEAT="coluna python: sorted(['TotalAgendados','NaFilaDeEspera','TotalTerminado','TotalCancelado','TotalEmAnalise','DemandaTotalDePedidos','DiasDeAtendimento','EventosCad1','EventosCad2','EventosReitoria','EventosExterno'])" TAL:CONTENT="coluna">Estatística</TH>			
+			<TH TAL:REPEAT="coluna python: sorted(['TotalAgendados','NaFilaDeEspera','TotalTerminado','TotalCancelado','TotalEmAnalise','DemandaTotalDePedidos','DiasDeAtendimento'])" TAL:CONTENT="coluna">Estatística</TH>			
 		</THEAD>	
 		<TBODY>
 		 <TR>		  
-		  <TD TAL:REPEAT="coluna python: sorted(['TotalAgendados','NaFilaDeEspera','TotalTerminado','TotalCancelado','TotalEmAnalise','DemandaTotalDePedidos','DiasDeAtendimento','EventosCad1','EventosCad2','EventosReitoria','EventosExterno'])">			
+		  <TD TAL:REPEAT="coluna python: sorted(['TotalAgendados','NaFilaDeEspera','TotalTerminado','TotalCancelado','TotalEmAnalise','DemandaTotalDePedidos','DiasDeAtendimento'])">			
 				<DIV TAL:REPLACE="python: estatistica[coluna]">NOME DA COLUNA</DIV>			
 		  </TD>		  	  		  		  	  
 		 </TR>
 		</TBODY>	  
 	  </TABLE>
-	  
+		<TABLE CLASS="listing">
+	  	<THEAD>	
+			<TH TAL:REPEAT="coluna python: sorted(['EventosCad1','EventosCad2','EventosReitoria','EventosExterno'])" TAL:CONTENT="coluna">Estatística</TH>			
+		</THEAD>	
+		<TBODY>
+		 <TR>		  
+		  <TD TAL:REPEAT="coluna python: sorted(['EventosCad1','EventosCad2','EventosReitoria','EventosExterno'])">			
+				<DIV TAL:REPLACE="python: estatistica[coluna]">NOME DA COLUNA</DIV>			
+		  </TD>		  	  		  		  	  
+		 </TR>
+		</TBODY>	  
+	  </TABLE>  
 	  <TABLE CLASS="listing">
 	  	<THEAD>	
 			<TH TAL:REPEAT="coluna python: ['Congressos','Formaturas','AulasProvasDefesas','ReunioesApresentacoesCulturais']" TAL:CONTENT="coluna">Estatística</TH>			
