@@ -31,6 +31,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from zope.schema import getFieldsInOrder
 from z3c.relationfield.relation import RelationValue
 from plone.event.interfaces import IEventAccessor
+from plone.app.z3cform.wysiwyg import WysiwygFieldWidget
 
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from sistema.agenda.membrodeequipe import ImembroDeEquipe
@@ -167,6 +168,7 @@ class Ievento(form.Schema, IImageScaleTraversable):
     cpf=schema.TextLine(title=u"CPF",constraint=cpfValidation, description=u'Informe o cpf do responsável pelo evento',required=True)
 
     form.fieldset('detalhes',label=u"Detalhes do evento", fields=['description'] )
+    form.widget('description', WysiwygFieldWidget)
     description=schema.Text(title=u"Descrição do evento",description=u"Informe os equipamentos, os serviços necessários e a programação do evento",required=True)		
     #anexo = NamedFile(title=u"Anexo",description=u"Quando requerido, adicione aqui o documento da unidade autorizando a realizacao de seu evento.", required=False)
     #programacao = NamedFile(title=u"Programacao",description=u"Quando possivel anexe a programacao completa do evento.", required=False)
@@ -660,7 +662,9 @@ def enviaEmail(solicitacao):
 	mt = getToolByName(solicitacao,'portal_membership')
 	emailAgendador = mt.getMemberById('agendador').email
 	wf = getToolByName(solicitacao,'portal_workflow')
-	estado = str(wf.getInfoFor(solicitacao,'review_state'))
+	estado = str(wf.getInfoFor(solicitacao,'review_state'))	
+	comentarios = str(wf.getInfoFor(solicitacao,'comments'))
+	#comentarios = str(comentarios.encode(
 	resp=info[solicitacao.id]['responsavel']
 	resp=retiraAcento(resp)
 	titulo = retiraAcento(info[solicitacao.id]['title'])
@@ -712,6 +716,8 @@ def enviaEmail(solicitacao):
 	mensagem = mensagem + str("Data inicial: ").upper()+ dataInicial+' às '+horaInicial+"\n" 
 	mensagem = mensagem + str("Data final: ").upper()+dataFinal+' até '+horaFinal+"\n\n" 
 	mensagem = mensagem + str("Protocolo: ").upper()+str(info[solicitacao.id]['id'])+"\n\n" 
+	mensagem = mensagem + str("OBS: ").upper()+str(comentarios)+"\n\n" 
+	
 	del info[solicitacao.id]['email']
 	del info[solicitacao.id]['responsavel']
 	del info[solicitacao.id]['local']

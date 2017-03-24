@@ -1,7 +1,7 @@
 "[Workflow]"
 "Id:","sistema.agenda.workflow_basico"
 "Title:","Fluxo de criacao de objetos de sistema.agenda"
-"Description:","Fluxo de agendamento baseado em 4 estagios. Solicitacao, Em analise, Pre-reservado, Agendado, Terminado"
+"Description:","Fluxo de agendamento baseado em 6 estagios. Solicitacao, Em analise, Pre-reservado, Agendado, Terminado, Nao aprovado"
 "Initial state:","solicitacao"
 
 "[State]"
@@ -31,7 +31,7 @@
 "Id:","em_analise"
 "Title:","Solicitacao em analise"
 "Description:","Solicitacao de agendamento em analise"
-"Transitions","prereservar,nao_aprovado"
+"Transitions","prereservar,nao_aprovado,reservar"
 "Permissions","Acquire","Anonymous","Site Administrator","Manager"
 "View","N",,"X","X"
 "sistema.agenda: ModificaEvento", "N",,"X","X"
