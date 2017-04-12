@@ -78,7 +78,8 @@ def telefoneValidation(data):
 	tel = tel.replace(")","")
 	tel = tel.replace("-","")
 	tel = tel.replace(" ","")
-	if not tel.isdigit() or len(tel)<8 or data[-5]!= "-" or data[0]!="(" or data[3]!=")" or data.count(" ")>1:
+	#if not tel.isdigit() or len(tel)<8 or data[-5]!= "-" or data[0]!="(" or data[3]!=")" or data.count(" ")>1:
+	if not tel.isdigit() or len(tel)<8:
 	 	raise Invalid(_(u"O número deve ser no formato (XX)XXXXX-XXXX"))
 	return True
 	
