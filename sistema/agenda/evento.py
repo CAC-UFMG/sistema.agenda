@@ -590,10 +590,11 @@ def modificaEventoAposedicao(evento,event):
     tituloAnterior = 'Evento de '+getattr(evento,'responsavel')
   evento.title = tituloAnterior +' em ['+strLocalParaTitulo+']'
 
+
 #Executado ao adicionar o objeto a titulo de validacao com os dados anteriores a edicao
 def modificaEvento(evento):    
   catalog = getUtility(ICatalog)
-  intids = getUtility(IIntIds) 
+  intids = getUtility(IIntIds)   
   #inicio=getattr(evento,'start',getattr(evento.__context__,'start',None))
   #fim=getattr(evento,'end',getattr(evento.__context__,'end',None))
   inicio=getattr(evento,'start',None)
@@ -732,7 +733,7 @@ def enviaEmail(solicitacao):
 	del info[solicitacao.id]['cpf']
 	del info[solicitacao.id]['id']
 	del info[solicitacao.id]['telefone']	
-	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title','unidade','servicosextras']
+	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title','unidade','servicosextras','outroespaco']
 	listaMaiusculo = ['DETALHESDISPONIBILIZASEGURANCA',
 'PRIORIDADETRANSPORTE',
 'DISPONIBILIZASEGURANCA',
