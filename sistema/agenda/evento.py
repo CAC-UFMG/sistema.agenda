@@ -733,7 +733,7 @@ def enviaEmail(solicitacao):
 	del info[solicitacao.id]['cpf']
 	del info[solicitacao.id]['id']
 	del info[solicitacao.id]['telefone']	
-	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title','unidade','servicosextras','outroespaco']
+	listaExclusao = ['open_end','sync_uid','whole_day','start','end','timezone','description','title','unidade','servicosextras','outroespaco','observacoes']
 	listaMaiusculo = ['DETALHESDISPONIBILIZASEGURANCA',
 'PRIORIDADETRANSPORTE',
 'DISPONIBILIZASEGURANCA',
