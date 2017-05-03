@@ -149,7 +149,7 @@ class Ievento(form.Schema, IImageScaleTraversable):
     form.write_permission(atendimento=permissaoAdm)             
     form.write_permission(diaria=permissaoAdm)             	
     form.write_permission(observacoes=permissaoAdm)             		
-	form.read_permission(observacoes=permissaoAdm)	
+    form.read_permission(observacoes=permissaoAdm)	
 
     title=schema.TextLine(title=u"Nome do evento",required=True,constraint=validatetitle)  
     id=schema.TextLine(title=u"Número identificador desta solicitação.")	    
