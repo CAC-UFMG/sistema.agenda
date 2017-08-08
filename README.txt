@@ -5,6 +5,8 @@ Instalação
 2. cd ... Plone/zinstance/src (ou  ... Plone/zeoserver/src)
 3. git clone https://github.com/CAC-UFMG/sistema.agenda.git
 
+usuário cacufmg
+senha cacufmgpwd*#1
 
 Atualização na máquina
 =======================
@@ -35,6 +37,11 @@ environment-vars =
         TZ America/Sao_Paulo
 		
 Em buildout.cfg na seção [instance]
+
+Inserir 
+Products.DCWorkflow=2.2.4
+
+Em buildout.cfg na seção [versions]
 
 informações de email
 smtp.grude.ufmg.br:25

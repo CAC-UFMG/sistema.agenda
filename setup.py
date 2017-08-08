@@ -35,7 +35,8 @@ setup(name='sistema.agenda',
           'collective.z3cform.datetimewidget',
 		  'collective.wtf',
 		  'plone.formwidget.querystring',
-		  'diazotheme.bootstrap',		  
+		  'diazotheme.bootstrap',
+          'Products.DCWorkflow==2.2.4'		  
       ],
       entry_points="""
       # -*- Entry points: -*-
