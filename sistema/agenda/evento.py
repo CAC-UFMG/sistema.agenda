@@ -65,7 +65,7 @@ listaDiaria = SimpleVocabulary.fromValues(['Sim','Nao'])
 listaPrioridadeTransporte=SimpleVocabulary.fromValues(['Vermelho','Amarelo','Verde'])
 opcoesEstado = SimpleVocabulary.fromValues(['NA','NAO ENVIADO','SOLICITADO','NAO SERA ATENDIDO','AGENDADO'])
 listaAtendimento = SimpleVocabulary.fromValues(['Emprestimo de equipamento','Emprestimo de espaco','Equipe tecnica'])
-sortTiposEvento = ['Aula','Defesa',u'Colacao','Formatura',u'Seminario',
+sortTiposEvento = ['Aula','Defesa','Atividade Cultural',u'Colacao','Formatura',u'Seminario',
 'Palestra',u'Forum',u'Simposio','Mostra','Congresso','Encontro','Ensaio','Montagem',u'Manutencao',
 u'Capacitacao','Workshop','Prova',u'Recepcao','Solenidade','Festividade',u'Reuniao']
 sortTiposEvento.sort()
@@ -150,6 +150,9 @@ class Ievento(form.Schema, IImageScaleTraversable):
     form.write_permission(diaria=permissaoAdm)             	
     form.write_permission(observacoes=permissaoAdm)             		
     form.read_permission(observacoes=permissaoAdm)	
+    form.write_permission(servicosExtras=permissaoAdm)             		
+    form.read_permission(servicosExtras=permissaoAdm)		
+	
 
     title=schema.TextLine(title=u"Nome do evento",required=True,constraint=validatetitle)  
     id=schema.TextLine(title=u"Número identificador desta solicitação.")	    
@@ -161,9 +164,10 @@ class Ievento(form.Schema, IImageScaleTraversable):
     equipe=RelationList(title=u"Equipe",description=u'PARA O AGENDADOR: Informe a equipe para este evento',required=False,value_type=RelationChoice(title=u'Equipe',required=True,source=pastaEquipe))	
     diaria=schema.Choice(title=u"Haverá diária?",description=u'PARA O AGENDADOR: Informe se o evento é pago',required=False,vocabulary=listaDiaria)
     previsaoDePublico=schema.TextLine(title=u"Previsão de Público",description=u'Informe a previsão do número de participantes',required=True,constraint=publicoValidation)
-    servicosExtras=schema.Set(title=u"Serviços Extras",description=u'O evento necessita de algum destes serviços?',required=False, value_type=schema.Choice(source=listaServicosExtras))
+    servicosExtras=schema.Set(title=u"Serviços Extras",description=u'O evento necessita de algum destes serviços?',required=False, value_type=schema.Choice(source=listaServicosExtras))    
     form.widget('servicosExtras', CheckBoxFieldWidget)
     form.widget('atendimento', CheckBoxFieldWidget)
+    
 	
     form.fieldset('dadosSolicitante',label=u"Dados do solicitante", fields=['responsavel','cpf','instituicao','unidade','telefone','celular','email'] ) 
     responsavel=schema.TextLine(title=u"Responsável pelo evento",description=u'Indique o nome completo do responsável pelo evento.',required=True)

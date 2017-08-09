@@ -8,7 +8,7 @@ def copiaParaPastaMae(self, state_change):
    wf = getToolByName(obj,'portal_workflow')
    estado = wf.getInfoFor(obj,'review_state')
    #indo para a reserva, copia para agenda
-   if pai.id == 'preagenda' and estado=='agendado':
+   if pai.id == 'preagenda' and estado in ('agendado','calacademico'):
      clipboard = pai.manage_cutObjects([obj.id])
      dest = aq_parent(aq_inner(pai))
      result = dest.manage_pasteObjects(clipboard)	 

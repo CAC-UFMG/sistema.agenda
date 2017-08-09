@@ -428,7 +428,7 @@ def criaPastas(context):
             
       field = listagem.getField('query')
       field.set(listagem, [{'i': 'portal_type', 'o':'plone.app.querystring.operation.selection.is','v':'sistema.agenda.evento'},
-	  {'i': 'review_state', 'o':'plone.app.querystring.operation.selection.is','v':'agendado'},
+	  {'i': 'review_state', 'o':'plone.app.querystring.operation.selection.is','v':('agendado','calacademico')},
 	  {'i': 'start', 'o':'plone.app.querystring.operation.date.lessThanRelativeDate','v':'30'}])	  
       raiz.setLayout(listagem.id)
       listagem.setExcludeFromNav(True)

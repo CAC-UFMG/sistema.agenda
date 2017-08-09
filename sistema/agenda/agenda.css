@@ -86,6 +86,17 @@ input#form-widgets-equipe-widgets-query,.documentDescription{
     color:black;
 }
 
+.fc-day.fc-sat, .fc-day.fc-sun,.fc-day.fc-sat.fc-past, .fc-day.fc-sun.fc-past{	
+	background:rgba(150, 145, 136, 0.65) !important;		
+	border:1px solid grey !important;	
+}
+
+
+.fc-day.fc-past{	
+	background:rgba(150, 145, 136, 0.59) !important;			
+}
+
+
 .ui-widget-content{	
 	background:rgba(150, 145, 136, 0.55) !important;
 }
@@ -121,3 +132,11 @@ input#form-widgets-equipe-widgets-query,.documentDescription{
     color: rgba(130, 83, 83, 0.67)  !important;
 	font-style:italic;
 }
+
+.state-calacademico {
+    color: RGBA(0, 0, 0, 0.8) !important;
+	text-align:center;
+	font-size: 11px !important;	
+	background:rgba(91, 142, 128, 0.4) !important;
+}
+
