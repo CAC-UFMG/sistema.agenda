@@ -31,10 +31,13 @@ class impresso(BrowserView):
      if deslocamento!=0:		           
        semanaHoje = hoje.isocalendar()[1]+deslocamento
        proximoMes=0
-       if (hoje.day+deslocamento*7) > calendar.monthrange(hoje.year,hoje.month)[1]:
+       diaEmQuestao = hoje.day+deslocamento*7
+       if diaEmQuestao > calendar.monthrange(hoje.year,hoje.month)[1]:
          proximoMes=1
-       hoje=datetime(hoje.year,hoje.month+proximoMes,(hoje.day+deslocamento*7)%calendar.monthrange(hoje.year,hoje.month+proximoMes)[1])	   
-	 
+         hoje=datetime(hoje.year,hoje.month+proximoMes,(diaEmQuestao)%calendar.monthrange(hoje.year,hoje.month)[1])	   
+       if diaEmQuestao <= calendar.monthrange(hoje.year,hoje.month)[1]:         
+         hoje=datetime(hoje.year,hoje.month,diaEmQuestao)	   
+		 
      umDia = timedelta(days=1)	 
      dDestaSemana = hoje.weekday()
      pD=0
